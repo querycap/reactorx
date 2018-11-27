@@ -1,0 +1,18 @@
+{
+  "name": "@reactorx/router",
+  "version": "0.0.0",
+  "main": "cjs/index.js",
+  "module": "es/index.js",
+  "types": "src/index.ts",
+  "files": [
+    "src/",
+    "es/",
+    "cjs/"
+  ],
+  "dependencies": {
+    "@types/history": "4.7.2",
+    "@types/path-to-regexp": "1.7.0",
+    "history": "4.7.2",
+    "path-to-regexp": "2.4.0"
+  }
+}

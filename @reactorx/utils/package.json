@@ -1,0 +1,16 @@
+{
+  "name": "@reactorx/utils",
+  "version": "0.0.0",
+  "main": "cjs/index.js",
+  "module": "es/index.js",
+  "types": "src/index.ts",
+  "files": [
+    "src/",
+    "es/",
+    "cjs/"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@emotion/is-prop-valid": "0.7.2"
+  }
+}
