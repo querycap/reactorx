@@ -1,0 +1,10 @@
+es/
+lib/
+coverage/
+node_modules/
+
+public/
+
+*.js
+*.log
+package-lock.json
