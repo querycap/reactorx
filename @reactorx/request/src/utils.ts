@@ -1,4 +1,12 @@
-import { Dictionary, forEach, isArray, isObject, isString, map, pickBy } from "lodash";
+import {
+  Dictionary,
+  forEach,
+  isArray,
+  isObject,
+  isString,
+  map,
+  pickBy,
+} from "lodash";
 import { RequestActor } from "./RequestActor";
 import { stringify } from "querystring";
 import { Status } from "./Status";
@@ -8,20 +16,21 @@ export interface ISelectOption {
   value: string | number;
 }
 
-export const optionsFromEnum = (enums: any, displayFn: (val: string) => string): ISelectOption[] => {
+export const optionsFromEnum = (
+  enums: any,
+  displayFn: (val: string) => string,
+): ISelectOption[] => {
   const strings = pickBy<string>(enums, isString) as Dictionary<string>;
 
-  return map<Dictionary<string>, ISelectOption>(
-    strings,
-    (key: string) => ({
-      label: displayFn(key),
-      value: key,
-    }),
-  );
+  return map<Dictionary<string>, ISelectOption>(strings, (key: string) => ({
+    label: displayFn(key),
+    value: key,
+  }));
 };
 
-
-export const createHrefBuilder = (baseURL: string) => (requestActor: RequestActor<any, any>) => {
+export const createHrefBuilder = (baseURL: string) => (
+  requestActor: RequestActor<any, any>,
+) => {
   const conf = requestActor.opts.requestConfigFromReq!(requestActor.arg);
   return `${baseURL}/${conf.url}?${paramsSerializer(conf.params)}`;
 };
@@ -63,7 +72,7 @@ export const paramsSerializer = (params: any) => {
   return stringify(data);
 };
 
-export const transformRequest = ((data: any, headers: any) => {
+export const transformRequest = (data: any, headers: any) => {
   const contentType = headers["Content-Type"];
 
   if (isMultipartFormData(contentType)) {
@@ -91,8 +100,7 @@ export const transformRequest = ((data: any, headers: any) => {
   }
 
   return JSON.stringify(data);
-});
-
+};
 
 export const errorResponseStatusEqual = (status: Status) => (
   actor: RequestActor,

@@ -1,15 +1,23 @@
 import { Dictionary, omit, size } from "lodash";
 import { AsyncStage, useEpic } from "@reactorx/core";
 import { RequestActor } from "./RequestActor";
-import { filter as rxFilter, ignoreElements as rxIgnoreElements, map as rxMap, tap as rxTap } from "rxjs/operators";
+import {
+  filter as rxFilter,
+  ignoreElements as rxIgnoreElements,
+  map as rxMap,
+  tap as rxTap,
+} from "rxjs/operators";
 import { useMemo } from "react";
 import { BehaviorSubject } from "rxjs";
 
 export const useRequesting$ = () => {
-  const { requestCounts$, requesting$ } = useMemo(() => ({
-    requesting$: new BehaviorSubject(false),
-    requestCounts$: new BehaviorSubject({} as Dictionary<number>),
-  }), []);
+  const { requestCounts$, requesting$ } = useMemo(
+    () => ({
+      requesting$: new BehaviorSubject(false),
+      requestCounts$: new BehaviorSubject({} as Dictionary<number>),
+    }),
+    [],
+  );
 
   useEpic((actor$) => {
     return actor$.pipe(
@@ -17,7 +25,7 @@ export const useRequesting$ = () => {
       rxMap((actor) => {
         const parentActorType = actor.opts.parentActor.type;
 
-        const requests = (requestCounts$.value);
+        const requests = requestCounts$.value;
 
         const count = requests[parentActorType] || 0;
 

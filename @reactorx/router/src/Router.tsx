@@ -36,15 +36,13 @@ export function Router({ history, children }: IRouterProps) {
   );
 }
 
-function HistoryListener(
-  {
-    history,
-    onLocationChange,
-  }: {
-    history: History;
-    onLocationChange: () => void;
-  },
-) {
+function HistoryListener({
+  history,
+  onLocationChange,
+}: {
+  history: History;
+  onLocationChange: () => void;
+}) {
   useLayoutEffect(() => {
     const unlisten = history.listen(() => {
       onLocationChange();

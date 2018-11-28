@@ -1,13 +1,29 @@
-import axios, { AxiosInterceptorManager, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, {
+  AxiosInterceptorManager,
+  AxiosRequestConfig,
+  AxiosResponse,
+} from "axios";
 import { forEach, set } from "lodash";
 import { IEpic } from "@reactorx/core";
-import { from as observableFrom, merge as observableMerge, of as observableOf } from "rxjs";
-import { catchError as rxCatchError, filter as rxFilter, map as rxMap, mergeMap as rxMergeMap } from "rxjs/operators";
+import {
+  from as observableFrom,
+  merge as observableMerge,
+  of as observableOf,
+} from "rxjs";
+import {
+  catchError as rxCatchError,
+  filter as rxFilter,
+  map as rxMap,
+  mergeMap as rxMergeMap,
+} from "rxjs/operators";
 import { RequestActor } from "./RequestActor";
 
 import { paramsSerializer, transformRequest } from "./utils";
 
-type TRequestInterceptor = (request: AxiosInterceptorManager<AxiosRequestConfig>, response: AxiosInterceptorManager<AxiosResponse>) => void
+type TRequestInterceptor = (
+  request: AxiosInterceptorManager<AxiosRequestConfig>,
+  response: AxiosInterceptorManager<AxiosResponse>,
+) => void;
 
 export const createRequestEpic = (
   options: AxiosRequestConfig,
@@ -36,11 +52,11 @@ export const createRequestEpic = (
 
         return observableMerge(
           observableOf(actor.started.with(axiosRequestConfig)),
-          observableFrom(client.request(axiosRequestConfig) as Promise<AxiosResponse>).pipe(
+          observableFrom(client.request(axiosRequestConfig) as Promise<
+            AxiosResponse
+          >).pipe(
             rxMap((response) => actor.done.with(response)),
-            rxCatchError((err) =>
-              observableOf(actor.failed.with(err)),
-            ),
+            rxCatchError((err) => observableOf(actor.failed.with(err))),
           ),
         );
       }),

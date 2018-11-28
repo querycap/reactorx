@@ -18,7 +18,7 @@ describe("A <Route>", () => {
 
     renderStrict(
       <MemoryRouter initialEntries={["/cupcakes"]}>
-        <Route path="/cupcakes" render={() => <h1>{text}</h1>}/>
+        <Route path="/cupcakes" render={() => <h1>{text}</h1>} />
       </MemoryRouter>,
       node,
     );
@@ -31,7 +31,7 @@ describe("A <Route>", () => {
 
     renderStrict(
       <MemoryRouter initialEntries={["/"]}>
-        <Route path="/" render={() => <h1>{text}</h1>}/>
+        <Route path="/" render={() => <h1>{text}</h1>} />
       </MemoryRouter>,
       node,
     );
@@ -44,7 +44,7 @@ describe("A <Route>", () => {
 
     renderStrict(
       <MemoryRouter initialEntries={["/bunnies"]}>
-        <Route path="/flowers" render={() => <h1>{text}</h1>}/>
+        <Route path="/flowers" render={() => <h1>{text}</h1>} />
       </MemoryRouter>,
       node,
     );
@@ -63,7 +63,7 @@ describe("A <Route>", () => {
           path="/sushi/:roll"
           render={({ match }) => <h1>{match.url}</h1>}
         />
-        <Redirect from={"/sushi/california"} to={"/sushi/spicy-tuna"}/>
+        <Redirect from={"/sushi/california"} to={"/sushi/spicy-tuna"} />
       </Router>,
       node,
     );
@@ -150,7 +150,7 @@ describe("A <Route>", () => {
 
       renderStrict(
         <Router history={history}>
-          <Route path={["/hello", "/world"]} component={MatchedRoute}/>
+          <Route path={["/hello", "/world"]} component={MatchedRoute} />
         </Router>,
         node,
       );
@@ -169,7 +169,7 @@ describe("A <Route>", () => {
     it("is able to match", () => {
       renderStrict(
         <MemoryRouter initialEntries={["/パス名"]}>
-          <Route path="/パス名" render={({ match }) => <h1>{match.url}</h1>}/>
+          <Route path="/パス名" render={({ match }) => <h1>{match.url}</h1>} />
         </MemoryRouter>,
         node,
       );
@@ -200,7 +200,7 @@ describe("A <Route>", () => {
 
       renderStrict(
         <MemoryRouter initialEntries={["/somepath/"]}>
-          <Route exact path="/somepath" render={() => <h1>{text}</h1>}/>
+          <Route exact path="/somepath" render={() => <h1>{text}</h1>} />
         </MemoryRouter>,
         node,
       );
@@ -297,7 +297,7 @@ describe("A <Route>", () => {
 
         renderStrict(
           <MemoryRouter initialEntries={["/"]}>
-            <Route path="/" children={() => <h1>{text}</h1>}/>
+            <Route path="/" children={() => <h1>{text}</h1>} />
           </MemoryRouter>,
           node,
         );
@@ -315,7 +315,7 @@ describe("A <Route>", () => {
 
       renderStrict(
         <MemoryRouter initialEntries={["/"]}>
-          <Route path="/" component={Home}/>
+          <Route path="/" component={Home} />
         </MemoryRouter>,
         node,
       );
@@ -335,7 +335,7 @@ describe("A <Route>", () => {
 
       renderStrict(
         <Router history={history}>
-          <Route path="/" component={Component}/>
+          <Route path="/" component={Component} />
         </Router>,
         node,
       );
@@ -353,7 +353,7 @@ describe("A <Route>", () => {
 
       renderStrict(
         <MemoryRouter initialEntries={["/"]}>
-          <Route path="/" render={() => <h1>{text}</h1>}/>
+          <Route path="/" render={() => <h1>{text}</h1>} />
         </MemoryRouter>,
         node,
       );
