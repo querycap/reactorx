@@ -12,7 +12,10 @@ describe("Persister", () => {
   });
 
   it("flow", (done) => {
-    const persister = createPersister({ name: "test", driver: memoryStorageDriver._driver });
+    const persister = createPersister({
+      name: "test",
+      driver: memoryStorageDriver._driver,
+    });
 
     const store$ = Store.create({ ping: 0, pong: 0 });
 
@@ -24,7 +27,7 @@ describe("Persister", () => {
 
     mount(
       <StoreProvider value={store$}>
-        <App/>
+        <App />
       </StoreProvider>,
     );
 

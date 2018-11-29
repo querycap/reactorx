@@ -15,7 +15,7 @@ describe("A <Prompt>", () => {
 
     const node = mount(
       <Router history={history}>
-        <Prompt message="Are you sure?"/>
+        <Prompt message="Are you sure?" />
       </Router>,
     );
 
@@ -39,7 +39,7 @@ describe("A <Prompt>", () => {
 
       const node = mount(
         <Router history={history}>
-          <Prompt message="Are you sure?" when={false}/>
+          <Prompt message="Are you sure?" when={false} />
         </Router>,
       );
 

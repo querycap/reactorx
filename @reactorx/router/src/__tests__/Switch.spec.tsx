@@ -7,8 +7,8 @@ describe("A <Switch>", () => {
     const node = mount(
       <MemoryRouter initialEntries={["/one"]}>
         <Switch>
-          <Route path="/one" render={() => <h1>one</h1>}/>
-          <Route path="/one" render={() => <h1>two</h1>}/>
+          <Route path="/one" render={() => <h1>one</h1>} />
+          <Route path="/one" render={() => <h1>two</h1>} />
         </Switch>
       </MemoryRouter>,
     );
@@ -20,9 +20,9 @@ describe("A <Switch>", () => {
     const node = mount(
       <MemoryRouter initialEntries={["/three"]}>
         <Switch>
-          <Route path="/one" render={() => <h1>one</h1>}/>
-          <Route path="/two" render={() => <h1>two</h1>}/>
-          <Redirect from="/three" to="/two"/>
+          <Route path="/one" render={() => <h1>one</h1>} />
+          <Route path="/two" render={() => <h1>two</h1>} />
+          <Redirect from="/three" to="/two" />
         </Switch>
       </MemoryRouter>,
     );
@@ -34,10 +34,10 @@ describe("A <Switch>", () => {
     const node = mount(
       <MemoryRouter initialEntries={["/three"]}>
         <Switch>
-          <Route path="/one" render={() => <h1>one</h1>}/>
-          <Route path="/two" render={() => <h1>two</h1>}/>
-          <Redirect from="/three" to="/two"/>
-          <Redirect from="/three" to="/one"/>
+          <Route path="/one" render={() => <h1>one</h1>} />
+          <Route path="/two" render={() => <h1>two</h1>} />
+          <Redirect from="/three" to="/two" />
+          <Redirect from="/three" to="/one" />
         </Switch>
       </MemoryRouter>,
     );
@@ -49,8 +49,8 @@ describe("A <Switch>", () => {
     const node = mount(
       <MemoryRouter initialEntries={["/two"]}>
         <Switch>
-          <Route path="/one" render={() => <h1>one</h1>}/>
-          <Route render={() => <h1>two</h1>}/>
+          <Route path="/one" render={() => <h1>one</h1>} />
+          <Route render={() => <h1>two</h1>} />
         </Switch>
       </MemoryRouter>,
     );
@@ -62,9 +62,9 @@ describe("A <Switch>", () => {
     const node = mount(
       <MemoryRouter initialEntries={["/three"]}>
         <Switch>
-          <Route path="/one" render={() => <h1>one</h1>}/>
-          <Redirect to="/one"/>
-          <Route path="/two" render={() => <h1>two</h1>}/>
+          <Route path="/one" render={() => <h1>one</h1>} />
+          <Redirect to="/one" />
+          <Route path="/two" render={() => <h1>two</h1>} />
         </Switch>
       </MemoryRouter>,
     );
@@ -76,9 +76,9 @@ describe("A <Switch>", () => {
     const node = mount(
       <MemoryRouter initialEntries={["/one"]}>
         <Switch>
-          <Redirect from="/one" to="/two"/>
-          <Redirect from="/two" to="/three"/>
-          <Route path="/three" render={() => <h1>three</h1>}/>
+          <Redirect from="/one" to="/two" />
+          <Redirect from="/two" to="/three" />
+          <Route path="/three" render={() => <h1>three</h1>} />
         </Switch>
       </MemoryRouter>,
     );
@@ -90,9 +90,9 @@ describe("A <Switch>", () => {
     const node = mount(
       <MemoryRouter initialEntries={["/cupcakes"]}>
         <Switch>
-          <Route path="/bubblegum" render={() => <div>bub</div>}/>
+          <Route path="/bubblegum" render={() => <div>bub</div>} />
           {/* this is a comment */}
-          <Route path="/cupcakes" render={() => <div>cup</div>}/>
+          <Route path="/cupcakes" render={() => <div>cup</div>} />
         </Switch>
       </MemoryRouter>,
     );
@@ -105,7 +105,7 @@ describe("A <Switch>", () => {
     const node = mount(
       <MemoryRouter initialEntries={["/one"]}>
         <Switch>
-          <Route path="/one" render={() => <h1>one</h1>}/>
+          <Route path="/one" render={() => <h1>one</h1>} />
           {false}
           {undefined}
         </Switch>
@@ -119,8 +119,8 @@ describe("A <Switch>", () => {
     const node = mount(
       <MemoryRouter initialEntries={["/one"]}>
         <Switch location={{ pathname: "/two" }}>
-          <Route path="/one" render={() => <h1>one</h1>}/>
-          <Route path="/two" render={() => <h1>two</h1>}/>
+          <Route path="/one" render={() => <h1>one</h1>} />
+          <Route path="/two" render={() => <h1>two</h1>} />
         </Switch>
       </MemoryRouter>,
     );

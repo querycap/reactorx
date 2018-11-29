@@ -57,24 +57,25 @@ class Persister {
   connect(store$: Store<any>) {
     let prevState: any = {};
 
-    const subscription = store$
-      .subscribe((nextState = {}) => {
-        this.keyOpts = nextState[persistedKeys] || {};
+    const subscription = store$.subscribe((nextState = {}) => {
+      this.keyOpts = nextState[persistedKeys] || {};
 
-        const nextData: { [key: string]: any } = {};
+      const nextData: { [key: string]: any } = {};
 
-        Object.keys(this.keyOpts)
-          .forEach((key) => {
-            if (typeof nextState[key] !== "undefined" && nextState[key] !== prevState[key]) {
-              nextData[key] = nextState[key];
-            }
-            return {};
-          });
-
-        prevState = nextState;
-
-        this.saveAll(nextData);
+      Object.keys(this.keyOpts).forEach((key) => {
+        if (
+          typeof nextState[key] !== "undefined" &&
+          nextState[key] !== prevState[key]
+        ) {
+          nextData[key] = nextState[key];
+        }
+        return {};
       });
+
+      prevState = nextState;
+
+      this.saveAll(nextData);
+    });
 
     return () => {
       prevState = null;
@@ -89,21 +90,22 @@ class Persister {
       return Promise.resolve();
     }
 
-    return Promise
-      .all([
-        this.save(persistedKeys, this.keyOpts),
-        ...keys.map((key) => {
-          return this.save(key, nextData[key], this.keyOpts[key]);
-        }),
-      ])
-      .catch(console.error);
+    return Promise.all([
+      this.save(persistedKeys, this.keyOpts),
+      ...keys.map((key) => {
+        return this.save(key, nextData[key], this.keyOpts[key]);
+      }),
+    ]).catch(console.error);
   }
 
   load(key: string) {
     return this.storage
       .getItem(key)
       .then((data: Partial<IStorageValues> = {}) => {
-        if (!!data.expiredAt && new Date(data.expiredAt).getTime() >= Date.now()) {
+        if (
+          !!data.expiredAt &&
+          new Date(data.expiredAt).getTime() >= Date.now()
+        ) {
           return data.values;
         }
         return {};
