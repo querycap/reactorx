@@ -46,9 +46,7 @@ export const createRequestEpic = (
     return actor$.pipe(
       rxFilter(RequestActor.isPreRequestActor),
       rxMergeMap((actor) => {
-        const axiosRequestConfig = actor.opts.requestConfigFromReq
-          ? actor.opts.requestConfigFromReq(actor.arg)
-          : actor.arg;
+        const axiosRequestConfig = actor.requestConfig();
 
         return observableMerge(
           observableOf(actor.started.with(axiosRequestConfig)),

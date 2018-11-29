@@ -1,26 +1,18 @@
 import React, { useLayoutEffect } from "react";
-import ReactDOM from "react-dom";
 import { createMemoryHistory as createHistory } from "history";
 import { MemoryRouter, Redirect, Route, Router } from "..";
 
-import { renderStrict } from "./testutils";
+import { mount } from "@reactorx/testutils";
 import { IRouterContext } from "../RouterContext";
 
 describe("A <Route>", () => {
-  const node = document.createElement("div");
-
-  afterEach(() => {
-    ReactDOM.unmountComponentAtNode(node);
-  });
-
   it("renders when it matches", () => {
     const text = "cupcakes";
 
-    renderStrict(
+    const node = mount(
       <MemoryRouter initialEntries={["/cupcakes"]}>
         <Route path="/cupcakes" render={() => <h1>{text}</h1>} />
       </MemoryRouter>,
-      node,
     );
 
     expect(node.innerHTML).toContain(text);
@@ -29,11 +21,10 @@ describe("A <Route>", () => {
   it("renders when it matches at the root URL", () => {
     const text = "cupcakes";
 
-    renderStrict(
+    const node = mount(
       <MemoryRouter initialEntries={["/"]}>
         <Route path="/" render={() => <h1>{text}</h1>} />
       </MemoryRouter>,
-      node,
     );
 
     expect(node.innerHTML).toContain(text);
@@ -42,11 +33,10 @@ describe("A <Route>", () => {
   it("does not render when it does not match", () => {
     const text = "bubblegum";
 
-    renderStrict(
+    const node = mount(
       <MemoryRouter initialEntries={["/bunnies"]}>
         <Route path="/flowers" render={() => <h1>{text}</h1>} />
       </MemoryRouter>,
-      node,
     );
 
     expect(node.innerHTML).not.toContain(text);
@@ -57,7 +47,7 @@ describe("A <Route>", () => {
       initialEntries: ["/sushi/california"],
     });
 
-    renderStrict(
+    const node = mount(
       <Router history={history}>
         <Route
           path="/sushi/:roll"
@@ -65,22 +55,20 @@ describe("A <Route>", () => {
         />
         <Redirect from={"/sushi/california"} to={"/sushi/spicy-tuna"} />
       </Router>,
-      node,
     );
 
-    // todo
+    expect(node.innerHTML).toContain("/sushi/spicy-tuna");
   });
 
   describe("with dynamic segments in the path", () => {
     it("decodes them", () => {
-      renderStrict(
+      const node = mount(
         <MemoryRouter initialEntries={["/a%20dynamic%20segment"]}>
           <Route
             path="/:id"
             render={({ match }) => <h1>{match.params.id}</h1>}
           />
         </MemoryRouter>,
-        node,
       );
 
       expect(node.innerHTML).toContain("a dynamic segment");
@@ -89,58 +77,50 @@ describe("A <Route>", () => {
 
   describe("with an array of paths", () => {
     it("matches the first provided path", () => {
-      const node = document.createElement("div");
-      ReactDOM.render(
+      const node = mount(
         <MemoryRouter initialEntries={["/hello"]}>
           <Route
             path={["/hello", "/world"]}
             render={() => <div>Hello World</div>}
           />
         </MemoryRouter>,
-        node,
       );
-
       expect(node.innerHTML).toContain("Hello World");
     });
 
     it("matches other provided paths", () => {
-      const node = document.createElement("div");
-      ReactDOM.render(
+      const node = mount(
         <MemoryRouter initialEntries={["/other", "/world"]} initialIndex={1}>
           <Route
             path={["/hello", "/world"]}
             render={() => <div>Hello World</div>}
           />
         </MemoryRouter>,
-        node,
       );
 
       expect(node.innerHTML).toContain("Hello World");
     });
 
     it("provides the matched path as a string", () => {
-      const node = document.createElement("div");
-      ReactDOM.render(
+      const node = mount(
         <MemoryRouter initialEntries={["/other", "/world"]} initialIndex={1}>
           <Route
             path={["/hello", "/world"]}
             render={({ match }) => <div>{match.path}</div>}
           />
         </MemoryRouter>,
-        node,
       );
 
       expect(node.innerHTML).toContain("/world");
     });
 
     it("doesn't remount when moving from one matching path to another", () => {
-      const node = document.createElement("div");
       const history = createHistory();
-      const mount = jest.fn();
+      const routeMount = jest.fn();
 
       function MatchedRoute() {
         useLayoutEffect(() => {
-          mount();
+          routeMount();
         }, []);
 
         return <div>Hello World</div>;
@@ -148,30 +128,28 @@ describe("A <Route>", () => {
 
       history.push("/hello");
 
-      renderStrict(
+      const node = mount(
         <Router history={history}>
           <Route path={["/hello", "/world"]} component={MatchedRoute} />
         </Router>,
-        node,
       );
 
-      expect(mount).toHaveBeenCalledTimes(1);
+      expect(routeMount).toHaveBeenCalledTimes(1);
       expect(node.innerHTML).toContain("Hello World");
 
       history.push("/world/somewhere/else");
 
-      expect(mount).toHaveBeenCalledTimes(1);
+      expect(routeMount).toHaveBeenCalledTimes(1);
       expect(node.innerHTML).toContain("Hello World");
     });
   });
 
   describe("with a unicode path", () => {
     it("is able to match", () => {
-      renderStrict(
+      const node = mount(
         <MemoryRouter initialEntries={["/パス名"]}>
           <Route path="/パス名" render={({ match }) => <h1>{match.url}</h1>} />
         </MemoryRouter>,
-        node,
       );
 
       expect(node.innerHTML).toContain("/パス名");
@@ -180,14 +158,13 @@ describe("A <Route>", () => {
 
   describe("with escaped special characters in the path", () => {
     it("is able to match", () => {
-      renderStrict(
+      const node = mount(
         <MemoryRouter initialEntries={["/pizza (1)"]}>
           <Route
             path="/pizza \(1\)"
             render={({ match }) => <h1>{match.url}</h1>}
           />
         </MemoryRouter>,
-        node,
       );
 
       expect(node.innerHTML).toContain("/pizza (1)");
@@ -198,11 +175,10 @@ describe("A <Route>", () => {
     it("renders when the URL does not have a trailing slash", () => {
       const text = "bubblegum";
 
-      renderStrict(
+      const node = mount(
         <MemoryRouter initialEntries={["/somepath/"]}>
           <Route exact path="/somepath" render={() => <h1>{text}</h1>} />
         </MemoryRouter>,
-        node,
       );
 
       expect(node.innerHTML).toContain(text);
@@ -212,7 +188,7 @@ describe("A <Route>", () => {
       it("does not render when the URL has a trailing slash", () => {
         const text = "bubblegum";
 
-        renderStrict(
+        const node = mount(
           <MemoryRouter initialEntries={["/somepath/"]}>
             <Route
               exact
@@ -221,7 +197,6 @@ describe("A <Route>", () => {
               render={() => <h1>{text}</h1>}
             />
           </MemoryRouter>,
-          node,
         );
 
         expect(node.innerHTML).not.toContain(text);
@@ -230,7 +205,7 @@ describe("A <Route>", () => {
       it("does not render when the URL does not have a trailing slash", () => {
         const text = "bubblegum";
 
-        renderStrict(
+        const node = mount(
           <MemoryRouter initialEntries={["/somepath"]}>
             <Route
               exact
@@ -239,7 +214,6 @@ describe("A <Route>", () => {
               render={() => <h1>{text}</h1>}
             />
           </MemoryRouter>,
-          node,
         );
 
         expect(node.innerHTML).not.toContain(text);
@@ -251,7 +225,7 @@ describe("A <Route>", () => {
     it("overrides `context.location`", () => {
       const text = "bubblegum";
 
-      renderStrict(
+      const node = mount(
         <MemoryRouter initialEntries={["/cupcakes"]}>
           <Route
             location={{ pathname: "/bubblegum" }}
@@ -259,7 +233,6 @@ describe("A <Route>", () => {
             render={() => <h1>{text}</h1>}
           />
         </MemoryRouter>,
-        node,
       );
 
       expect(node.innerHTML).toContain(text);
@@ -273,7 +246,7 @@ describe("A <Route>", () => {
 
         let props: IRouterContext | null = null;
 
-        renderStrict(
+        const node = mount(
           <Router history={history}>
             <Route
               path="/"
@@ -283,7 +256,6 @@ describe("A <Route>", () => {
               }}
             />
           </Router>,
-          node,
         );
 
         expect(props).not.toBe(null);
@@ -295,11 +267,10 @@ describe("A <Route>", () => {
       it("renders", () => {
         const text = "bubblegum";
 
-        renderStrict(
+        const node = mount(
           <MemoryRouter initialEntries={["/"]}>
             <Route path="/" children={() => <h1>{text}</h1>} />
           </MemoryRouter>,
-          node,
         );
 
         expect(node.innerHTML).toContain(text);
@@ -313,11 +284,10 @@ describe("A <Route>", () => {
 
       const Home = () => <h1>{text}</h1>;
 
-      renderStrict(
+      const node = mount(
         <MemoryRouter initialEntries={["/"]}>
           <Route path="/" component={Home} />
         </MemoryRouter>,
-        node,
       );
 
       expect(node.innerHTML).toContain(text);
@@ -333,11 +303,10 @@ describe("A <Route>", () => {
         return null;
       };
 
-      renderStrict(
+      const node = mount(
         <Router history={history}>
           <Route path="/" component={Component} />
         </Router>,
-        node,
       );
 
       expect(props).not.toBe(null);
@@ -351,11 +320,10 @@ describe("A <Route>", () => {
     it("renders its return value", () => {
       const text = "Mrs. Kato";
 
-      renderStrict(
+      const node = mount(
         <MemoryRouter initialEntries={["/"]}>
           <Route path="/" render={() => <h1>{text}</h1>} />
         </MemoryRouter>,
-        node,
       );
 
       expect(node.innerHTML).toContain(text);
@@ -366,7 +334,7 @@ describe("A <Route>", () => {
 
       let props: IRouterContext | null = null;
 
-      renderStrict(
+      const node = mount(
         <Router history={history}>
           <Route
             path="/"
@@ -376,7 +344,6 @@ describe("A <Route>", () => {
             }}
           />
         </Router>,
-        node,
       );
 
       expect(props).not.toBe(null);

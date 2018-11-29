@@ -7,9 +7,7 @@ import {
   map,
   pickBy,
 } from "lodash";
-import { RequestActor } from "./RequestActor";
 import { stringify } from "querystring";
-import { Status } from "./Status";
 
 export interface ISelectOption {
   label: string;
@@ -26,13 +24,6 @@ export const optionsFromEnum = (
     label: displayFn(key),
     value: key,
   }));
-};
-
-export const createHrefBuilder = (baseURL: string) => (
-  requestActor: RequestActor<any, any>,
-) => {
-  const conf = requestActor.opts.requestConfigFromReq!(requestActor.arg);
-  return `${baseURL}/${conf.url}?${paramsSerializer(conf.params)}`;
 };
 
 export const isMultipartFormData = (contentType: string = "") =>
@@ -100,18 +91,4 @@ export const transformRequest = (data: any, headers: any) => {
   }
 
   return JSON.stringify(data);
-};
-
-export const errorResponseStatusEqual = (status: Status) => (
-  actor: RequestActor,
-) => {
-  return (
-    RequestActor.isFailedRequestActor(actor) && actor.arg.status === status
-  );
-};
-
-export const errorResponseHasTalkError = () => (actor: RequestActor) => {
-  return (
-    RequestActor.isFailedRequestActor(actor) && actor.arg.data.canBeTalkError
-  );
 };

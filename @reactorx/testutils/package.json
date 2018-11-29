@@ -1,0 +1,20 @@
+{
+  "name": "@reactorx/testutils",
+  "version": "0.1.1",
+  "main": "cjs/index.js",
+  "module": "es/index.js",
+  "types": "src/index.tsx",
+  "files": [
+    "src/",
+    "es/",
+    "cjs/"
+  ],
+  "peerDependencies": {
+    "jsdom": "*",
+    "react": "*",
+    "react-dom": "*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

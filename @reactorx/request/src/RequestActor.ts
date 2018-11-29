@@ -5,44 +5,39 @@ import {
   IActorOpt,
   IAsyncDerived,
 } from "@reactorx/core";
-import { Dictionary, isUndefined, pickBy } from "lodash";
-import { AxiosRequestConfig, AxiosResponse } from "axios";
+import { Dictionary, isUndefined, omit, pickBy } from "lodash";
+import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import { paramsSerializer } from "./utils";
 
 export type IMethod = "GET" | "DELETE" | "HEAD" | "POST" | "PUT" | "PATCH";
 
-export interface IRequestOpts {
+export interface IRequestOpts<T = any> {
   method: IMethod;
   url: string;
-  baseURL?: string;
-  query?: Dictionary<any>;
   headers?: Dictionary<any>;
-  data?: Dictionary<any>;
-
-  // for upload processing
-  onUploadProgress?: (progressEvent: any) => void;
+  query?: Dictionary<any>;
+  data?: T;
 }
 
 export function createRequestActor<TReq, TResBody, TError>(
   name: string,
-  requestOptsFromReq?: (arg: TReq) => IRequestOpts,
+  requestOptsFromReq: (arg: TReq) => IRequestOpts,
 ) {
-  return new RequestActor<TReq, TResBody>({
+  return new RequestActor<TReq, TResBody, TError>({
     name,
     opts: {
-      requestConfigFromReq: requestOptsFromReq
-        ? (req) => axiosConfigFromRequestOptions(requestOptsFromReq(req))
-        : undefined,
+      requestOptsFromReq,
     },
   });
 }
 
 export class RequestActor<
-  TReq = any,
+  TReq = IRequestOpts,
   TRespBody = any,
   TError = any
 > extends AsyncActor<
   TReq,
-  { requestConfigFromReq?: (req: TReq) => AxiosRequestConfig },
+  AxiosRequestConfig & { requestOptsFromReq?: (arg: TReq) => IRequestOpts },
   IAsyncDerived<
     AxiosRequestConfig,
     AxiosResponse<TRespBody>,
@@ -52,7 +47,7 @@ export class RequestActor<
   constructor(
     opt: IActorOpt<
       TReq,
-      { requestConfigFromReq?: (req: TReq) => AxiosRequestConfig }
+      AxiosRequestConfig & { requestOptsFromReq?: (arg: TReq) => IRequestOpts }
     >,
   ) {
     super({
@@ -64,12 +59,14 @@ export class RequestActor<
   static group = "request";
 
   static isPreRequestActor = (actor: Actor): actor is RequestActor => {
-    return actor.group == RequestActor.group && !actor.stage;
+    return actor.group === RequestActor.group && !actor.stage;
   };
 
-  static isFailedRequestActor = (actor: Actor): actor is RequestActor => {
+  static isFailedRequestActor = (
+    actor: Actor,
+  ): actor is Actor<AxiosResponse<any>> => {
     return (
-      actor.group == RequestActor.group && actor.stage == AsyncStage.FAILED
+      actor.group === RequestActor.group && actor.stage === AsyncStage.FAILED
     );
   };
 
@@ -81,38 +78,36 @@ export class RequestActor<
   ): boolean => {
     return actor.group == RequestActor.group && !!actor.stage;
   };
-}
 
-export const axiosConfigFromRequestOptions = ({
-  method,
-  url,
-  baseURL,
-  headers,
-  query,
-  data,
-  onUploadProgress,
-}: IRequestOpts): AxiosRequestConfig => {
-  const reqConfig = {
-    method,
-    url,
-    headers,
-    params: query,
-    data: data,
-    onUploadProgress,
-  };
-
-  const fixedHeaders = pickBy(headers as any, (v: any) => !isUndefined(v));
-
-  if (baseURL) {
-    return {
-      ...reqConfig,
-      headers: fixedHeaders,
-      baseURL,
-    };
+  requestConfig(): AxiosRequestConfig {
+    return requestConfigFromRequestOptions(
+      this.opts.requestOptsFromReq
+        ? this.opts.requestOptsFromReq(this.arg)
+        : (this.arg as any),
+      omit(this.opts, "requestOptsFromReq"),
+    );
   }
 
+  href(baseURL: string = ""): string {
+    const conf = this.requestConfig();
+    return `${baseURL || conf.baseURL}${conf.url}?${paramsSerializer(
+      conf.params,
+    )}`;
+  }
+}
+
+export function requestConfigFromRequestOptions(
+  requestOpts: IRequestOpts,
+  requestConfig: AxiosRequestConfig,
+): AxiosRequestConfig {
+  const { method, url, headers, query, data } = requestOpts;
+
   return {
-    ...reqConfig,
-    headers: fixedHeaders,
+    ...requestConfig,
+    method,
+    url,
+    params: query,
+    data: data,
+    headers: pickBy(headers as any, (v: any) => !isUndefined(v)),
   };
-};
+}

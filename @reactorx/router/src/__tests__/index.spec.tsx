@@ -1,20 +1,13 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import { MemoryRouter, Route } from "..";
-import { renderStrict } from "./testutils";
+import { mount } from "@reactorx/testutils";
 
 describe("Integration Tests", () => {
-  const node = document.createElement("div");
-
-  afterEach(() => {
-    ReactDOM.unmountComponentAtNode(node);
-  });
-
   it("renders nested matches", () => {
     const TEXT1 = "Ms. Tripp";
     const TEXT2 = "Mrs. Schiffman";
 
-    renderStrict(
+    const node = mount(
       <MemoryRouter initialEntries={["/nested"]}>
         <Route
           path="/"
@@ -26,7 +19,6 @@ describe("Integration Tests", () => {
           )}
         />
       </MemoryRouter>,
-      node,
     );
 
     expect(node.innerHTML).toContain(TEXT1);
@@ -37,7 +29,7 @@ describe("Integration Tests", () => {
     const TEXT1 = "Ms. Tripp";
     const TEXT2 = "Mrs. Schiffman";
 
-    renderStrict(
+    const node = mount(
       <MemoryRouter initialEntries={["/"]}>
         <Route
           path="/"
@@ -49,7 +41,6 @@ describe("Integration Tests", () => {
           )}
         />
       </MemoryRouter>,
-      node,
     );
 
     expect(node.innerHTML).toContain(TEXT1);
@@ -60,7 +51,7 @@ describe("Integration Tests", () => {
     const TEXT1 = "Mrs. Schiffman";
     const TEXT2 = "Mrs. Burton";
 
-    renderStrict(
+    const node = mount(
       <MemoryRouter initialEntries={["/double"]}>
         <div>
           <aside>
@@ -71,7 +62,6 @@ describe("Integration Tests", () => {
           </main>
         </div>
       </MemoryRouter>,
-      node,
     );
 
     expect(node.innerHTML).toContain(TEXT1);

@@ -1,11 +1,8 @@
 import { filter, map } from "rxjs/operators";
 import { Actor, AsyncActor, Store, StoreProvider, useEpic } from "..";
 import React from "react";
-import { configure, mount } from "enzyme";
 import { Observable } from "rxjs";
-import Adapter from "enzyme-adapter-react-16";
-
-configure({ adapter: new Adapter() });
+import { mount } from "@reactorx/testutils";
 
 describe("@reactorx/core", () => {
   test("AsyncActor", () => {
@@ -120,45 +117,28 @@ describe("@reactorx/core", () => {
       );
     };
 
-    const wrapper = mount(<App ping={true} />);
+    const node = mount(<App ping={true} />);
 
-    const pingPongTexts = [];
-
-    wrapper.mount();
-
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 10; i++) {
       ping.with({}).invoke(so$);
 
-      const $ping = wrapper.find("#ping");
-      const $pong = wrapper.find("#pong");
+      const $ping = node.querySelector("#ping");
+      const $pong = node.querySelector("#pong");
 
-      pingPongTexts.push($ping.length ? $ping.text() : undefined);
-      pingPongTexts.push($pong.length ? $pong.text() : undefined);
+      expect($ping!.innerHTML).toContain(so$.getValue()["ping"]);
+      expect($pong!.innerHTML).toContain(so$.getValue()["pong"]);
     }
 
-    wrapper.setProps({
-      ping: false,
-    });
+    mount(<App ping={false} />, node);
 
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 10; i++) {
       ping.with({}).invoke(so$);
 
-      const $ping = wrapper.find("#ping");
-      const $pong = wrapper.find("#pong");
+      const $ping = node.querySelector("#ping");
+      const $pong = node.querySelector("#pong");
 
-      pingPongTexts.push($ping.length ? $ping.text() : undefined);
-      pingPongTexts.push($pong.length ? $pong.text() : undefined);
+      expect($ping).toBeNull();
+      expect($pong!.innerHTML).toContain(so$.getValue()["pong"]);
     }
-
-    expect(pingPongTexts).toEqual([
-      "1",
-      "1",
-      "2",
-      "2",
-      undefined,
-      "2",
-      undefined,
-      "2",
-    ]);
   });
 });

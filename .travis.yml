@@ -3,3 +3,9 @@ language: node_js
 node_js:
   - "10"
   - "11"
+
+script:
+  - echo "."
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

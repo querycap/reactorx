@@ -4,7 +4,7 @@ import {
   LocationDescriptorObject,
   locationsAreEqual,
 } from "history";
-import React, { useEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import { generatePath, IMatch, usePrevious } from "./utils";
 import { IRouterContext, useRouterContext } from "./RouterContext";
 
@@ -21,7 +21,7 @@ export const Redirect = (props: IRedirectProps) => {
   const context = useRouterContext();
   const prevToRef = usePrevious(props.to);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (
       prevToRef == null ||
       !locationsAreEqual(createLocation(prevToRef), createLocation(props.to))

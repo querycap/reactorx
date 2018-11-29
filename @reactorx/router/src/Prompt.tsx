@@ -4,7 +4,7 @@ import { usePrevious } from "./utils";
 
 export interface IPromptProps {
   message: string;
-  when: boolean;
+  when?: boolean;
 }
 
 export function Prompt({ message, when = true }: IPromptProps) {

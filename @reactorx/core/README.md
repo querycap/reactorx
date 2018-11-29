@@ -3,9 +3,8 @@
 Another state manager based on [RxJS 6](https://github.com/ReactiveX/rxjs)
 inspired by [redux](https://redux.js.org/) and [redux-observable](https://redux-observable.js.org/)
 
-[![Build Status](https://img.shields.io/travis/reactorxjs/reactorx.svg?style=flat-square)](https://travis-ci.org/reactorxjs/reactorx)
-[![NPM](https://img.shields.io/npm/v/@reactorx/core.svg?style=flat-square)](https://npmjs.org/package/@reactorx/reactorx)
-[![License](https://img.shields.io/npm/l/@reactorx/reactorx.svg?style=flat-square)](https://npmjs.org/package/@reactorx/reactorx)
+[![NPM](https://img.shields.io/npm/v/@reactorx/core.svg?style=flat-square)](https://npmjs.org/package/@reactorx/core)
+[![License](https://img.shields.io/npm/l/@reactorx/core.svg?style=flat-square)](https://npmjs.org/package/@reactorx/core)
 
 ## Core Concepts​
 
