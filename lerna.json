@@ -2,5 +2,10 @@
   "packages": [
     "@reactorx/*"
   ],
+  "publish": {
+    "ignoreChanges": [
+      "*.js"
+    ]
+  },
   "version": "0.2.0"
 }

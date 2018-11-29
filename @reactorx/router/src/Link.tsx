@@ -48,7 +48,7 @@ function handleClick(
     !event.defaultPrevented && // onClick prevented default
     event.button === 0 && // ignore everything but left clicks
     (attrTarget === null || attrTarget === "_self") && // let browser handle "target=_blank" etc.
-    !isModifiedEvent(event) // ignore clicks with modifier keys
+    !isModifiedEvent(event) // ignore clicks with modifier keyOpts
   ) {
     event.preventDefault();
     nav();
