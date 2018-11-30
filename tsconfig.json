@@ -3,10 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "*": [
-        "*",
-        "__types__/*"
-      ]
+      "*": ["*", "__types__/*"]
     },
     "noImplicitAny": true,
     "experimentalDecorators": true,
@@ -15,17 +12,18 @@
     "moduleResolution": "node",
     "jsx": "react",
     "module": "commonjs",
-    "lib": [
-      "dom",
-      "esnext"
-    ],
+    "lib": ["dom", "esnext"],
     "target": "es2015",
     "pretty": true,
     "strict": true,
+    /* Additional Checks */
+    "noUnusedLocals": true,
+    "preserveConstEnums": false,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
     "removeComments": true
   },
-  "exclude": [
-    "node_modules/*"
-  ]
+  "exclude": ["node_modules/*"]
 }

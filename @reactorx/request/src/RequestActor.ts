@@ -6,7 +6,7 @@ import {
   IAsyncDerived,
 } from "@reactorx/core";
 import { Dictionary, isUndefined, omit, pickBy } from "lodash";
-import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { paramsSerializer } from "./utils";
 
 export type IMethod = "GET" | "DELETE" | "HEAD" | "POST" | "PUT" | "PATCH";

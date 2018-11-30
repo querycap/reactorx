@@ -3,7 +3,7 @@ import { Form } from "../Form";
 import { Field } from "../Field";
 import { pickDOMAttrs } from "@reactorx/utils";
 
-export function SimpleForm(props: {}) {
+export function SimpleForm() {
   return (
     <Form
       name={"SimpleForm"}

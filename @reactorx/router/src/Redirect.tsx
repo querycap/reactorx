@@ -4,7 +4,7 @@ import {
   LocationDescriptorObject,
   locationsAreEqual,
 } from "history";
-import React, { useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 import { generatePath, IMatch, usePrevious } from "./utils";
 import { IRouterContext, useRouterContext } from "./RouterContext";
 

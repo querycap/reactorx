@@ -263,7 +263,7 @@ describe("A <Route>", () => {
 
         let props: IRouterContext | null = null;
 
-        const node = mount(
+        mount(
           <Router history={history}>
             <Route
               path="/"
@@ -320,7 +320,7 @@ describe("A <Route>", () => {
         return null;
       };
 
-      const node = mount(
+      mount(
         <Router history={history}>
           <Route path="/" component={Component} />
         </Router>,
@@ -351,7 +351,7 @@ describe("A <Route>", () => {
 
       let props: IRouterContext | null = null;
 
-      const node = mount(
+      mount(
         <Router history={history}>
           <Route
             path="/"
