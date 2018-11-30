@@ -1,18 +1,19 @@
 import React, { useLayoutEffect } from "react";
 import { createMemoryHistory as createHistory } from "history";
-import { MemoryRouter, Redirect, Route, Router } from "..";
+import { Redirect, Route, Router } from "..";
 
 import { mount } from "@reactorx/testutils";
 import { IRouterContext } from "../RouterContext";
+import { default as createMemoryHistory } from "history/createMemoryHistory";
 
 describe("A <Route>", () => {
   it("renders when it matches", () => {
     const text = "cupcakes";
 
     const node = mount(
-      <MemoryRouter initialEntries={["/cupcakes"]}>
+      <Router history={createMemoryHistory({ initialEntries: ["/cupcakes"] })}>
         <Route path="/cupcakes" render={() => <h1>{text}</h1>} />
-      </MemoryRouter>,
+      </Router>,
     );
 
     expect(node.innerHTML).toContain(text);
@@ -22,9 +23,9 @@ describe("A <Route>", () => {
     const text = "cupcakes";
 
     const node = mount(
-      <MemoryRouter initialEntries={["/"]}>
+      <Router history={createMemoryHistory({ initialEntries: ["/"] })}>
         <Route path="/" render={() => <h1>{text}</h1>} />
-      </MemoryRouter>,
+      </Router>,
     );
 
     expect(node.innerHTML).toContain(text);
@@ -34,9 +35,9 @@ describe("A <Route>", () => {
     const text = "bubblegum";
 
     const node = mount(
-      <MemoryRouter initialEntries={["/bunnies"]}>
+      <Router history={createMemoryHistory({ initialEntries: ["/bunnies"] })}>
         <Route path="/flowers" render={() => <h1>{text}</h1>} />
-      </MemoryRouter>,
+      </Router>,
     );
 
     expect(node.innerHTML).not.toContain(text);
@@ -63,12 +64,15 @@ describe("A <Route>", () => {
   describe("with dynamic segments in the path", () => {
     it("decodes them", () => {
       const node = mount(
-        <MemoryRouter initialEntries={["/a%20dynamic%20segment"]}>
+        <Router
+          history={createMemoryHistory({
+            initialEntries: ["/a%20dynamic%20segment"],
+          })}>
           <Route
             path="/:id"
             render={({ match }) => <h1>{match.params.id}</h1>}
           />
-        </MemoryRouter>,
+        </Router>,
       );
 
       expect(node.innerHTML).toContain("a dynamic segment");
@@ -78,24 +82,28 @@ describe("A <Route>", () => {
   describe("with an array of paths", () => {
     it("matches the first provided path", () => {
       const node = mount(
-        <MemoryRouter initialEntries={["/hello"]}>
+        <Router history={createMemoryHistory({ initialEntries: ["/hello"] })}>
           <Route
             path={["/hello", "/world"]}
             render={() => <div>Hello World</div>}
           />
-        </MemoryRouter>,
+        </Router>,
       );
       expect(node.innerHTML).toContain("Hello World");
     });
 
     it("matches other provided paths", () => {
       const node = mount(
-        <MemoryRouter initialEntries={["/other", "/world"]} initialIndex={1}>
+        <Router
+          history={createMemoryHistory({
+            initialEntries: ["/other", "/world"],
+            initialIndex: 1,
+          })}>
           <Route
             path={["/hello", "/world"]}
             render={() => <div>Hello World</div>}
           />
-        </MemoryRouter>,
+        </Router>,
       );
 
       expect(node.innerHTML).toContain("Hello World");
@@ -103,12 +111,16 @@ describe("A <Route>", () => {
 
     it("provides the matched path as a string", () => {
       const node = mount(
-        <MemoryRouter initialEntries={["/other", "/world"]} initialIndex={1}>
+        <Router
+          history={createMemoryHistory({
+            initialEntries: ["/other", "/world"],
+            initialIndex: 1,
+          })}>
           <Route
             path={["/hello", "/world"]}
             render={({ match }) => <div>{match.path}</div>}
           />
-        </MemoryRouter>,
+        </Router>,
       );
 
       expect(node.innerHTML).toContain("/world");
@@ -147,9 +159,9 @@ describe("A <Route>", () => {
   describe("with a unicode path", () => {
     it("is able to match", () => {
       const node = mount(
-        <MemoryRouter initialEntries={["/パス名"]}>
+        <Router history={createMemoryHistory({ initialEntries: ["/パス名"] })}>
           <Route path="/パス名" render={({ match }) => <h1>{match.url}</h1>} />
-        </MemoryRouter>,
+        </Router>,
       );
 
       expect(node.innerHTML).toContain("/パス名");
@@ -159,12 +171,13 @@ describe("A <Route>", () => {
   describe("with escaped special characters in the path", () => {
     it("is able to match", () => {
       const node = mount(
-        <MemoryRouter initialEntries={["/pizza (1)"]}>
+        <Router
+          history={createMemoryHistory({ initialEntries: ["/pizza (1)"] })}>
           <Route
             path="/pizza \(1\)"
             render={({ match }) => <h1>{match.url}</h1>}
           />
-        </MemoryRouter>,
+        </Router>,
       );
 
       expect(node.innerHTML).toContain("/pizza (1)");
@@ -176,9 +189,10 @@ describe("A <Route>", () => {
       const text = "bubblegum";
 
       const node = mount(
-        <MemoryRouter initialEntries={["/somepath/"]}>
+        <Router
+          history={createMemoryHistory({ initialEntries: ["/somepath/"] })}>
           <Route exact path="/somepath" render={() => <h1>{text}</h1>} />
-        </MemoryRouter>,
+        </Router>,
       );
 
       expect(node.innerHTML).toContain(text);
@@ -189,14 +203,15 @@ describe("A <Route>", () => {
         const text = "bubblegum";
 
         const node = mount(
-          <MemoryRouter initialEntries={["/somepath/"]}>
+          <Router
+            history={createMemoryHistory({ initialEntries: ["/somepath/"] })}>
             <Route
               exact
               strict
               path="/somepath"
               render={() => <h1>{text}</h1>}
             />
-          </MemoryRouter>,
+          </Router>,
         );
 
         expect(node.innerHTML).not.toContain(text);
@@ -206,14 +221,15 @@ describe("A <Route>", () => {
         const text = "bubblegum";
 
         const node = mount(
-          <MemoryRouter initialEntries={["/somepath"]}>
+          <Router
+            history={createMemoryHistory({ initialEntries: ["/somepath"] })}>
             <Route
               exact
               strict
               path="/somepath/"
               render={() => <h1>{text}</h1>}
             />
-          </MemoryRouter>,
+          </Router>,
         );
 
         expect(node.innerHTML).not.toContain(text);
@@ -226,13 +242,14 @@ describe("A <Route>", () => {
       const text = "bubblegum";
 
       const node = mount(
-        <MemoryRouter initialEntries={["/cupcakes"]}>
+        <Router
+          history={createMemoryHistory({ initialEntries: ["/cupcakes"] })}>
           <Route
             location={{ pathname: "/bubblegum" }}
             path="/bubblegum"
             render={() => <h1>{text}</h1>}
           />
-        </MemoryRouter>,
+        </Router>,
       );
 
       expect(node.innerHTML).toContain(text);
@@ -268,9 +285,9 @@ describe("A <Route>", () => {
         const text = "bubblegum";
 
         const node = mount(
-          <MemoryRouter initialEntries={["/"]}>
+          <Router history={createMemoryHistory({ initialEntries: ["/"] })}>
             <Route path="/" children={() => <h1>{text}</h1>} />
-          </MemoryRouter>,
+          </Router>,
         );
 
         expect(node.innerHTML).toContain(text);
@@ -285,9 +302,9 @@ describe("A <Route>", () => {
       const Home = () => <h1>{text}</h1>;
 
       const node = mount(
-        <MemoryRouter initialEntries={["/"]}>
+        <Router history={createMemoryHistory({ initialEntries: ["/"] })}>
           <Route path="/" component={Home} />
-        </MemoryRouter>,
+        </Router>,
       );
 
       expect(node.innerHTML).toContain(text);
@@ -321,9 +338,9 @@ describe("A <Route>", () => {
       const text = "Mrs. Kato";
 
       const node = mount(
-        <MemoryRouter initialEntries={["/"]}>
+        <Router history={createMemoryHistory({ initialEntries: ["/"] })}>
           <Route path="/" render={() => <h1>{text}</h1>} />
-        </MemoryRouter>,
+        </Router>,
       );
 
       expect(node.innerHTML).toContain(text);

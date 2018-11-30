@@ -9,11 +9,18 @@
     "es/",
     "cjs/"
   ],
+  "peerDependencies": {
+    "rxjs": "6.x",
+    "history": "4.7.x"
+  },
   "dependencies": {
-    "@types/history": "4.7.2",
+    "@reactorx/core": "^0.2.0",
     "@types/path-to-regexp": "1.7.0",
-    "history": "4.7.2",
     "path-to-regexp": "2.4.0"
+  },
+  "devDependencies": {
+    "@types/history": "4.7.x",
+    "history": "4.7.x"
   },
   "publishConfig": {
     "access": "public"

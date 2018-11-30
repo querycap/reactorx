@@ -18,7 +18,7 @@ export interface IRedirectProps {
 }
 
 export const Redirect = (props: IRedirectProps) => {
-  const context = useRouterContext();
+  const router = useRouterContext();
   const prevToRef = usePrevious(props.to);
 
   useLayoutEffect(() => {
@@ -26,7 +26,7 @@ export const Redirect = (props: IRedirectProps) => {
       prevToRef == null ||
       !locationsAreEqual(createLocation(prevToRef), createLocation(props.to))
     ) {
-      perform(props, context);
+      perform(props, router);
     }
   });
 

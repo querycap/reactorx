@@ -11,9 +11,9 @@ export interface ISwitchProps {
 }
 
 export const Switch = (props: ISwitchProps) => {
-  const context = useRouterContext();
+  const router = useRouterContext();
 
-  const location = (props.location || context.location) as Location;
+  const location = (props.location || router.location) as Location;
 
   let match: IMatch<any> | null = null;
   let element: React.ReactElement<any> | undefined;
@@ -28,7 +28,7 @@ export const Switch = (props: ISwitchProps) => {
 
       match = path
         ? matchPath(location.pathname, { ...child.props, path })
-        : context.match;
+        : router.match;
     }
   });
 

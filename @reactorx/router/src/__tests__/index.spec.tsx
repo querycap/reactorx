@@ -1,6 +1,7 @@
 import React from "react";
-import { MemoryRouter, Route } from "..";
+import { Route, Router } from "..";
 import { mount } from "@reactorx/testutils";
+import { createMemoryHistory } from "history";
 
 describe("Integration Tests", () => {
   it("renders nested matches", () => {
@@ -8,7 +9,7 @@ describe("Integration Tests", () => {
     const TEXT2 = "Mrs. Schiffman";
 
     const node = mount(
-      <MemoryRouter initialEntries={["/nested"]}>
+      <Router history={createMemoryHistory({ initialEntries: ["/nested"] })}>
         <Route
           path="/"
           render={() => (
@@ -18,7 +19,7 @@ describe("Integration Tests", () => {
             </div>
           )}
         />
-      </MemoryRouter>,
+      </Router>,
     );
 
     expect(node.innerHTML).toContain(TEXT1);
@@ -30,7 +31,7 @@ describe("Integration Tests", () => {
     const TEXT2 = "Mrs. Schiffman";
 
     const node = mount(
-      <MemoryRouter initialEntries={["/"]}>
+      <Router history={createMemoryHistory({ initialEntries: ["/"] })}>
         <Route
           path="/"
           render={() => (
@@ -40,7 +41,7 @@ describe("Integration Tests", () => {
             </div>
           )}
         />
-      </MemoryRouter>,
+      </Router>,
     );
 
     expect(node.innerHTML).toContain(TEXT1);
@@ -52,7 +53,7 @@ describe("Integration Tests", () => {
     const TEXT2 = "Mrs. Burton";
 
     const node = mount(
-      <MemoryRouter initialEntries={["/double"]}>
+      <Router history={createMemoryHistory({ initialEntries: ["/double"] })}>
         <div>
           <aside>
             <Route path="/double" render={() => <h1>{TEXT1}</h1>} />
@@ -61,7 +62,7 @@ describe("Integration Tests", () => {
             <Route path="/double" render={() => <h1>{TEXT2}</h1>} />
           </main>
         </div>
-      </MemoryRouter>,
+      </Router>,
     );
 
     expect(node.innerHTML).toContain(TEXT1);
