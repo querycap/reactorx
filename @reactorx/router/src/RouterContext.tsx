@@ -15,6 +15,6 @@ const RouterContext = createContext({} as IRouterContext<any>);
 
 export const RouterProvider = RouterContext.Provider;
 
-export const useRouterContext = () => {
-  return useContext(RouterContext);
-};
+export function useRouterContext<TParameters = any>() {
+  return useContext<IRouterContext<TParameters>>(RouterContext);
+}
