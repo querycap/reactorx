@@ -72,7 +72,7 @@ describe("@reactorx/core", () => {
     expect(pongStates).toEqual([0, 1, 2, 3, 4, 5]);
   });
 
-  test("in react", () => {
+  test("in react", async () => {
     const testActor = Actor.of("test");
 
     const ping = testActor
@@ -117,7 +117,7 @@ describe("@reactorx/core", () => {
       );
     };
 
-    const node = mount(<App ping={true} />);
+    const node = await mount(<App ping={true} />);
 
     for (let i = 0; i < 10; i++) {
       ping.with({}).invoke(so$);
@@ -129,7 +129,7 @@ describe("@reactorx/core", () => {
       expect($pong!.innerHTML).toContain(so$.getValue()["pong"]);
     }
 
-    mount(<App ping={false} />, node);
+    await mount(<App ping={false} />, node);
 
     for (let i = 0; i < 10; i++) {
       ping.with({}).invoke(so$);

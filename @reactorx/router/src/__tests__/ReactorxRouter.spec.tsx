@@ -8,7 +8,7 @@ import { mount } from "@reactorx/testutils";
 import { Store, StoreProvider } from "@reactorx/core";
 
 describe("ReactorxRouter", () => {
-  it("renders the first <Redirect> that matches the URL", () => {
+  it("renders the first <Redirect> that matches the URL", async () => {
     const store$ = Store.create({
       $$location: {
         pathname: "/three",
@@ -18,7 +18,7 @@ describe("ReactorxRouter", () => {
       },
     });
 
-    const node = mount(
+    const node = await mount(
       <StoreProvider value={store$}>
         <ReactorxRouter history={createMemoryHistory({ keyLength: 0 })}>
           <Switch>

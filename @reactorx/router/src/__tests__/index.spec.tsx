@@ -4,11 +4,11 @@ import { mount } from "@reactorx/testutils";
 import { createMemoryHistory } from "history";
 
 describe("Integration Tests", () => {
-  it("renders nested matches", () => {
+  it("renders nested matches", async () => {
     const TEXT1 = "Ms. Tripp";
     const TEXT2 = "Mrs. Schiffman";
 
-    const node = mount(
+    const node = await mount(
       <Router history={createMemoryHistory({ initialEntries: ["/nested"] })}>
         <Route
           path="/"
@@ -26,11 +26,11 @@ describe("Integration Tests", () => {
     expect(node.innerHTML).toContain(TEXT2);
   });
 
-  it("renders only as deep as the matching Route", () => {
+  it("renders only as deep as the matching Route", async () => {
     const TEXT1 = "Ms. Tripp";
     const TEXT2 = "Mrs. Schiffman";
 
-    const node = mount(
+    const node = await mount(
       <Router history={createMemoryHistory({ initialEntries: ["/"] })}>
         <Route
           path="/"
@@ -48,11 +48,11 @@ describe("Integration Tests", () => {
     expect(node.innerHTML).not.toContain(TEXT2);
   });
 
-  it("renders multiple matching routes", () => {
+  it("renders multiple matching routes", async () => {
     const TEXT1 = "Mrs. Schiffman";
     const TEXT2 = "Mrs. Burton";
 
-    const node = mount(
+    const node = await mount(
       <Router history={createMemoryHistory({ initialEntries: ["/double"] })}>
         <div>
           <aside>

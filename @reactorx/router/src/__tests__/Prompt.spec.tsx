@@ -4,7 +4,7 @@ import { Prompt, Router } from "..";
 import { mount } from "@reactorx/testutils";
 
 describe("A <Prompt>", () => {
-  it("calls getUserConfirmation with the prompt message", () => {
+  it("calls getUserConfirmation with the prompt message", async () => {
     const getUserConfirmation = jest.fn((_, callback) => {
       callback(false);
     });
@@ -13,7 +13,7 @@ describe("A <Prompt>", () => {
       getUserConfirmation: getUserConfirmation,
     });
 
-    mount(
+    await mount(
       <Router history={history}>
         <Prompt message="Are you sure?" />
       </Router>,
@@ -28,7 +28,7 @@ describe("A <Prompt>", () => {
   });
 
   describe("with when=false", () => {
-    it("does not call getUserConfirmation", () => {
+    it("does not call getUserConfirmation", async () => {
       const getUserConfirmation = jest.fn((_, callback) => {
         callback(false);
       });
@@ -37,7 +37,7 @@ describe("A <Prompt>", () => {
         getUserConfirmation: getUserConfirmation,
       });
 
-      mount(
+      await mount(
         <Router history={history}>
           <Prompt message="Are you sure?" when={false} />
         </Router>,

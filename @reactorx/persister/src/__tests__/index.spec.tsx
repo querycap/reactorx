@@ -11,7 +11,7 @@ describe("Persister", () => {
     await localforage.defineDriver(memoryStorageDriver);
   });
 
-  it("flow", (done) => {
+  it("flow", async (done) => {
     const persister = createPersister({
       name: "test",
       driver: memoryStorageDriver._driver,
@@ -25,7 +25,7 @@ describe("Persister", () => {
       return null;
     }
 
-    mount(
+    await mount(
       <StoreProvider value={store$}>
         <App />
       </StoreProvider>,

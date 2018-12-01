@@ -25,20 +25,27 @@ function Root({ child$ }: { child$: BehaviorSubject<ReactElement<any>> }) {
 
 export function mount(
   element: ReactElement<any>,
-  e: Element = document.createElement("div"),
-) {
-  if ((e as any).subject$) {
-    (e as any).subject$.next(element);
+  node: Element = document.createElement("div"),
+): Promise<Element> {
+  if ((node as any).subject$) {
+    (node as any).subject$.next(element);
+    return Promise.resolve(node);
   }
+  return new Promise((resolve) => {
+    const child$ = new BehaviorSubject(element);
 
-  const child$ = new BehaviorSubject(element);
+    (node as any).subject$ = child$;
 
-  ReactDOM.render(
-    <StrictMode>
-      <Root child$={child$} />
-    </StrictMode>,
-    e,
-  );
-  (e as any).subject$ = child$;
-  return e;
+    ReactDOM.render(
+      <StrictMode>
+        <Root child$={child$} />
+      </StrictMode>,
+      node,
+      () => {
+        setTimeout(() => {
+          resolve(node);
+        });
+      },
+    );
+  });
 }
