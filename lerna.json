@@ -1,7 +1,7 @@
 {
   "packages": ["@reactorx/*"],
   "publish": {
-    "ignoreChanges": ["*.js"]
+    "ignoreChanges": ["*.js", "__tests__/**"]
   },
   "version": "0.3.3"
 }
