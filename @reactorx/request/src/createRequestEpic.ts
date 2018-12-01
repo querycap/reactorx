@@ -28,7 +28,7 @@ type TRequestInterceptor = (
 export const createRequestEpic = (
   options: AxiosRequestConfig,
   ...interceptors: TRequestInterceptor[]
-): IEpic<RequestActor> => {
+): IEpic => {
   const client = axios.create({
     ...options,
     timeout: 0,

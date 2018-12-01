@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { createLocation, LocationDescriptorObject } from "history";
-import { useRouterContext } from "./RouterContext";
+import { useRouter } from "./RouterContext";
 
 export interface ILinkProps {
   onClick?: (evt: any) => void;
@@ -11,7 +11,7 @@ export interface ILinkProps {
 }
 
 export function Link(props: ILinkProps) {
-  const context = useRouterContext();
+  const context = useRouter();
 
   const { replace, to, ...rest } = props;
 

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useRouterContext } from "./RouterContext";
+import { useRouter } from "./RouterContext";
 import { usePrevious } from "./utils";
 
 export interface IPromptProps {
@@ -8,7 +8,7 @@ export interface IPromptProps {
 }
 
 export function Prompt({ message, when = true }: IPromptProps) {
-  const { history } = useRouterContext();
+  const { history } = useRouter();
   const prevMessage = usePrevious(message);
   const releaseRef = useRef(() => {});
 

@@ -5,18 +5,24 @@ import { RequestActor } from "./RequestActor";
 import { BehaviorSubject, merge as observableMerge, Subject } from "rxjs";
 import { filter as rxFilter, tap as rxTap } from "rxjs/operators";
 
-export interface IUseRequestOpts<TAsyncActor extends RequestActor> {
-  arg?: TAsyncActor["arg"];
-  opts?: TAsyncActor["opts"];
+export interface IUseRequestOpts<TReq, TRespBody, TError> {
+  arg?: RequestActor<TReq, TRespBody, TError>["arg"];
+  opts?: RequestActor<TReq, TRespBody, TError>["opts"];
   required?: boolean;
-  onSuccess?: (actor: TAsyncActor["done"], dispatch: IDispatch) => void;
-  onFail?: (actor: TAsyncActor["failed"], dispatch: IDispatch) => void;
+  onSuccess?: (
+    actor: RequestActor<TReq, TRespBody, TError>["done"],
+    dispatch: IDispatch,
+  ) => void;
+  onFail?: (
+    actor: RequestActor<TReq, TRespBody, TError>["failed"],
+    dispatch: IDispatch,
+  ) => void;
   onFinish?: (dispatch: IDispatch) => void;
 }
 
-export function useRequest<TAsyncActor extends RequestActor>(
-  asyncActor: TAsyncActor,
-  options: IUseRequestOpts<TAsyncActor> = {},
+export function useRequest<TReq, TRespBody, TError>(
+  requestActor: RequestActor<TReq, TRespBody, TError>,
+  options: IUseRequestOpts<TReq, TRespBody, TError> = {},
 ) {
   const requesting$ = useMemo(
     () => new BehaviorSubject(!!options.required),
@@ -39,20 +45,20 @@ export function useRequest<TAsyncActor extends RequestActor>(
 
       const subscription = observableMerge(
         subject$.pipe(
-          rxFilter(asyncActor.done.is),
+          rxFilter(requestActor.done.is),
           rxFilter((actor) =>
             isEqual(actor.opts.parentActor.arg, lastArg.current),
           ),
-          rxTap((actor: typeof asyncActor.done) => {
+          rxTap((actor: typeof requestActor.done) => {
             end(() => (options.onSuccess || noop)(actor, dispatch));
           }),
         ),
         subject$.pipe(
-          rxFilter(asyncActor.failed.is),
+          rxFilter(requestActor.failed.is),
           rxFilter((actor) =>
             isEqual(actor.opts.parentActor.arg, lastArg.current),
           ),
-          rxTap((actor: typeof asyncActor.failed) => {
+          rxTap((actor: typeof requestActor.failed) => {
             end(() => (options.onFail || noop)(actor, dispatch));
             (options.onFail || noop)(actor, dispatch);
           }),
@@ -64,14 +70,14 @@ export function useRequest<TAsyncActor extends RequestActor>(
         actorSubscription.unsubscribe();
       };
     },
-    [asyncActor],
+    [requestActor],
   );
 
   return {
     request: (arg: any = options.arg || {}, opts: any = options.opts) => {
       lastArg.current = arg;
       requesting$.next(true);
-      dispatch(asyncActor.with(arg, opts));
+      dispatch(requestActor.with(arg, opts));
     },
     requesting$,
   };

@@ -6,7 +6,7 @@ import {
 } from "history";
 import { useLayoutEffect } from "react";
 import { generatePath, IMatch, usePrevious } from "./utils";
-import { IRouterContext, useRouterContext } from "./RouterContext";
+import { IRouterContext, useRouter } from "./RouterContext";
 
 export interface IRedirectProps {
   to: LocationDescriptor;
@@ -18,7 +18,7 @@ export interface IRedirectProps {
 }
 
 export const Redirect = (props: IRedirectProps) => {
-  const router = useRouterContext();
+  const router = useRouter();
   const prevToRef = usePrevious(props.to);
 
   useLayoutEffect(() => {

@@ -1,10 +1,6 @@
 import React from "react";
 import { IMatch, matchPath } from "./utils";
-import {
-  IRouterContext,
-  RouterProvider,
-  useRouterContext,
-} from "./RouterContext";
+import { IRouterContext, RouterProvider, useRouter } from "./RouterContext";
 
 export interface IRouteProps {
   path?: string | string[];
@@ -22,7 +18,7 @@ export interface IRouteProps {
 }
 
 export function Route(props: IRouteProps) {
-  const context = useRouterContext();
+  const context = useRouter();
   const match = computeRouteMatch(props, context);
 
   const nextContext = {

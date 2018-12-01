@@ -1,7 +1,7 @@
 import { Location, LocationDescriptorObject } from "history";
 import * as React from "react";
 import { IMatch, matchPath } from "./utils";
-import { useRouterContext } from "./RouterContext";
+import { useRouter } from "./RouterContext";
 import { IRouteProps } from "./Route";
 import { IRedirectProps } from "./Redirect";
 
@@ -11,7 +11,7 @@ export interface ISwitchProps {
 }
 
 export const Switch = (props: ISwitchProps) => {
-  const router = useRouterContext();
+  const router = useRouter();
 
   const location = (props.location || router.location) as Location;
 
