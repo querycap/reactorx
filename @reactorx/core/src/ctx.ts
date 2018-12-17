@@ -1,4 +1,9 @@
-import { createContext, useContext, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useLayoutEffect,
+  useLayoutEffect,
+} from "react";
 import { IEpic, Store } from "./core";
 
 const StoreContext = createContext({} as Store<any>);
@@ -12,7 +17,7 @@ export const useStore = () => {
 export const useEpic = (epic: IEpic, inputs?: any[]) => {
   const store$ = useStore();
 
-  useEffect(
+  useLayoutEffect(
     () => {
       const subscription = store$.epicOn(epic);
 
