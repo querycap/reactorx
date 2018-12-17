@@ -1,3 +1,4 @@
+export * from "./Actors";
 export * from "./Field";
 export * from "./FieldArray";
 export * from "./Form";
