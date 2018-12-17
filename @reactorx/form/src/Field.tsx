@@ -15,7 +15,7 @@ export interface IFieldStateProps {
   name: string;
   children: (
     formState: IFieldState & { name: string; value: any },
-  ) => JSX.Element | null;
+  ) => React.ReactNode;
 }
 
 export function FieldState(props: IFieldStateProps) {
@@ -31,15 +31,19 @@ export function FieldState(props: IFieldStateProps) {
     [name],
   );
 
-  return fieldState$.render((fieldState) => {
-    return fieldValue$.render((value) => {
-      return props.children({
-        ...fieldState,
-        value,
-        name,
-      });
-    });
-  });
+  return (
+    <>
+      {fieldState$.render((fieldState) => {
+        return fieldValue$.render((value) => {
+          return props.children({
+            ...fieldState,
+            value,
+            name,
+          });
+        });
+      })}
+    </>
+  );
 }
 
 export interface IFieldInnerProps<TName extends string = string>
@@ -62,7 +66,7 @@ export interface IFieldProps<TName extends string = string> {
   name: TName;
   required?: boolean;
   validate?: TValidate | TValidate[];
-  children: (fieldProps: IFieldInnerProps<TName>) => JSX.Element | null;
+  children: (fieldProps: IFieldInnerProps<TName>) => React.ReactNode;
 }
 
 export const createValidate = (
@@ -182,7 +186,7 @@ export function Field<TName extends string = string>(
           fieldError: touched ? error : undefined, // show error after touched
           value: value,
           required: props.required,
-        }) as any;
+        });
       }}
     </FieldState>
   );

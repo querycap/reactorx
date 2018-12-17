@@ -3,7 +3,12 @@ import {
   distinctUntilChanged as rxDistinctUntilChanged,
   map as rxMap,
 } from "rxjs/operators";
-import { createElement, useLayoutEffect, useMemo, useState } from "react";
+import React, {
+  createElement,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
 import { shallowEqual } from "./utils";
 
 export function useObservable<T>(observable: Observable<T>, defaultValue: T) {
@@ -26,21 +31,21 @@ export function useObservable<T>(observable: Observable<T>, defaultValue: T) {
 export interface IObserverProps<TState> {
   state$: Observable<TState>;
   initialState: TState;
-  children: (state: TState) => JSX.Element | null;
+  children: (state: TState) => React.ReactNode;
 }
 
 declare module "rxjs/internal/Observable" {
   interface Observable<T> {
     render<T>(
       this: Observable<T>,
-      render: (state: T) => JSX.Element | null,
-    ): JSX.Element | null;
+      render: (state: T) => React.ReactNode,
+    ): React.ReactNode;
   }
 }
 
 Observable.prototype.render = function<T>(
   this: Observable<T>,
-  render: (state: T) => JSX.Element | null,
+  render: (state: T) => React.ReactNode,
 ) {
   return createElement(Observer, {
     state$: this,
@@ -52,7 +57,7 @@ Observable.prototype.render = function<T>(
 function Observer(props: IObserverProps<any>) {
   const { state$, initialState, children } = props;
   const state = useObservable(state$, initialState);
-  return children(state);
+  return <>{children(state)}</>;
 }
 
 declare module "rxjs/internal/Observable" {

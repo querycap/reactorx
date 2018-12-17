@@ -8,12 +8,12 @@ import React from "react";
 export interface IFieldArrayAPIs {
   add: () => void;
   remove: (idx: number) => void;
-  each: (render: (idx: number) => JSX.Element | null) => JSX.Element | null;
+  each: (render: (idx: number) => React.ReactNode) => React.ReactNode;
 }
 
 export interface IFieldArrayProps {
   name: string;
-  children: (fields: IFieldArrayAPIs) => JSX.Element | null;
+  children: (fields: IFieldArrayAPIs) => React.ReactNode;
 }
 
 export const FieldArray = ({ name, children }: IFieldArrayProps) => {
@@ -56,7 +56,7 @@ export const FieldArray = ({ name, children }: IFieldArrayProps) => {
                   )
                   .invoke(store$);
               },
-              each: (render: (idx: number) => JSX.Element | null) => {
+              each: (render: (idx: number) => React.ReactNode) => {
                 return <>{map(value || [], (_, i: number) => render(i))}</>;
               },
             })}

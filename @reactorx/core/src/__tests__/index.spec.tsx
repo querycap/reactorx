@@ -101,7 +101,13 @@ describe("@reactorx/core", () => {
 
       const ping$ = so$.useConn((state) => state["ping"]);
 
-      return ping$.render((ping) => <span id={"ping"}>{ping}</span>);
+      return (
+        <>
+          {ping$.render((ping) => (
+            <span id={"ping"}>{ping}</span>
+          ))}
+        </>
+      );
     };
 
     const App = (props: { ping: boolean }) => {
