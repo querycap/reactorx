@@ -20,7 +20,7 @@ import { RequestActor } from "./RequestActor";
 
 import { paramsSerializer, transformRequest } from "./utils";
 
-type TRequestInterceptor = (
+export type TRequestInterceptor = (
   request: AxiosInterceptorManager<AxiosRequestConfig>,
   response: AxiosInterceptorManager<AxiosResponse>,
 ) => void;
@@ -31,7 +31,6 @@ export const createRequestEpic = (
 ): IEpic => {
   const client = axios.create({
     ...options,
-    timeout: 0,
     paramsSerializer,
     transformRequest,
   });

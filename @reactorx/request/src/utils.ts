@@ -51,7 +51,7 @@ export const paramsSerializer = (params: any) => {
   const appendValue = (k: string, v: any) => {
     if (isArray(v)) {
       forEach(v, (item) => appendValue(k, item));
-    } else if (Object(v)) {
+    } else if (isObject(v)) {
       add(k, JSON.stringify(v));
     } else {
       add(k, v);

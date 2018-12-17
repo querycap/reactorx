@@ -1,9 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useLayoutEffect,
-  useLayoutEffect,
-} from "react";
+import { createContext, useContext, useLayoutEffect } from "react";
 import { IEpic, Store } from "./core";
 
 const StoreContext = createContext({} as Store<any>);
