@@ -30,6 +30,9 @@ export function useRequest<TReq, TRespBody, TError>(
   );
   const lastArg = useRef(null);
   const { actor$, dispatch } = useStore();
+  const optionsRef = useRef(options);
+
+  optionsRef.current = options;
 
   useEffect(
     () => {
@@ -40,7 +43,7 @@ export function useRequest<TReq, TRespBody, TError>(
       const end = (cb: () => void) => {
         cb();
         requesting$.next(false);
-        (options.onFinish || noop)(dispatch);
+        (optionsRef.current.onFinish || noop)(dispatch);
       };
 
       const subscription = observableMerge(
@@ -50,7 +53,7 @@ export function useRequest<TReq, TRespBody, TError>(
             isEqual(actor.opts.parentActor.arg, lastArg.current),
           ),
           rxTap((actor: typeof requestActor.done) => {
-            end(() => (options.onSuccess || noop)(actor, dispatch));
+            end(() => (optionsRef.current.onSuccess || noop)(actor, dispatch));
           }),
         ),
         subject$.pipe(
@@ -59,8 +62,8 @@ export function useRequest<TReq, TRespBody, TError>(
             isEqual(actor.opts.parentActor.arg, lastArg.current),
           ),
           rxTap((actor: typeof requestActor.failed) => {
-            end(() => (options.onFail || noop)(actor, dispatch));
-            (options.onFail || noop)(actor, dispatch);
+            end(() => (optionsRef.current.onFail || noop)(actor, dispatch));
+            (optionsRef.current.onFail || noop)(actor, dispatch);
           }),
         ),
       ).subscribe();
@@ -74,7 +77,10 @@ export function useRequest<TReq, TRespBody, TError>(
   );
 
   return {
-    request: (arg: any = options.arg || {}, opts: any = options.opts) => {
+    request: (
+      arg: any = optionsRef.current.arg || {},
+      opts: any = optionsRef.current.opts,
+    ) => {
       lastArg.current = arg;
       requesting$.next(true);
       dispatch(requestActor.with(arg, opts));
