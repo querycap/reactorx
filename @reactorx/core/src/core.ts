@@ -199,13 +199,6 @@ export function effectOn<TRoot, TActor extends Actor>(
 
     const nextState = effect(root[k], actor);
 
-    if (typeof nextState === "undefined") {
-      return {
-        ...root,
-        k: undefined,
-      };
-    }
-
     return {
       ...(root as any),
       [k]: nextState,
