@@ -1,6 +1,6 @@
 {
   "name": "@reactorx/request",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "main": "cjs/index.js",
   "module": "es/index.js",
   "types": "src/index.ts",
@@ -14,7 +14,7 @@
     "rxjs": ">= 6.x"
   },
   "dependencies": {
-    "@reactorx/core": "^0.3.7",
+    "@reactorx/core": "^0.3.9",
     "@types/lodash": "4.14.x",
     "axios": "0.18.x",
     "lodash": "4.17.x"
