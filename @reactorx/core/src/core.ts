@@ -193,15 +193,26 @@ export function effectOn<TRoot, TActor extends Actor>(
       typeof keyOrKeyCreator === "function"
         ? keyOrKeyCreator(actor)
         : keyOrKeyCreator;
+
     if (k === "") {
       return root;
     }
 
     const nextState = effect(root[k], actor);
 
-    return {
-      ...(root as any),
-      [k]: nextState,
-    };
+    const nextRoot: typeof root = {};
+
+    for (let key in root) {
+      if (key === k) {
+        continue;
+      }
+      nextRoot[key] = root[key];
+    }
+
+    if (typeof nextState !== "undefined") {
+      nextRoot[k] = nextState;
+    }
+
+    return nextRoot;
   };
 }
