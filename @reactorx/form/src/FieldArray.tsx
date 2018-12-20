@@ -22,7 +22,7 @@ export const FieldArray = ({ name, children }: IFieldArrayProps) => {
   const fieldName = `${formCtx.fieldPrefix || ""}${name}`;
 
   return (
-    <FieldState name={name}>
+    <FieldState name={fieldName}>
       {({ value }) => {
         return (
           <FormProvider
