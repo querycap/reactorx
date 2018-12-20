@@ -6,7 +6,7 @@ import { useStore } from "@reactorx/core";
 import React from "react";
 
 export interface IFieldArrayAPIs {
-  add: () => void;
+  add: (defaultValue?: any) => void;
   remove: (idx: number) => void;
   each: (render: (idx: number) => React.ReactNode) => React.ReactNode;
 }
@@ -31,11 +31,11 @@ export const FieldArray = ({ name, children }: IFieldArrayProps) => {
               fieldPrefix: fieldName,
             }}>
             {children({
-              add: () =>
+              add: (defaultValue) =>
                 formUpdateField
                   .with(
                     {
-                      value: [...(value || []), undefined],
+                      value: [...(value || []), defaultValue],
                     },
                     {
                       form: formCtx.formName,
