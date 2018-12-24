@@ -48,6 +48,10 @@ const getFormName = ({ name, id }: IFormProps<any>) => {
 };
 
 export function pickValidValues(values: any): any {
+  if (values instanceof Blob || values instanceof File) {
+    return values;
+  }
+
   if (isArray(values)) {
     return map(filter(values, (item) => item != null), pickValidValues);
   }
