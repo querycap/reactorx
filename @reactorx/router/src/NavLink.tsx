@@ -5,8 +5,8 @@ import { Location } from "history";
 import * as React from "react";
 
 export interface INavLinkProps extends ILinkProps {
-  getActiveProps?: () => any;
   isActive?: (match: IMatch<any>, location: Location) => boolean;
+  activeClassName?: string;
   exact?: boolean;
   strict?: boolean;
 }
@@ -15,7 +15,7 @@ export const NavLink = ({
   to,
   exact,
   strict,
-  getActiveProps,
+  activeClassName,
   isActive: getIsActive,
   ...otherProps
 }: INavLinkProps) => (
@@ -32,7 +32,9 @@ export const NavLink = ({
         <Link
           to={to}
           {...otherProps}
-          {...(isActive && getActiveProps ? getActiveProps() : {})}
+          className={`${(otherProps as any).className} ${
+            isActive ? activeClassName || "" : ""
+          }`}
         />
       );
     }}

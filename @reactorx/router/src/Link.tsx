@@ -7,6 +7,7 @@ export interface ILinkProps {
   replace?: boolean;
   to: string | LocationDescriptorObject;
   target?: string;
+  className?: string;
   children?: ReactNode;
 }
 
