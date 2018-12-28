@@ -1,5 +1,5 @@
 import { filter, map } from "rxjs/operators";
-import { Actor, AsyncActor, Store, StoreProvider, useEpic } from "..";
+import { Actor, AsyncActor, Store, StoreProvider, useEpic, useStore } from "..";
 import React from "react";
 import { Observable } from "rxjs";
 import { mount } from "@reactorx/testutils";
@@ -110,6 +110,18 @@ describe("@reactorx/core", () => {
       );
     };
 
+    function PongOrPing({ name }: { name: string }) {
+      const store$ = useStore();
+      const pongOrPing$ = store$.useConn((state) => state[name as any], [name]);
+      const pingOrPong = pongOrPing$.useState();
+
+      return (
+        <span id={"pingOrPong"}>
+          {name} {pingOrPong}
+        </span>
+      );
+    }
+
     const App = (props: { ping: boolean }) => {
       const pong$ = so$.useConn((state) => state["pong"]);
 
@@ -119,6 +131,7 @@ describe("@reactorx/core", () => {
           {pong$.render((pong) => (
             <span id={"pong"}>{pong}</span>
           ))}
+          <PongOrPing name={props.ping ? "ping" : "pong"} />
         </StoreProvider>
       );
     };
@@ -128,11 +141,15 @@ describe("@reactorx/core", () => {
     for (let i = 0; i < 10; i++) {
       ping.with({}).invoke(so$);
 
-      const $ping = node.querySelector("#ping");
-      const $pong = node.querySelector("#pong");
+      const $ping = node.querySelector("#ping")!;
+      const $pong = node.querySelector("#pong")!;
+      const $pingOrPong = node.querySelector("#pingOrPong")!;
 
-      expect($ping!.innerHTML).toContain(so$.getValue()["ping"]);
-      expect($pong!.innerHTML).toContain(so$.getValue()["pong"]);
+      expect($ping.innerHTML).toContain(so$.getValue()["ping"]);
+      expect($pong.innerHTML).toContain(so$.getValue()["pong"]);
+
+      expect($pingOrPong.innerHTML).toContain("ping");
+      expect($pingOrPong.innerHTML).toContain(so$.getValue()["ping"]);
     }
 
     await mount(<App ping={false} />, node);
@@ -141,10 +158,14 @@ describe("@reactorx/core", () => {
       ping.with({}).invoke(so$);
 
       const $ping = node.querySelector("#ping");
-      const $pong = node.querySelector("#pong");
+      const $pong = node.querySelector("#pong")!;
+      const $pingOrPong = node.querySelector("#pingOrPong")!;
 
       expect($ping).toBeNull();
-      expect($pong!.innerHTML).toContain(so$.getValue()["pong"]);
+      expect($pong.innerHTML).toContain(so$.getValue()["pong"]);
+
+      expect($pingOrPong.innerHTML).toContain("pong");
+      expect($pingOrPong.innerHTML).toContain(so$.getValue()["pong"]);
     }
   });
 });

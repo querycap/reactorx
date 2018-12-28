@@ -30,7 +30,6 @@ export function useObservable<T>(observable: Observable<T>, defaultValue: T) {
 
 export interface IObserverProps<TState> {
   state$: Observable<TState>;
-  initialState: TState;
   children: (state: TState) => React.ReactNode;
 }
 
@@ -49,14 +48,13 @@ Observable.prototype.render = function<T>(
 ) {
   return createElement(Observer, {
     state$: this,
-    initialState: (this as any).value,
     children: render,
   });
 };
 
 function Observer(props: IObserverProps<any>) {
-  const { state$, initialState, children } = props;
-  const state = useObservable(state$, initialState);
+  const { state$, children } = props;
+  const state = state$.useState();
   return <>{children(state)}</>;
 }
 
@@ -70,7 +68,10 @@ declare module "rxjs/internal/Observable" {
     useConn<TOutput>(
       this: Observable<T>,
       mapper: (state: T) => TOutput,
+      inputs?: ReadonlyArray<any>,
     ): Observable<TOutput>;
+
+    useState<TOutput>(this: Observable<TOutput>): TOutput;
   }
 }
 
@@ -84,8 +85,13 @@ Observable.prototype.conn = function<T, TOutput>(
 Observable.prototype.useConn = function<T, TOutput>(
   this: Observable<T>,
   mapper: (state: T) => TOutput,
+  inputs: ReadonlyArray<any> = [],
 ) {
-  return useMemo(() => this.conn(mapper), [this]);
+  return useMemo(() => this.conn(mapper), [this, ...inputs]);
+};
+
+Observable.prototype.useState = function<TOutput>(this: Observable<TOutput>) {
+  return useObservable(this, (this as any).value);
 };
 
 class StateMapperObservable<T, TOutput> extends Observable<TOutput> {
