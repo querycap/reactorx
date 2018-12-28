@@ -54,14 +54,14 @@ describe("full flow", () => {
     function useEmoijs() {
       const [emoijs, updateEmoijs] = useState({});
 
-      const { request } = useRequest(getEmojis, {
+      const [request] = useRequest(getEmojis, {
         onSuccess: ({ arg }) => {
           updateEmoijs(arg.data);
         },
       });
 
       useLayoutEffect(() => {
-        request(undefined);
+        request();
       }, []);
 
       return emoijs;

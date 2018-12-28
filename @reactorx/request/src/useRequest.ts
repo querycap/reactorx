@@ -23,12 +23,18 @@ export interface IUseRequestOpts<TReq, TRespBody, TError> {
 export function useRequest<TReq, TRespBody, TError>(
   requestActor: RequestActor<TReq, TRespBody, TError>,
   options: IUseRequestOpts<TReq, TRespBody, TError> = {},
-) {
+): [
+  (
+    arg: IUseRequestOpts<TReq, TRespBody, TError>["arg"],
+    opts?: IUseRequestOpts<TReq, TRespBody, TError>["opts"],
+  ) => void,
+  BehaviorSubject<boolean>
+] {
   const requesting$ = useMemo(
     () => new BehaviorSubject(!!options.required),
     [],
   );
-  const lastArg = useRef(null);
+  const lastArg = useRef(options.arg);
   const { actor$, dispatch } = useStore();
   const optionsRef = useRef(options);
 
@@ -76,15 +82,15 @@ export function useRequest<TReq, TRespBody, TError>(
     [requestActor],
   );
 
-  return {
-    request: (
-      arg: any = optionsRef.current.arg || {},
-      opts: any = optionsRef.current.opts,
+  return [
+    (
+      arg: (typeof options)["arg"] = optionsRef.current.arg || ({} as any),
+      opts: (typeof options)["opts"] = optionsRef.current.opts,
     ) => {
       lastArg.current = arg;
       requesting$.next(true);
       dispatch(requestActor.with(arg, opts));
     },
     requesting$,
-  };
+  ];
 }
