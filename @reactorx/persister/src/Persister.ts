@@ -7,6 +7,7 @@ interface IStorageValues {
 }
 
 export interface IStoreOpts {
+  key: string;
   expiresIn: number; // s
 }
 
@@ -51,9 +52,6 @@ class Persister {
       .catch(console.error);
   }
 
-  // useEffect(() => {
-  //    return persister.connect(store$)
-  // }, [])
   connect(store$: Store<any>) {
     let prevState: any = {};
 

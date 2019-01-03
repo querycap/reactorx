@@ -32,7 +32,9 @@ describe("Persister", () => {
     );
 
     expect((store$.getState() as any)[persistedKeys] || {}).toEqual({
-      ping: {},
+      ping: {
+        key: "ping",
+      },
     });
 
     store$.next({ ...store$.getState(), ping: 1, pong: 1 });
