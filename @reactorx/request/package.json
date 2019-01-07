@@ -1,6 +1,6 @@
 {
   "name": "@reactorx/request",
-  "version": "0.4.1",
+  "version": "0.4.4",
   "main": "cjs/index.js",
   "module": "es/index.js",
   "types": "src/index.ts",
