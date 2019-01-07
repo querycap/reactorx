@@ -90,7 +90,7 @@ export class RequestActor<
 
   href(baseURL: string = ""): string {
     const conf = this.requestConfig();
-    return `${baseURL || conf.baseURL}${conf.url}?${paramsSerializer(
+    return `${baseURL || conf.baseURL || ""}${conf.url}?${paramsSerializer(
       conf.params,
     )}`;
   }
