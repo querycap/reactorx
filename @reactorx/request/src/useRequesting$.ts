@@ -4,49 +4,43 @@ import { RequestActor } from "./RequestActor";
 import {
   filter as rxFilter,
   ignoreElements as rxIgnoreElements,
-  map as rxMap,
+  scan as rxScan,
   tap as rxTap,
 } from "rxjs/operators";
 import { useMemo } from "react";
 import { BehaviorSubject } from "rxjs";
 
 export const useRequesting$ = () => {
-  const { requestCounts$, requesting$ } = useMemo(
-    () => ({
-      requesting$: new BehaviorSubject(false),
-      requestCounts$: new BehaviorSubject({} as Dictionary<number>),
-    }),
-    [],
-  );
+  const requesting$ = useMemo(() => new BehaviorSubject(false), []);
 
   useEpic((actor$) => {
     return actor$.pipe(
       rxFilter(RequestActor.isRequestActor),
-      rxMap((actor) => {
-        const parentActorType = actor.opts.parentActor.type;
+      rxScan(
+        (counts, actor: any) => {
+          const parentActorType = actor.opts.parentActor.type;
 
-        const requests = requestCounts$.value;
+          const count = counts[parentActorType] || 0;
 
-        const count = requests[parentActorType] || 0;
+          if (actor.stage === AsyncStage.STARTED) {
+            return {
+              ...counts,
+              [parentActorType]: count + 1,
+            };
+          }
 
-        if (actor.stage === AsyncStage.STARTED) {
-          return {
-            ...requestCounts$.value,
-            [parentActorType]: count + 1,
-          };
-        }
+          if (count > 1) {
+            return {
+              ...counts,
+              [parentActorType]: count - 1,
+            };
+          }
 
-        if (count > 1) {
-          return {
-            ...requests,
-            [parentActorType]: count - 1,
-          };
-        }
-
-        return omit(requests, parentActorType);
-      }),
+          return omit(counts, parentActorType);
+        },
+        {} as Dictionary<number>,
+      ),
       rxTap((nextRequests) => {
-        requestCounts$.next(nextRequests);
         requesting$.next(size(nextRequests) > 0);
       }),
       rxIgnoreElements(),

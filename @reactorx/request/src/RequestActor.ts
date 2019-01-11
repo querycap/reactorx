@@ -71,11 +71,11 @@ export class RequestActor<
   };
 
   static isRequestActor = (
-    actor:
-      | RequestActor["done"]
-      | RequestActor["failed"]
-      | RequestActor["started"],
-  ): boolean => {
+    actor: Actor,
+  ): actor is
+    | RequestActor["done"]
+    | RequestActor["failed"]
+    | RequestActor["started"] => {
     return actor.group == RequestActor.group && !!actor.stage;
   };
 
