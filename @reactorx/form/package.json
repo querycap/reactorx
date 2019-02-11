@@ -1,6 +1,6 @@
 {
   "name": "@reactorx/form",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "main": "cjs/index.js",
   "module": "es/index.js",
   "types": "src/index.ts",
@@ -15,7 +15,7 @@
     "rxjs": ">= 6.x"
   },
   "dependencies": {
-    "@reactorx/core": "^0.4.0",
+    "@reactorx/core": "^0.5.0",
     "@types/lodash": "4.14.x",
     "lodash": "4.17.x"
   },
