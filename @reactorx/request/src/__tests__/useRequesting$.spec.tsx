@@ -3,6 +3,7 @@ import { useRequesting$ } from "../useRequesting$";
 import { Store, StoreProvider } from "@reactorx/core";
 import React from "react";
 import { mount } from "@reactorx/testutils";
+import { act } from "react-dom/test-utils";
 
 describe("useRequesting$", () => {
   const getApiList = createRequestActor<void, { [k: string]: string }, any>(
@@ -36,14 +37,21 @@ describe("useRequesting$", () => {
     for (let i = 0; i < 1000; i++) {
       const $loading = node.querySelector("#loading")!;
 
-      actor.started.invoke(store$);
+      act(() => {
+        actor.started.invoke(store$);
+      });
+
       expect($loading.innerHTML).toContain("true");
 
       if (i % 2) {
-        actor.done.invoke(store$);
+        act(() => {
+          actor.done.invoke(store$);
+        });
         expect($loading.innerHTML).toContain("false");
       } else {
-        actor.failed.invoke(store$);
+        act(() => {
+          actor.failed.invoke(store$);
+        });
         expect($loading.innerHTML).toContain("false");
       }
     }

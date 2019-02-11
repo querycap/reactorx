@@ -3,6 +3,7 @@ import { Actor, AsyncActor, Store, StoreProvider, useEpic, useStore } from "..";
 import React from "react";
 import { Observable } from "rxjs";
 import { mount } from "@reactorx/testutils";
+import { act } from "react-dom/test-utils";
 
 describe("@reactorx/core", () => {
   test("AsyncActor", () => {
@@ -17,6 +18,7 @@ describe("@reactorx/core", () => {
 
   test("Store", () => {
     const testActor = Actor.of("test");
+
     const ping = testActor
       .named<{ step?: number }, { o: string }>("ping")
       .effectOn("ping", (state: any = 0, actor) => {
@@ -139,7 +141,9 @@ describe("@reactorx/core", () => {
     const node = await mount(<App ping={true} />);
 
     for (let i = 0; i < 10; i++) {
-      ping.with({}).invoke(so$);
+      act(() => {
+        ping.with({}).invoke(so$);
+      });
 
       const $ping = node.querySelector("#ping")!;
       const $pong = node.querySelector("#pong")!;
@@ -155,7 +159,9 @@ describe("@reactorx/core", () => {
     await mount(<App ping={false} />, node);
 
     for (let i = 0; i < 10; i++) {
-      ping.with({}).invoke(so$);
+      act(() => {
+        ping.with({}).invoke(so$);
+      });
 
       const $ping = node.querySelector("#ping");
       const $pong = node.querySelector("#pong")!;

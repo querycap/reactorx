@@ -5,6 +5,7 @@ import { Redirect, Route, Router } from "..";
 import { mount } from "@reactorx/testutils";
 import { IRouterContext } from "../RouterContext";
 import { default as createMemoryHistory } from "history/createMemoryHistory";
+import { act } from "react-dom/test-utils";
 
 describe("A <Route>", () => {
   it("renders when it matches", async () => {
@@ -138,7 +139,9 @@ describe("A <Route>", () => {
         return <div>Hello World</div>;
       }
 
-      history.push("/hello");
+      act(() => {
+        history.push("/hello");
+      });
 
       const node = await mount(
         <Router history={history}>
@@ -149,7 +152,9 @@ describe("A <Route>", () => {
       expect(routeMount).toHaveBeenCalledTimes(1);
       expect(node.innerHTML).toContain("Hello World");
 
-      history.push("/world/somewhere/else");
+      act(() => {
+        history.push("/world/somewhere/else");
+      });
 
       expect(routeMount).toHaveBeenCalledTimes(1);
       expect(node.innerHTML).toContain("Hello World");

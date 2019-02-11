@@ -9,6 +9,7 @@ import { composeEpics, Store, StoreProvider } from "@reactorx/core";
 import { mount } from "@reactorx/testutils";
 import React, { useLayoutEffect, useState } from "react";
 import { AxiosRequestConfig, AxiosResponse } from "axios";
+import { act } from "react-dom/test-utils";
 
 interface IGitHubError {
   message: string;
@@ -56,7 +57,10 @@ describe("full flow", () => {
 
       const [request] = useRequest(getEmojis, {
         onSuccess: ({ arg }) => {
-          updateEmoijs(arg.data);
+          // todo remove this in future
+          act(() => {
+            updateEmoijs(arg.data);
+          });
         },
       });
 

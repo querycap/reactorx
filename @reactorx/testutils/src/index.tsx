@@ -4,7 +4,8 @@ import React, {
   useLayoutEffect,
   useState,
 } from "react";
-import ReactDOM from "react-dom";
+import { render } from "react-dom";
+import { act } from "react-dom/test-utils";
 import { BehaviorSubject } from "rxjs";
 
 function Root({ child$ }: { child$: BehaviorSubject<ReactElement<any>> }) {
@@ -28,24 +29,31 @@ export function mount(
   node: Element = document.createElement("div"),
 ): Promise<Element> {
   if ((node as any).subject$) {
-    (node as any).subject$.next(element);
-    return Promise.resolve(node);
+    return new Promise((resolve) => {
+      act(() => {
+        (node as any).subject$.next(element);
+        resolve(node);
+      });
+    });
   }
+
   return new Promise((resolve) => {
     const child$ = new BehaviorSubject(element);
 
     (node as any).subject$ = child$;
 
-    ReactDOM.render(
-      <StrictMode>
-        <Root child$={child$} />
-      </StrictMode>,
-      node,
-      () => {
-        setTimeout(() => {
-          resolve(node);
-        });
-      },
-    );
+    act(() => {
+      render(
+        <StrictMode>
+          <Root child$={child$} />
+        </StrictMode>,
+        node,
+        () => {
+          setTimeout(() => {
+            resolve(node);
+          });
+        },
+      );
+    });
   });
 }

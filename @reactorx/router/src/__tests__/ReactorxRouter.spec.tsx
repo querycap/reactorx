@@ -6,6 +6,7 @@ import React from "react";
 import { ReactorxRouter, routerActors } from "../ReactorxRouter";
 import { mount } from "@reactorx/testutils";
 import { Store, StoreProvider } from "@reactorx/core";
+import { act } from "react-dom/test-utils";
 
 describe("ReactorxRouter", () => {
   it("renders the first <Redirect> that matches the URL", async () => {
@@ -40,7 +41,10 @@ describe("ReactorxRouter", () => {
     });
     expect(node.innerHTML).toContain("two");
 
-    routerActors.push.with("/one").invoke(store$);
+    act(() => {
+      routerActors.push.with("/one").invoke(store$);
+    });
+
     expect(store$.getState()).toEqual({
       $$location: {
         pathname: "/one",

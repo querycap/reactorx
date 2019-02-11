@@ -2,6 +2,7 @@ import React from "react";
 import { createMemoryHistory as createHistory } from "history";
 import { Prompt, Router } from "..";
 import { mount } from "@reactorx/testutils";
+import { act } from "react-dom/test-utils";
 
 describe("A <Prompt>", () => {
   it("calls getUserConfirmation with the prompt message", async () => {
@@ -19,7 +20,9 @@ describe("A <Prompt>", () => {
       </Router>,
     );
 
-    history.push("/somewhere");
+    act(() => {
+      history.push("/somewhere");
+    });
 
     expect(getUserConfirmation).toHaveBeenCalledWith(
       expect.stringMatching("Are you sure?"),
@@ -43,7 +46,9 @@ describe("A <Prompt>", () => {
         </Router>,
       );
 
-      history.push("/somewhere");
+      act(() => {
+        history.push("/somewhere");
+      });
 
       expect(getUserConfirmation).not.toHaveBeenCalled();
     });
