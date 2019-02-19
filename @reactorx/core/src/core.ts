@@ -82,8 +82,8 @@ export class Actor<TArg = any, TOpts = any> {
     });
   }
 
-  invoke(store$: Store<any>) {
-    return store$.dispatch(this);
+  invoke(dispatcher: { dispatch: (actor: Actor) => void }) {
+    return dispatcher.dispatch(this);
   }
 
   get type(): string {
