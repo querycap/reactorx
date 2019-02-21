@@ -10,7 +10,7 @@ React stack based on [rxjs](https://github.com/ReactiveX/rxjs)
 
 * **Only for TypeScript** (checking type **in coding** over **in runtime**)
     * No any propTypes for runtime checking
-* **Only support react and it's version must be 16.7+**
+* **Only support react and it's version must be 16.8+**
     * `react hooks` is so cool
 
 ## Packages
