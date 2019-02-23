@@ -40,47 +40,43 @@ export function useRequest<TReq, TRespBody, TError>(
 
   optionsRef.current = options;
 
-  useEffect(
-    () => {
-      const subject$ = new Subject<Actor<any>>();
+  useEffect(() => {
+    const subject$ = new Subject<Actor<any>>();
 
-      const actorSubscription = actor$.subscribe(subject$);
+    const actorSubscription = actor$.subscribe(subject$);
 
-      const end = (cb: () => void) => {
-        cb();
-        requesting$.next(false);
-        (optionsRef.current.onFinish || noop)(dispatch);
-      };
+    const end = (cb: () => void) => {
+      cb();
+      (optionsRef.current.onFinish || noop)(dispatch);
+      requesting$.next(false);
+    };
 
-      const subscription = observableMerge(
-        subject$.pipe(
-          rxFilter(requestActor.done.is),
-          rxFilter((actor) =>
-            isEqual(actor.opts.parentActor.arg, lastArg.current),
-          ),
-          rxTap((actor: typeof requestActor.done) => {
-            end(() => (optionsRef.current.onSuccess || noop)(actor, dispatch));
-          }),
+    const subscription = observableMerge(
+      subject$.pipe(
+        rxFilter(requestActor.done.is),
+        rxFilter((actor) =>
+          isEqual(actor.opts.parentActor.arg, lastArg.current),
         ),
-        subject$.pipe(
-          rxFilter(requestActor.failed.is),
-          rxFilter((actor) =>
-            isEqual(actor.opts.parentActor.arg, lastArg.current),
-          ),
-          rxTap((actor: typeof requestActor.failed) => {
-            end(() => (optionsRef.current.onFail || noop)(actor, dispatch));
-            (optionsRef.current.onFail || noop)(actor, dispatch);
-          }),
+        rxTap((actor: typeof requestActor.done) => {
+          end(() => (optionsRef.current.onSuccess || noop)(actor, dispatch));
+        }),
+      ),
+      subject$.pipe(
+        rxFilter(requestActor.failed.is),
+        rxFilter((actor) =>
+          isEqual(actor.opts.parentActor.arg, lastArg.current),
         ),
-      ).subscribe();
+        rxTap((actor: typeof requestActor.failed) => {
+          end(() => (optionsRef.current.onFail || noop)(actor, dispatch));
+        }),
+      ),
+    ).subscribe();
 
-      return () => {
-        subscription.unsubscribe();
-        actorSubscription.unsubscribe();
-      };
-    },
-    [requestActor],
-  );
+    return () => {
+      subscription.unsubscribe();
+      actorSubscription.unsubscribe();
+    };
+  }, [requestActor]);
 
   return [
     (
