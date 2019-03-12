@@ -1,12 +1,4 @@
-import {
-  Dictionary,
-  forEach,
-  isArray,
-  isObject,
-  isString,
-  map,
-  pickBy,
-} from "lodash";
+import { Dictionary, forEach, isArray, isObject, isString, map, pickBy } from "lodash";
 import { stringify } from "querystring";
 
 export interface ISelectOption {
@@ -14,10 +6,7 @@ export interface ISelectOption {
   value: string | number;
 }
 
-export const optionsFromEnum = (
-  enums: any,
-  displayFn: (val: string) => string,
-): ISelectOption[] => {
+export const optionsFromEnum = (enums: any, displayFn: (val: string) => string): ISelectOption[] => {
   const strings = pickBy<string>(enums, isString) as Dictionary<string>;
 
   return map<Dictionary<string>, ISelectOption>(strings, (key: string) => ({
@@ -26,8 +15,7 @@ export const optionsFromEnum = (
   }));
 };
 
-export const isMultipartFormData = (contentType: string = "") =>
-  contentType.indexOf("multipart/form-data") > -1;
+export const isMultipartFormData = (contentType: string = "") => contentType.indexOf("multipart/form-data") > -1;
 
 export const isFormURLEncoded = (contentType: string = "") =>
   contentType.indexOf("application/x-www-form-urlencoded") > -1;

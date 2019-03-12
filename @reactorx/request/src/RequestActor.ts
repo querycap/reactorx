@@ -1,10 +1,4 @@
-import {
-  Actor,
-  AsyncActor,
-  AsyncStage,
-  IActorOpt,
-  IAsyncDerived,
-} from "@reactorx/core";
+import { Actor, AsyncActor, AsyncStage, IActorOpt, IAsyncDerived } from "@reactorx/core";
 import { Dictionary, isUndefined, omit, pickBy } from "lodash";
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { paramsSerializer } from "./utils";
@@ -31,25 +25,12 @@ export function createRequestActor<TReq, TResBody, TError>(
   });
 }
 
-export class RequestActor<
-  TReq = IRequestOpts,
-  TRespBody = any,
-  TError = any
-> extends AsyncActor<
+export class RequestActor<TReq = IRequestOpts, TRespBody = any, TError = any> extends AsyncActor<
   TReq,
   AxiosRequestConfig & { requestOptsFromReq?: (arg: TReq) => IRequestOpts },
-  IAsyncDerived<
-    AxiosRequestConfig,
-    AxiosResponse<TRespBody>,
-    AxiosResponse<TError>
-  >
+  IAsyncDerived<AxiosRequestConfig, AxiosResponse<TRespBody>, AxiosResponse<TError>>
 > {
-  constructor(
-    opt: IActorOpt<
-      TReq,
-      AxiosRequestConfig & { requestOptsFromReq?: (arg: TReq) => IRequestOpts }
-    >,
-  ) {
+  constructor(opt: IActorOpt<TReq, AxiosRequestConfig & { requestOptsFromReq?: (arg: TReq) => IRequestOpts }>) {
     super({
       ...opt,
       group: RequestActor.group,
@@ -62,37 +43,26 @@ export class RequestActor<
     return actor.group === RequestActor.group && !actor.stage;
   };
 
-  static isFailedRequestActor = (
-    actor: Actor,
-  ): actor is Actor<AxiosResponse<any>> => {
-    return (
-      actor.group === RequestActor.group && actor.stage === AsyncStage.FAILED
-    );
+  static isFailedRequestActor = (actor: Actor): actor is Actor<AxiosResponse<any>> => {
+    return actor.group === RequestActor.group && actor.stage === AsyncStage.FAILED;
   };
 
   static isRequestActor = (
     actor: Actor,
-  ): actor is
-    | RequestActor["done"]
-    | RequestActor["failed"]
-    | RequestActor["started"] => {
+  ): actor is RequestActor["done"] | RequestActor["failed"] | RequestActor["started"] => {
     return actor.group == RequestActor.group && !!actor.stage;
   };
 
   requestConfig(): AxiosRequestConfig {
     return requestConfigFromRequestOptions(
-      this.opts.requestOptsFromReq
-        ? this.opts.requestOptsFromReq(this.arg)
-        : (this.arg as any),
+      this.opts.requestOptsFromReq ? this.opts.requestOptsFromReq(this.arg) : (this.arg as any),
       omit(this.opts, "requestOptsFromReq"),
     );
   }
 
   href(baseURL: string = ""): string {
     const conf = this.requestConfig();
-    return `${baseURL || conf.baseURL || ""}${conf.url}?${paramsSerializer(
-      conf.params,
-    )}`;
+    return `${baseURL || conf.baseURL || ""}${conf.url}?${paramsSerializer(conf.params)}`;
   }
 }
 

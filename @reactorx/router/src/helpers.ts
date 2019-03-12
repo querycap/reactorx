@@ -5,9 +5,7 @@ export const toSearchString = (query: any) => {
   return s ? `?${stringify(query)}` : "";
 };
 
-export function parseSearchString<T extends ReturnType<typeof parse> = any>(
-  search: string,
-): T {
+export function parseSearchString<T extends ReturnType<typeof parse> = any>(search: string): T {
   if (search[0] === "?") {
     search = search.slice(1);
   }

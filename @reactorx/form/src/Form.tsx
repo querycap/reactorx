@@ -1,14 +1,4 @@
-import {
-  cloneDeep,
-  Dictionary,
-  every,
-  filter,
-  get,
-  isArray,
-  isObject,
-  map,
-  mapValues,
-} from "lodash";
+import { cloneDeep, Dictionary, every, filter, get, isArray, isObject, map, mapValues } from "lodash";
 import React, { ReactNode, SyntheticEvent, useEffect, useMemo } from "react";
 import { Store, useStore } from "@reactorx/core";
 import {
@@ -23,8 +13,7 @@ import {
 } from "./Actors";
 import { FormProvider, IFormContexts } from "./FormContext";
 
-export interface IFormInnerProps<TFormValues = any>
-  extends IFormContexts<TFormValues> {
+export interface IFormInnerProps<TFormValues = any> extends IFormContexts<TFormValues> {
   submit: (evt: SyntheticEvent<any>) => void;
 }
 
@@ -81,10 +70,7 @@ function createFormContext<TFormValues>(
   };
 
   const getFormState = () => {
-    return (
-      (store$.getState() as any)[formKey(formName)] ||
-      ({} as IFormState<TFormValues>)
-    );
+    return (store$.getState() as any)[formKey(formName)] || ({} as IFormState<TFormValues>);
   };
 
   const createSubmit = (cb: () => void) => {
@@ -116,23 +102,14 @@ function createFormContext<TFormValues>(
   };
 }
 
-export function Form<TFormValues extends object>(
-  props: IFormProps<TFormValues>,
-) {
+export function Form<TFormValues extends object>(props: IFormProps<TFormValues>) {
   const formName = getFormName(props);
 
   const store$ = useStore();
 
-  const ctx = useMemo(
-    () => {
-      return createFormContext<TFormValues>(
-        store$,
-        formName,
-        props.initialValues,
-      );
-    },
-    [formName],
-  );
+  const ctx = useMemo(() => {
+    return createFormContext<TFormValues>(store$, formName, props.initialValues);
+  }, [formName]);
 
   return (
     <FormProvider key={formName} value={ctx}>
@@ -151,21 +128,12 @@ export function Form<TFormValues extends object>(
   );
 }
 
-function FormMount({
-  formName,
-  initialValues,
-}: {
-  formName: string;
-  initialValues: any;
-}) {
+function FormMount({ formName, initialValues }: { formName: string; initialValues: any }) {
   const store$ = useStore();
 
-  useEffect(
-    () => {
-      formInitial.with(initialValues, { form: formName }).invoke(store$);
-    },
-    [formName],
-  );
+  useEffect(() => {
+    formInitial.with(initialValues, { form: formName }).invoke(store$);
+  }, [formName]);
 
   return null;
 }
@@ -173,14 +141,11 @@ function FormMount({
 function FormUnmount({ formName }: { formName: string }) {
   const store$ = useStore();
 
-  useEffect(
-    () => {
-      return () => {
-        formDestroy.with(undefined, { form: formName }).invoke(store$);
-      };
-    },
-    [formName],
-  );
+  useEffect(() => {
+    return () => {
+      formDestroy.with(undefined, { form: formName }).invoke(store$);
+    };
+  }, [formName]);
 
   return null;
 }

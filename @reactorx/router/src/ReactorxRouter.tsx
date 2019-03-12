@@ -17,9 +17,10 @@ export const routerActors = {
 
 export const locationStorageKey = "$$location";
 
-export const routerChanged = RouterActor.named<LocationDescriptorObject>(
-  "changed",
-).effectOn(locationStorageKey, (_, { arg }) => arg);
+export const routerChanged = RouterActor.named<LocationDescriptorObject>("changed").effectOn(
+  locationStorageKey,
+  (_, { arg }) => arg,
+);
 
 export function ReactorxRouter({ history, ...otherProps }: IRouterProps) {
   return (

@@ -6,16 +6,13 @@ import { mount } from "@reactorx/testutils";
 import { act } from "react-dom/test-utils";
 
 describe("useRequesting$", () => {
-  const getApiList = createRequestActor<void, { [k: string]: string }, any>(
-    "github",
-    () => ({
-      method: "GET",
-      url: "/",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }),
-  );
+  const getApiList = createRequestActor<void, { [k: string]: string }, any>("github", () => ({
+    method: "GET",
+    url: "/",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }));
 
   it("loading", async () => {
     const actor = getApiList.with(undefined);

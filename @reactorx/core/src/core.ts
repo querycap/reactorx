@@ -43,10 +43,7 @@ export class Actor<TArg = any, TOpts = any> {
     this.opts = opt.opts || ({} as TOpts);
   }
 
-  named<TNamedArg = TArg, TNamedOpts = TOpts>(
-    name: string,
-    opts?: TNamedOpts,
-  ): Actor<TNamedArg, TNamedOpts & TOpts> {
+  named<TNamedArg = TArg, TNamedOpts = TOpts>(name: string, opts?: TNamedOpts): Actor<TNamedArg, TNamedOpts & TOpts> {
     return new (this.constructor as any)({
       ...(this as any),
       name,
@@ -139,9 +136,7 @@ export function composeEpics(...epics: Array<IEpic<any>>): IEpic<any> {
   };
 }
 
-export class Store<
-  TRoot extends { [key: string]: any } = {}
-> extends BehaviorSubject<TRoot> {
+export class Store<TRoot extends { [key: string]: any } = {}> extends BehaviorSubject<TRoot> {
   static create<TState>(initialState: TState = {} as TState) {
     return new Store<TState>(initialState);
   }
@@ -189,10 +184,7 @@ export function effectOn<TRoot, TActor extends Actor>(
   effect: (root: TRoot, actor: TActor) => TRoot | undefined,
 ) {
   return function(root: any = {}, actor: TActor) {
-    const k =
-      typeof keyOrKeyCreator === "function"
-        ? keyOrKeyCreator(actor)
-        : keyOrKeyCreator;
+    const k = typeof keyOrKeyCreator === "function" ? keyOrKeyCreator(actor) : keyOrKeyCreator;
 
     if (k === "") {
       return root;

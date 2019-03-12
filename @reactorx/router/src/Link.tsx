@@ -16,10 +16,7 @@ export function Link(props: ILinkProps) {
 
   const { replace, to, ...rest } = props;
 
-  const location =
-    typeof to === "string"
-      ? createLocation(to, null, undefined, context.location)
-      : to;
+  const location = typeof to === "string" ? createLocation(to, null, undefined, context.location) : to;
 
   const href = location ? context.history.createHref(location) : "";
 
@@ -39,10 +36,7 @@ export function Link(props: ILinkProps) {
   );
 }
 
-function handleClick(
-  event: React.MouseEvent<HTMLAnchorElement>,
-  nav: () => void,
-) {
+function handleClick(event: React.MouseEvent<HTMLAnchorElement>, nav: () => void) {
   const attrTarget = (event.target as HTMLLinkElement).getAttribute("target");
 
   if (

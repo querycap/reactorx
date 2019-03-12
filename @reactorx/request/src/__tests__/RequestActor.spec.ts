@@ -9,11 +9,7 @@ interface IGitHubError {
 
 describe("request", () => {
   describe("#RequestActor", () => {
-    const getApiList = createRequestActor<
-      void,
-      { [k: string]: string },
-      IGitHubError
-    >("github", () => ({
+    const getApiList = createRequestActor<void, { [k: string]: string }, IGitHubError>("github", () => ({
       method: "GET",
       url: "/",
       headers: {
@@ -23,9 +19,7 @@ describe("request", () => {
 
     it("#href", () => {
       const actor = getApiList.with(undefined);
-      expect(actor.href("https://api.github.com")).toBe(
-        "https://api.github.com/?",
-      );
+      expect(actor.href("https://api.github.com")).toBe("https://api.github.com/?");
     });
 
     it("#requestConfig", () => {

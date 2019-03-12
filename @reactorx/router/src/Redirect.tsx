@@ -1,9 +1,4 @@
-import {
-  createLocation,
-  LocationDescriptor,
-  LocationDescriptorObject,
-  locationsAreEqual,
-} from "history";
+import { createLocation, LocationDescriptor, LocationDescriptorObject, locationsAreEqual } from "history";
 import { useLayoutEffect } from "react";
 import { generatePath, IMatch, usePrevious } from "./utils";
 import { IRouterContext, useRouter } from "./RouterContext";
@@ -22,10 +17,7 @@ export const Redirect = (props: IRedirectProps) => {
   const prevToRef = usePrevious(props.to);
 
   useLayoutEffect(() => {
-    if (
-      prevToRef == null ||
-      !locationsAreEqual(createLocation(prevToRef), createLocation(props.to))
-    ) {
+    if (prevToRef == null || !locationsAreEqual(createLocation(prevToRef), createLocation(props.to))) {
       perform(props, router);
     }
   });
@@ -46,10 +38,7 @@ function computeTo({ computedMatch, to }: IRedirectProps) {
     }
     return {
       ...to,
-      pathname: generatePath(
-        (to as LocationDescriptorObject).pathname,
-        computedMatch.params,
-      ),
+      pathname: generatePath((to as LocationDescriptorObject).pathname, computedMatch.params),
     };
   }
   return to;

@@ -1,10 +1,4 @@
-import {
-  createCombineDuplicatedRequestEpic,
-  createRequestActor,
-  createRequestEpic,
-  Status,
-  useRequest,
-} from "..";
+import { createCombineDuplicatedRequestEpic, createRequestActor, createRequestEpic, Status, useRequest } from "..";
 import { composeEpics, Store, StoreProvider } from "@reactorx/core";
 import { mount } from "@reactorx/testutils";
 import React, { useLayoutEffect, useState } from "react";
@@ -16,11 +10,7 @@ interface IGitHubError {
   documentation_url: string;
 }
 
-const getEmojis = createRequestActor<
-  void,
-  { [k: string]: string },
-  IGitHubError
->("github.emojis", () => ({
+const getEmojis = createRequestActor<void, { [k: string]: string }, IGitHubError>("github.emojis", () => ({
   method: "GET",
   url: "/emojis",
 }));
@@ -34,8 +24,7 @@ describe("full flow", () => {
         status: Status.OK,
         statusText: Status[Status.OK],
         data: {
-          "100":
-            "https://assets-cdn.github.com/images/icons/emoji/unicode/1f4af.png?v8",
+          "100": "https://assets-cdn.github.com/images/icons/emoji/unicode/1f4af.png?v8",
         },
         headers: {},
         config,

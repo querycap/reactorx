@@ -25,29 +25,17 @@ export const NestedForm = () => {
           <form onSubmit={submit}>
             <FormSection name="user">
               <Field name="firstName">
-                {(fieldProps) => (
-                  <input
-                    placeholder="firstName"
-                    {...pickDOMAttrs(fieldProps)}
-                  />
-                )}
+                {(fieldProps) => <input placeholder="firstName" {...pickDOMAttrs(fieldProps)} />}
               </Field>
               <Field name="lastName">
-                {(fieldProps) => (
-                  <input placeholder="lastName" {...pickDOMAttrs(fieldProps)} />
-                )}
+                {(fieldProps) => <input placeholder="lastName" {...pickDOMAttrs(fieldProps)} />}
               </Field>
             </FormSection>
             <FieldArray name="addresses">
               {({ each }) =>
                 each((i) => (
                   <Field key={i} name={`[${i}].address`}>
-                    {(fieldProps) => (
-                      <input
-                        placeholder="address"
-                        {...pickDOMAttrs(fieldProps)}
-                      />
-                    )}
+                    {(fieldProps) => <input placeholder="address" {...pickDOMAttrs(fieldProps)} />}
                   </Field>
                 ))
               }
@@ -58,12 +46,7 @@ export const NestedForm = () => {
                   {each((i) => (
                     <div key={i}>
                       <Field name={`[${i}]`}>
-                        {(fieldProps) => (
-                          <input
-                            placeholder="phone"
-                            {...pickDOMAttrs(fieldProps)}
-                          />
-                        )}
+                        {(fieldProps) => <input placeholder="phone" {...pickDOMAttrs(fieldProps)} />}
                       </Field>
                       <button type="button" onClick={() => remove(i)}>
                         Remove

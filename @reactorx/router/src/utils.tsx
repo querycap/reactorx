@@ -42,20 +42,12 @@ export interface IMatch<TParameters> {
   url: string;
 }
 
-export function matchPath(
-  pathname: string,
-  optionsOrPath: IMatchPathOpt | string = "",
-): IMatch<any> | null {
+export function matchPath(pathname: string, optionsOrPath: IMatchPathOpt | string = ""): IMatch<any> | null {
   if (typeof optionsOrPath === "string") {
     optionsOrPath = { path: optionsOrPath };
   }
 
-  let {
-    path = "",
-    exact = false,
-    strict = false,
-    sensitive = false,
-  } = optionsOrPath as IMatchPathOpt;
+  let { path = "", exact = false, strict = false, sensitive = false } = optionsOrPath as IMatchPathOpt;
 
   const paths = ([] as string[]).concat(path);
 
@@ -87,13 +79,10 @@ export function matchPath(
       path, // the path used to match
       url: path === "/" && url === "" ? "/" : url, // the matched portion of the URL
       isExact, // whether or not we matched exactly
-      params: keys.reduce(
-        (memo: { [key: string]: any }, key: Key, index: number) => {
-          memo[key.name] = values[index];
-          return memo;
-        },
-        {},
-      ),
+      params: keys.reduce((memo: { [key: string]: any }, key: Key, index: number) => {
+        memo[key.name] = values[index];
+        return memo;
+      }, {}),
     };
   }, null);
 }

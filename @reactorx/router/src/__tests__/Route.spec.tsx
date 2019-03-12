@@ -51,10 +51,7 @@ describe("A <Route>", () => {
 
     const node = await mount(
       <Router history={history}>
-        <Route
-          path="/sushi/:roll"
-          render={({ match }) => <h1>{match.url}</h1>}
-        />
+        <Route path="/sushi/:roll" render={({ match }) => <h1>{match.url}</h1>} />
         <Redirect from={"/sushi/california"} to={"/sushi/spicy-tuna"} />
       </Router>,
     );
@@ -69,10 +66,7 @@ describe("A <Route>", () => {
           history={createMemoryHistory({
             initialEntries: ["/a%20dynamic%20segment"],
           })}>
-          <Route
-            path="/:id"
-            render={({ match }) => <h1>{match.params.id}</h1>}
-          />
+          <Route path="/:id" render={({ match }) => <h1>{match.params.id}</h1>} />
         </Router>,
       );
 
@@ -84,10 +78,7 @@ describe("A <Route>", () => {
     it("matches the first provided path", async () => {
       const node = await mount(
         <Router history={createMemoryHistory({ initialEntries: ["/hello"] })}>
-          <Route
-            path={["/hello", "/world"]}
-            render={() => <div>Hello World</div>}
-          />
+          <Route path={["/hello", "/world"]} render={() => <div>Hello World</div>} />
         </Router>,
       );
       expect(node.innerHTML).toContain("Hello World");
@@ -100,10 +91,7 @@ describe("A <Route>", () => {
             initialEntries: ["/other", "/world"],
             initialIndex: 1,
           })}>
-          <Route
-            path={["/hello", "/world"]}
-            render={() => <div>Hello World</div>}
-          />
+          <Route path={["/hello", "/world"]} render={() => <div>Hello World</div>} />
         </Router>,
       );
 
@@ -117,10 +105,7 @@ describe("A <Route>", () => {
             initialEntries: ["/other", "/world"],
             initialIndex: 1,
           })}>
-          <Route
-            path={["/hello", "/world"]}
-            render={({ match }) => <div>{match.path}</div>}
-          />
+          <Route path={["/hello", "/world"]} render={({ match }) => <div>{match.path}</div>} />
         </Router>,
       );
 
@@ -176,12 +161,8 @@ describe("A <Route>", () => {
   describe("with escaped special characters in the path", () => {
     it("is able to match", async () => {
       const node = await mount(
-        <Router
-          history={createMemoryHistory({ initialEntries: ["/pizza (1)"] })}>
-          <Route
-            path="/pizza \(1\)"
-            render={({ match }) => <h1>{match.url}</h1>}
-          />
+        <Router history={createMemoryHistory({ initialEntries: ["/pizza (1)"] })}>
+          <Route path="/pizza \(1\)" render={({ match }) => <h1>{match.url}</h1>} />
         </Router>,
       );
 
@@ -194,8 +175,7 @@ describe("A <Route>", () => {
       const text = "bubblegum";
 
       const node = await mount(
-        <Router
-          history={createMemoryHistory({ initialEntries: ["/somepath/"] })}>
+        <Router history={createMemoryHistory({ initialEntries: ["/somepath/"] })}>
           <Route exact path="/somepath" render={() => <h1>{text}</h1>} />
         </Router>,
       );
@@ -208,14 +188,8 @@ describe("A <Route>", () => {
         const text = "bubblegum";
 
         const node = await mount(
-          <Router
-            history={createMemoryHistory({ initialEntries: ["/somepath/"] })}>
-            <Route
-              exact
-              strict
-              path="/somepath"
-              render={() => <h1>{text}</h1>}
-            />
+          <Router history={createMemoryHistory({ initialEntries: ["/somepath/"] })}>
+            <Route exact strict path="/somepath" render={() => <h1>{text}</h1>} />
           </Router>,
         );
 
@@ -226,14 +200,8 @@ describe("A <Route>", () => {
         const text = "bubblegum";
 
         const node = await mount(
-          <Router
-            history={createMemoryHistory({ initialEntries: ["/somepath"] })}>
-            <Route
-              exact
-              strict
-              path="/somepath/"
-              render={() => <h1>{text}</h1>}
-            />
+          <Router history={createMemoryHistory({ initialEntries: ["/somepath"] })}>
+            <Route exact strict path="/somepath/" render={() => <h1>{text}</h1>} />
           </Router>,
         );
 
@@ -247,13 +215,8 @@ describe("A <Route>", () => {
       const text = "bubblegum";
 
       const node = await mount(
-        <Router
-          history={createMemoryHistory({ initialEntries: ["/cupcakes"] })}>
-          <Route
-            location={{ pathname: "/bubblegum" }}
-            path="/bubblegum"
-            render={() => <h1>{text}</h1>}
-          />
+        <Router history={createMemoryHistory({ initialEntries: ["/cupcakes"] })}>
+          <Route location={{ pathname: "/bubblegum" }} path="/bubblegum" render={() => <h1>{text}</h1>} />
         </Router>,
       );
 

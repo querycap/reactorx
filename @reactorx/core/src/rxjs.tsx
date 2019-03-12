@@ -1,29 +1,18 @@
 import { Observable } from "rxjs";
-import {
-  distinctUntilChanged as rxDistinctUntilChanged,
-  map as rxMap,
-} from "rxjs/operators";
-import React, {
-  createElement,
-  useLayoutEffect,
-  useMemo,
-  useState,
-} from "react";
+import { distinctUntilChanged as rxDistinctUntilChanged, map as rxMap } from "rxjs/operators";
+import React, { createElement, useLayoutEffect, useMemo, useState } from "react";
 import { shallowEqual } from "./utils";
 
 export function useObservable<T>(observable: Observable<T>, defaultValue: T) {
   const [value, setValue] = useState(defaultValue);
 
-  useLayoutEffect(
-    () => {
-      const subscription = observable.subscribe(setValue);
+  useLayoutEffect(() => {
+    const subscription = observable.subscribe(setValue);
 
-      return () => {
-        subscription.unsubscribe();
-      };
-    },
-    [observable],
-  );
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [observable]);
 
   return value;
 }
@@ -35,17 +24,11 @@ export interface IObserverProps<TState> {
 
 declare module "rxjs/internal/Observable" {
   interface Observable<T> {
-    render<T>(
-      this: Observable<T>,
-      render: (state: T) => React.ReactNode,
-    ): React.ReactNode;
+    render<T>(this: Observable<T>, render: (state: T) => React.ReactNode): React.ReactNode;
   }
 }
 
-Observable.prototype.render = function<T>(
-  this: Observable<T>,
-  render: (state: T) => React.ReactNode,
-) {
+Observable.prototype.render = function<T>(this: Observable<T>, render: (state: T) => React.ReactNode) {
   return createElement(Observer, {
     state$: this,
     children: render,
@@ -60,10 +43,7 @@ function Observer(props: IObserverProps<any>) {
 
 declare module "rxjs/internal/Observable" {
   interface Observable<T> {
-    conn<TOutput>(
-      this: Observable<T>,
-      mapper: (state: T) => TOutput,
-    ): Observable<TOutput>;
+    conn<TOutput>(this: Observable<T>, mapper: (state: T) => TOutput): Observable<TOutput>;
 
     useConn<TOutput>(
       this: Observable<T>,
@@ -75,10 +55,7 @@ declare module "rxjs/internal/Observable" {
   }
 }
 
-Observable.prototype.conn = function<T, TOutput>(
-  this: Observable<T>,
-  mapper: (state: T) => TOutput,
-) {
+Observable.prototype.conn = function<T, TOutput>(this: Observable<T>, mapper: (state: T) => TOutput) {
   return new StateMapperObservable<T, TOutput>(this, mapper);
 };
 
@@ -100,10 +77,7 @@ class StateMapperObservable<T, TOutput> extends Observable<TOutput> {
     return typeof value === "undefined" ? undefined : this.mapper(value);
   }
 
-  constructor(
-    private state$: Observable<T>,
-    private mapper: (state: T) => TOutput,
-  ) {
+  constructor(private state$: Observable<T>, private mapper: (state: T) => TOutput) {
     super((s) => {
       return this.state$
         .pipe(

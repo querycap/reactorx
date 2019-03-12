@@ -1,21 +1,12 @@
 import { get, isEmpty } from "lodash";
 import React, { ChangeEvent, useEffect, useMemo } from "react";
 import { TValidate, useFormContext } from "./FormContext";
-import {
-  formAddField,
-  formBlurField,
-  formFocusField,
-  formRemoveField,
-  formUpdateField,
-  IFieldState,
-} from "./Actors";
+import { formAddField, formBlurField, formFocusField, formRemoveField, formUpdateField, IFieldState } from "./Actors";
 import { useStore } from "@reactorx/core";
 
 export interface IFieldStateProps {
   name: string;
-  children: (
-    formState: IFieldState & { name: string; value: any },
-  ) => React.ReactNode;
+  children: (formState: IFieldState & { name: string; value: any }) => React.ReactNode;
 }
 
 export function FieldState(props: IFieldStateProps) {
@@ -46,8 +37,7 @@ export function FieldState(props: IFieldStateProps) {
   );
 }
 
-export interface IFieldInnerProps<TName extends string = string>
-  extends IFieldState {
+export interface IFieldInnerProps<TName extends string = string> extends IFieldState {
   name: TName | string;
   value: any;
   required?: boolean;
@@ -69,10 +59,7 @@ export interface IFieldProps<TName extends string = string> {
   children: (fieldProps: IFieldInnerProps<TName>) => React.ReactNode;
 }
 
-export const createValidate = (
-  validate?: TValidate | TValidate[],
-  required?: boolean,
-) => (value: any = "") => {
+export const createValidate = (validate?: TValidate | TValidate[], required?: boolean) => (value: any = "") => {
   if (required && isEmpty(String(value))) {
     return "不能为空";
   }
@@ -88,9 +75,7 @@ export const createValidate = (
   return undefined;
 };
 
-export function Field<TName extends string = string>(
-  props: IFieldProps<TName>,
-) {
+export function Field<TName extends string = string>(props: IFieldProps<TName>) {
   const store$ = useStore();
   const { fieldPrefix, formName } = useFormContext();
 
@@ -98,15 +83,37 @@ export function Field<TName extends string = string>(
 
   const fieldFullName = `${formName}.${fieldName}`;
 
-  useEffect(
-    () => {
-      formAddField
+  useEffect(() => {
+    formAddField
+      .with(
+        {
+          defaultValue: props.defaultValue,
+          error: createValidate(props.validate, props.required)(props.defaultValue),
+        },
+        {
+          field: fieldName,
+          form: formName,
+        },
+      )
+      .invoke(store$);
+
+    return () => {
+      formRemoveField
+        .with(undefined, {
+          field: fieldName,
+          form: formName,
+        })
+        .invoke(store$);
+    };
+  }, [fieldFullName]);
+
+  const callbacks = useMemo(() => {
+    const changeValue = (nextValue: any) => {
+      return formUpdateField
         .with(
           {
-            defaultValue: props.defaultValue,
-            error: createValidate(props.validate, props.required)(
-              props.defaultValue,
-            ),
+            value: nextValue,
+            error: createValidate(props.validate, props.required)(nextValue || props.defaultValue),
           },
           {
             field: fieldName,
@@ -114,66 +121,27 @@ export function Field<TName extends string = string>(
           },
         )
         .invoke(store$);
+    };
 
-      return () => {
-        formRemoveField
+    return {
+      onChange: (e: ChangeEvent) => changeValue((e.target as any).value),
+      onValueChange: (nextValue: any) => changeValue(nextValue),
+      onFocus: () =>
+        formFocusField
           .with(undefined, {
             field: fieldName,
             form: formName,
           })
-          .invoke(store$);
-      };
-    },
-    [fieldFullName],
-  );
-
-  const callbacks = useMemo(
-    () => {
-      const changeValue = (nextValue: any) => {
-        return formUpdateField
-          .with(
-            {
-              value: nextValue,
-              error: createValidate(props.validate, props.required)(
-                nextValue || props.defaultValue,
-              ),
-            },
-            {
-              field: fieldName,
-              form: formName,
-            },
-          )
-          .invoke(store$);
-      };
-
-      return {
-        onChange: (e: ChangeEvent) => changeValue((e.target as any).value),
-        onValueChange: (nextValue: any) => changeValue(nextValue),
-        onFocus: () =>
-          formFocusField
-            .with(undefined, {
-              field: fieldName,
-              form: formName,
-            })
-            .invoke(store$),
-        onBlur: () =>
-          formBlurField
-            .with(undefined, {
-              field: fieldName,
-              form: formName,
-            })
-            .invoke(store$),
-      };
-    },
-    [
-      formName,
-      fieldName,
-      props.validate,
-      props.required,
-      props.defaultValue,
-      store$,
-    ],
-  );
+          .invoke(store$),
+      onBlur: () =>
+        formBlurField
+          .with(undefined, {
+            field: fieldName,
+            form: formName,
+          })
+          .invoke(store$),
+    };
+  }, [formName, fieldName, props.validate, props.required, props.defaultValue, store$]);
 
   return (
     <FieldState name={fieldName}>

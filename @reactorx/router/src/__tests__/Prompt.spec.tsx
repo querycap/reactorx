@@ -24,10 +24,7 @@ describe("A <Prompt>", () => {
       history.push("/somewhere");
     });
 
-    expect(getUserConfirmation).toHaveBeenCalledWith(
-      expect.stringMatching("Are you sure?"),
-      expect.any(Function),
-    );
+    expect(getUserConfirmation).toHaveBeenCalledWith(expect.stringMatching("Are you sure?"), expect.any(Function));
   });
 
   describe("with when=false", () => {

@@ -41,12 +41,17 @@ class Persister {
       })
       .then((values) => {
         const data: { [k: string]: any } = {};
+
         values.forEach((v: any) => {
-          data[v.key] = v.values;
+          if (typeof v.values !== "undefined") {
+            data[v.key] = v.values;
+          }
         });
+
         if (callback) {
           callback(data);
         }
+
         return data;
       })
       .catch(console.error);
@@ -60,25 +65,41 @@ class Persister {
 
       const nextData: { [key: string]: any } = {};
 
+      const keysToDelete = [] as string[];
+
       Object.keys(this.keyOpts).forEach((key) => {
-        if (
-          typeof nextState[key] !== "undefined" &&
-          nextState[key] !== prevState[key]
-        ) {
+        if (typeof nextState[key] === "undefined") {
+          keysToDelete.push(key);
+          return;
+        }
+
+        if (nextState[key] !== prevState[key]) {
           nextData[key] = nextState[key];
         }
-        return {};
       });
 
       prevState = nextState;
 
       this.saveAll(nextData);
+      this.removeAll(keysToDelete);
     });
 
     return () => {
       prevState = null;
       subscription.unsubscribe();
     };
+  }
+
+  removeAll(keys: string[]) {
+    if (keys.length === 0) {
+      return Promise.resolve();
+    }
+
+    return Promise.all(
+      keys.map((key) => {
+        return this.remove(key);
+      }),
+    ).catch(console.error);
   }
 
   saveAll(nextData: { [key: string]: any }) {
@@ -100,15 +121,11 @@ class Persister {
     return this.storage
       .getItem(key)
       .then((data: Partial<IStorageValues> = {}) => {
-        if (
-          !!data.expiredAt &&
-          new Date(data.expiredAt).getTime() >= Date.now()
-        ) {
+        if (!!data.expiredAt && new Date(data.expiredAt).getTime() >= Date.now()) {
           return data.values;
         }
-        return {};
       })
-      .catch(() => ({}));
+      .catch();
   }
 
   save(key: string, values: any, opts: IStoreOpts = {} as IStoreOpts) {
@@ -120,5 +137,9 @@ class Persister {
       values,
       expiredAt: Date.now() + (opts.expiresIn || 24 * 3600) * 1000,
     });
+  }
+
+  remove(key: string) {
+    return this.storage.removeItem(key);
   }
 }

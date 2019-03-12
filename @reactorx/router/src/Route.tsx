@@ -27,11 +27,7 @@ export function Route(props: IRouteProps) {
     match: match!,
   };
 
-  return (
-    <RouterProvider value={nextContext}>
-      {renderChildren(props, nextContext)}
-    </RouterProvider>
-  );
+  return <RouterProvider value={nextContext}>{renderChildren(props, nextContext)}</RouterProvider>;
 }
 
 function renderChildren(props: IRouteProps, context: IRouterContext) {

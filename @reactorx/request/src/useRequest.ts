@@ -9,14 +9,8 @@ export interface IUseRequestOpts<TReq, TRespBody, TError> {
   arg?: RequestActor<TReq, TRespBody, TError>["arg"];
   opts?: RequestActor<TReq, TRespBody, TError>["opts"];
   required?: boolean;
-  onSuccess?: (
-    actor: RequestActor<TReq, TRespBody, TError>["done"],
-    dispatch: IDispatch,
-  ) => void;
-  onFail?: (
-    actor: RequestActor<TReq, TRespBody, TError>["failed"],
-    dispatch: IDispatch,
-  ) => void;
+  onSuccess?: (actor: RequestActor<TReq, TRespBody, TError>["done"], dispatch: IDispatch) => void;
+  onFail?: (actor: RequestActor<TReq, TRespBody, TError>["failed"], dispatch: IDispatch) => void;
   onFinish?: (dispatch: IDispatch) => void;
 }
 
@@ -30,10 +24,7 @@ export function useRequest<TReq, TRespBody, TError>(
   ) => void,
   BehaviorSubject<boolean>
 ] {
-  const requesting$ = useMemo(
-    () => new BehaviorSubject(!!options.required),
-    [],
-  );
+  const requesting$ = useMemo(() => new BehaviorSubject(!!options.required), []);
   const lastArg = useRef(options.arg);
   const { actor$, dispatch } = useStore();
   const optionsRef = useRef(options);
@@ -54,18 +45,14 @@ export function useRequest<TReq, TRespBody, TError>(
     const subscription = observableMerge(
       subject$.pipe(
         rxFilter(requestActor.done.is),
-        rxFilter((actor) =>
-          isEqual(actor.opts.parentActor.arg, lastArg.current),
-        ),
+        rxFilter((actor) => isEqual(actor.opts.parentActor.arg, lastArg.current)),
         rxTap((actor: typeof requestActor.done) => {
           end(() => (optionsRef.current.onSuccess || noop)(actor, dispatch));
         }),
       ),
       subject$.pipe(
         rxFilter(requestActor.failed.is),
-        rxFilter((actor) =>
-          isEqual(actor.opts.parentActor.arg, lastArg.current),
-        ),
+        rxFilter((actor) => isEqual(actor.opts.parentActor.arg, lastArg.current)),
         rxTap((actor: typeof requestActor.failed) => {
           end(() => (optionsRef.current.onFail || noop)(actor, dispatch));
         }),

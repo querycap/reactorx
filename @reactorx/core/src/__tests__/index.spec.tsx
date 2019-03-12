@@ -19,11 +19,9 @@ describe("@reactorx/core", () => {
   test("Store", () => {
     const testActor = Actor.of("test");
 
-    const ping = testActor
-      .named<{ step?: number }, { o: string }>("ping")
-      .effectOn("ping", (state: any = 0, actor) => {
-        return state + (actor.arg.step || 1);
-      });
+    const ping = testActor.named<{ step?: number }, { o: string }>("ping").effectOn("ping", (state: any = 0, actor) => {
+      return state + (actor.arg.step || 1);
+    });
 
     const pong = testActor.named("pong").effectOn("pong", (state: any = 0) => {
       return state + 1;
@@ -77,11 +75,9 @@ describe("@reactorx/core", () => {
   test("in react", async () => {
     const testActor = Actor.of("test");
 
-    const ping = testActor
-      .named<{ step?: number }, { o: string }>("ping")
-      .effectOn("ping", (state: any = 0, actor) => {
-        return state + (actor.arg.step || 1);
-      });
+    const ping = testActor.named<{ step?: number }, { o: string }>("ping").effectOn("ping", (state: any = 0, actor) => {
+      return state + (actor.arg.step || 1);
+    });
 
     const pong = testActor.named("pong").effectOn("pong", (state: any = 0) => {
       return state + 1;

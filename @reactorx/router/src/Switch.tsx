@@ -22,17 +22,11 @@ export const Switch = (props: ISwitchProps) => {
     if (match == null && React.isValidElement(child)) {
       element = child;
 
-      const path =
-        (child.props as IRouteProps).path ||
-        (child.props as IRedirectProps).from;
+      const path = (child.props as IRouteProps).path || (child.props as IRedirectProps).from;
 
-      match = path
-        ? matchPath(location.pathname, { ...child.props, path })
-        : router.match;
+      match = path ? matchPath(location.pathname, { ...child.props, path }) : router.match;
     }
   });
 
-  return !!match && !!element
-    ? React.cloneElement(element, { location, computedMatch: match })
-    : null;
+  return !!match && !!element ? React.cloneElement(element, { location, computedMatch: match }) : null;
 };

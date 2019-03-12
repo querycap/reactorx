@@ -1,9 +1,4 @@
-import React, {
-  ReactElement,
-  StrictMode,
-  useLayoutEffect,
-  useState,
-} from "react";
+import React, { ReactElement, StrictMode, useLayoutEffect, useState } from "react";
 import { render } from "react-dom";
 import { act } from "react-dom/test-utils";
 import { BehaviorSubject } from "rxjs";
@@ -24,10 +19,7 @@ function Root({ child$ }: { child$: BehaviorSubject<ReactElement<any>> }) {
   return <>{child}</>;
 }
 
-export function mount(
-  element: ReactElement<any>,
-  node: Element = document.createElement("div"),
-): Promise<Element> {
+export function mount(element: ReactElement<any>, node: Element = document.createElement("div")): Promise<Element> {
   if ((node as any).subject$) {
     return new Promise((resolve) => {
       act(() => {

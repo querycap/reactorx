@@ -11,7 +11,7 @@ describe("Persister", () => {
     await localforage.defineDriver(memoryStorageDriver);
   });
 
-  it("flow", async (done) => {
+  it("flow", async () => {
     const persister = createPersister({
       name: "test",
       driver: memoryStorageDriver._driver,
@@ -40,13 +40,29 @@ describe("Persister", () => {
     store$.next({ ...store$.getState(), ping: 1, pong: 1 });
     store$.next({ ...store$.getState(), ping: 2, pong: 2 });
 
-    setTimeout(() => {
-      persister.hydrate((data) => {
-        expect(data).toEqual({
-          ping: 2,
-        });
-        done();
+    await timeout(1000);
+
+    await persister.hydrate((data) => {
+      expect(data).toEqual({
+        ping: 2,
       });
+    });
+
+    store$.next({ ...store$.getState(), ping: undefined, pong: undefined } as any);
+
+    await timeout(1000);
+
+    await persister.hydrate((data) => {
+      console.log(data);
+      expect(data).toEqual({});
     });
   });
 });
+
+function timeout(t: number) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, t);
+  });
+}

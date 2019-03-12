@@ -13,12 +13,8 @@ export function SimpleForm() {
       {({ submit }) => {
         return (
           <form onSubmit={submit}>
-            <Field name="firstName">
-              {(fieldProps) => <input {...pickDOMAttrs(fieldProps)} />}
-            </Field>
-            <Field name="lastName">
-              {(fieldProps) => <input {...pickDOMAttrs(fieldProps)} />}
-            </Field>
+            <Field name="firstName">{(fieldProps) => <input {...pickDOMAttrs(fieldProps)} />}</Field>
+            <Field name="lastName">{(fieldProps) => <input {...pickDOMAttrs(fieldProps)} />}</Field>
             <button type="submit">Submit</button>
           </form>
         );

@@ -1,33 +1,20 @@
 import { Actor, AsyncStage } from "./core";
 
-export interface IAsyncDerived<
-  TStartedArg = any,
-  TDoneArg = any,
-  TFailedArg = any
-> {
+export interface IAsyncDerived<TStartedArg = any, TDoneArg = any, TFailedArg = any> {
   startedArg: TStartedArg;
   doneArg: TDoneArg;
   failedArg: TFailedArg;
 }
 
-export class AsyncActor<
-  TArg = any,
-  TOpts = any,
-  TAsyncDerived extends IAsyncDerived = IAsyncDerived
-> extends Actor<TArg, TOpts> {
-  static of<
-    TArg = any,
-    TOpts = any,
-    TAsyncDerived extends IAsyncDerived = IAsyncDerived
-  >(group: string) {
+export class AsyncActor<TArg = any, TOpts = any, TAsyncDerived extends IAsyncDerived = IAsyncDerived> extends Actor<
+  TArg,
+  TOpts
+> {
+  static of<TArg = any, TOpts = any, TAsyncDerived extends IAsyncDerived = IAsyncDerived>(group: string) {
     return new AsyncActor<TArg, TOpts, TAsyncDerived>({ group });
   }
 
-  named<
-    TNamedArg = TArg,
-    TNamedOpts = TOpts,
-    TNamedAsyncDerived extends IAsyncDerived = TAsyncDerived
-  >(
+  named<TNamedArg = TArg, TNamedOpts = TOpts, TNamedAsyncDerived extends IAsyncDerived = TAsyncDerived>(
     name: string,
     opts?: TNamedOpts,
   ): AsyncActor<TNamedArg, TNamedOpts & TOpts, TNamedAsyncDerived> {
@@ -42,10 +29,7 @@ export class AsyncActor<
   }
 
   get started() {
-    return new Actor<
-      TAsyncDerived["startedArg"],
-      { parentActor: Actor<TArg, TOpts> }
-    >({
+    return new Actor<TAsyncDerived["startedArg"], { parentActor: Actor<TArg, TOpts> }>({
       group: this.group,
       name: this.name,
       stage: AsyncStage.STARTED,
@@ -54,10 +38,7 @@ export class AsyncActor<
   }
 
   get done() {
-    return new Actor<
-      TAsyncDerived["doneArg"],
-      { parentActor: Actor<TArg, TOpts> }
-    >({
+    return new Actor<TAsyncDerived["doneArg"], { parentActor: Actor<TArg, TOpts> }>({
       group: this.group,
       name: this.name,
       stage: AsyncStage.DONE,
@@ -66,10 +47,7 @@ export class AsyncActor<
   }
 
   get failed() {
-    return new Actor<
-      TAsyncDerived["failedArg"],
-      { parentActor: Actor<TArg, TOpts> }
-    >({
+    return new Actor<TAsyncDerived["failedArg"], { parentActor: Actor<TArg, TOpts> }>({
       group: this.group,
       name: this.name,
       stage: AsyncStage.FAILED,

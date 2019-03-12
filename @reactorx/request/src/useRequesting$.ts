@@ -1,12 +1,7 @@
 import { Dictionary, omit, size } from "lodash";
 import { AsyncStage, useEpic } from "@reactorx/core";
 import { RequestActor } from "./RequestActor";
-import {
-  filter as rxFilter,
-  ignoreElements as rxIgnoreElements,
-  scan as rxScan,
-  tap as rxTap,
-} from "rxjs/operators";
+import { filter as rxFilter, ignoreElements as rxIgnoreElements, scan as rxScan, tap as rxTap } from "rxjs/operators";
 import { useMemo } from "react";
 import { BehaviorSubject } from "rxjs";
 

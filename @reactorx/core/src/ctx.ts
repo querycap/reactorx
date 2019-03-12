@@ -12,14 +12,11 @@ export const useStore = () => {
 export const useEpic = (epic: IEpic, inputs?: any[]) => {
   const store$ = useStore();
 
-  useLayoutEffect(
-    () => {
-      const subscription = store$.epicOn(epic);
+  useLayoutEffect(() => {
+    const subscription = store$.epicOn(epic);
 
-      return () => {
-        subscription.unsubscribe();
-      };
-    },
-    [epic, ...(inputs || [])],
-  );
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [epic, ...(inputs || [])]);
 };
