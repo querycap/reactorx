@@ -78,5 +78,9 @@ export const transformRequest = (data: any, headers: any) => {
     return paramsSerializer(data);
   }
 
-  return JSON.stringify(data);
+  if (isArray(data) || isObject(data)) {
+    return JSON.stringify(data);
+  }
+
+  return data;
 };
