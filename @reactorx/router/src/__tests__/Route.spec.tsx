@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useEffect } from "react";
 import { createMemoryHistory as createHistory } from "history";
 import { Redirect, Route, Router } from "..";
 
@@ -117,7 +117,7 @@ describe("A <Route>", () => {
       const routeMount = jest.fn();
 
       function MatchedRoute() {
-        useLayoutEffect(() => {
+        useEffect(() => {
           routeMount();
         }, []);
 
@@ -183,7 +183,7 @@ describe("A <Route>", () => {
       expect(node.innerHTML).toContain(text);
     });
 
-    describe("and `strict=true`", async () => {
+    describe("and `strict=true`", () => {
       it("does not render when the URL has a trailing slash", async () => {
         const text = "bubblegum";
 

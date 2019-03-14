@@ -1,7 +1,7 @@
 import { Store, StoreProvider } from "@reactorx/core";
 import { createPersister, persistedKeys } from "../Persister";
 import { mount } from "@reactorx/testutils";
-import React, { useLayoutEffect } from "react";
+import React, { useEffect } from "react";
 import localforage from "localforage";
 import memoryStorageDriver from "localforage-memoryStorageDriver";
 import { usePersist } from "../PersisterActor";
@@ -20,7 +20,7 @@ describe("Persister", () => {
     const store$ = Store.create({ ping: 0, pong: 0 });
 
     function App() {
-      useLayoutEffect(() => persister.connect(store$));
+      useEffect(() => persister.connect(store$));
       usePersist("ping");
       return null;
     }

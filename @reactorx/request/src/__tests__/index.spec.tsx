@@ -1,7 +1,7 @@
 import { createCombineDuplicatedRequestEpic, createRequestActor, createRequestEpic, Status, useRequest } from "..";
 import { composeEpics, Store, StoreProvider } from "@reactorx/core";
 import { mount } from "@reactorx/testutils";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { act } from "react-dom/test-utils";
 
@@ -53,7 +53,7 @@ describe("full flow", () => {
         },
       });
 
-      useLayoutEffect(() => {
+      useEffect(() => {
         request();
       }, []);
 

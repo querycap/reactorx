@@ -1,6 +1,7 @@
 import React from "react";
 import { IMatch, matchPath } from "./utils";
 import { IRouterContext, RouterProvider, useRouter } from "./RouterContext";
+import { shallowEqual } from "@reactorx/core";
 
 export interface IRouteProps {
   path?: string | string[];
@@ -17,7 +18,7 @@ export interface IRouteProps {
   computedMatch?: IMatch<any>;
 }
 
-export function Route(props: IRouteProps) {
+export const Route = (props: IRouteProps) => {
   const context = useRouter();
   const match = computeRouteMatch(props, context);
 
@@ -28,7 +29,7 @@ export function Route(props: IRouteProps) {
   };
 
   return <RouterProvider value={nextContext}>{renderChildren(props, nextContext)}</RouterProvider>;
-}
+};
 
 function renderChildren(props: IRouteProps, context: IRouterContext) {
   const { children, component, render } = props;
@@ -56,12 +57,34 @@ function computeRouteMatch(
   if (computedMatch) {
     return computedMatch;
   }
-  return path
-    ? matchPath((location || context.location).pathname, {
-        path,
-        strict,
-        exact,
-        sensitive,
-      })
-    : context.match;
+
+  if (path) {
+    const nextMatch = matchPath((location || context.location).pathname, {
+      path,
+      strict,
+      exact,
+      sensitive,
+    });
+
+    if (nextMatch && isMatchEqual(nextMatch, context.match)) {
+      return context.match;
+    }
+
+    return nextMatch;
+  }
+
+  return context.match;
+}
+
+function isMatchEqual(match: IMatch<any>, nextMatch: IMatch<any>): boolean {
+  if (match.url !== nextMatch.url) {
+    return false;
+  }
+  if (match.path !== nextMatch.path) {
+    return false;
+  }
+  if (match.isExact !== nextMatch.isExact) {
+    return false;
+  }
+  return shallowEqual(match.params, nextMatch.params);
 }

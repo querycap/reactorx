@@ -1,12 +1,12 @@
 import { Observable } from "rxjs";
 import { distinctUntilChanged as rxDistinctUntilChanged, map as rxMap } from "rxjs/operators";
-import React, { createElement, useLayoutEffect, useMemo, useState } from "react";
+import React, { createElement, useEffect, useMemo, useState } from "react";
 import { shallowEqual } from "./utils";
 
 export function useObservable<T>(observable: Observable<T>, defaultValue: T) {
   const [value, setValue] = useState(defaultValue);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const subscription = observable.subscribe(setValue);
 
     return () => {

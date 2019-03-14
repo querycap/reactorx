@@ -1,5 +1,5 @@
 import { History } from "history";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IMatch } from "./utils";
 import { RouterProvider } from "./RouterContext";
 
@@ -34,7 +34,7 @@ export function Router({ history, children }: IRouterProps) {
 }
 
 function HistoryListener({ history, onLocationChange }: { history: History; onLocationChange: () => void }) {
-  useLayoutEffect(() => {
+  useEffect(() => {
     const unlisten = history.listen(() => {
       onLocationChange();
     });

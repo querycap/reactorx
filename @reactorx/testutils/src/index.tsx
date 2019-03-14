@@ -1,4 +1,4 @@
-import React, { ReactElement, StrictMode, useLayoutEffect, useState } from "react";
+import React, { ReactElement, StrictMode, useEffect, useState } from "react";
 import { render } from "react-dom";
 import { act } from "react-dom/test-utils";
 import { BehaviorSubject } from "rxjs";
@@ -6,7 +6,7 @@ import { BehaviorSubject } from "rxjs";
 function Root({ child$ }: { child$: BehaviorSubject<ReactElement<any>> }) {
   const [child, updateChild] = useState(child$.value);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const subscription = child$.subscribe((child) => {
       updateChild(child);
     });
