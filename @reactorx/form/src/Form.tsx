@@ -1,5 +1,5 @@
-import { cloneDeep, Dictionary, every, filter, get, isArray, isObject, map, mapValues } from "lodash";
-import React, { ReactNode, SyntheticEvent, useEffect, useMemo } from "react";
+import { cloneDeep, Dictionary, every, filter, get, isArray, isFunction, isObject, map, mapValues } from "lodash";
+import React, { ReactNode, RefObject, useEffect, useMemo, useRef } from "react";
 import { Store, useStore } from "@reactorx/core";
 import {
   formDestroy,
@@ -13,16 +13,14 @@ import {
 } from "./Actors";
 import { FormProvider, IFormContexts } from "./FormContext";
 
-export interface IFormInnerProps<TFormValues = any> extends IFormContexts<TFormValues> {
-  submit: (evt: SyntheticEvent<any>) => void;
-}
+type TFormContextChildRender<TFormValues> = (ctx: IFormContexts<TFormValues>) => ReactNode;
 
 export interface IFormProps<TFormValues extends object> {
   onSubmit?: (values: TFormValues) => void;
   name: string;
   id?: string;
   initialValues?: TFormValues;
-  children: (form: IFormInnerProps<TFormValues>) => ReactNode;
+  children: ReactNode | TFormContextChildRender<TFormValues>;
 }
 
 const isValid = (fields: IFormState["fields"]): boolean => {
@@ -52,10 +50,10 @@ export function pickValidValues(values: any): any {
   return values;
 }
 
-function createFormContext<TFormValues>(
+function createFormContext<TFormValues extends object>(
   store$: Store,
   formName: string,
-  initials: TFormValues = {} as TFormValues,
+  propsRef: RefObject<IFormProps<TFormValues>>,
 ): IFormContexts<TFormValues> {
   const startSubmit = () => {
     return formStartSubmit.with(undefined, { form: formName }).invoke(store$);
@@ -87,6 +85,13 @@ function createFormContext<TFormValues>(
     };
   };
 
+  const submit = createSubmit(() => {
+    if (propsRef.current && propsRef.current.onSubmit) {
+      propsRef.current.onSubmit(pickValidValues(getFormState().values));
+    }
+    endSubmit();
+  });
+
   return {
     formName,
     getFormState,
@@ -94,9 +99,10 @@ function createFormContext<TFormValues>(
     endSubmit,
     setErrors,
     createSubmit,
+    submit,
     state$: store$.conn((state) =>
       get(state, formKey(formName), {
-        values: cloneDeep(initials),
+        values: propsRef.current ? cloneDeep(propsRef.current.initialValues) : {},
       }),
     ),
   };
@@ -107,22 +113,16 @@ export function Form<TFormValues extends object>(props: IFormProps<TFormValues>)
 
   const store$ = useStore();
 
+  const propsRef = useRef(props);
+
   const ctx = useMemo(() => {
-    return createFormContext<TFormValues>(store$, formName, props.initialValues);
+    return createFormContext<TFormValues>(store$, formName, propsRef);
   }, [formName]);
 
   return (
     <FormProvider key={formName} value={ctx}>
       <FormMount formName={formName} initialValues={props.initialValues} />
-      {props.children({
-        ...ctx,
-        submit: ctx.createSubmit(() => {
-          if (props.onSubmit) {
-            props.onSubmit(pickValidValues(ctx.getFormState().values));
-          }
-          ctx.endSubmit();
-        }),
-      })}
+      {isFunction(props.children) ? props.children(ctx) : props.children}
       <FormUnmount formName={formName} />
     </FormProvider>
   );

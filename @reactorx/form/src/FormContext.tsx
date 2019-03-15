@@ -13,6 +13,7 @@ export interface IFormContexts<TFormValues> {
   setErrors: (errors: Dictionary<string>) => void;
   getFormState: () => IFormState<TFormValues>;
   createSubmit: (cb: () => void) => (evt: SyntheticEvent<any>) => void;
+  submit: (evt: SyntheticEvent<any>) => void;
   state$: Observable<IFormState<any>>;
 }
 
