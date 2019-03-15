@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect } from "react";
+import React, { createContext, useContext, useEffect } from "react";
 import { IEpic, Store } from "./core";
 
 const StoreContext = createContext({} as Store<any>);
@@ -21,7 +21,11 @@ export const useEpic = (epic: IEpic, inputs: any[] = []) => {
   }, inputs);
 };
 
-export const EpicOn = ({ children, inputs }: { children: IEpic; inputs: any[] }) => {
+export const epicOn = (epic: IEpic, inputs: any[]) => {
+  return <EpicOn inputs={inputs}>{epic}</EpicOn>;
+};
+
+const EpicOn = ({ children, inputs }: { children: IEpic; inputs: any[] }) => {
   useEpic(children, inputs);
   return null;
 };
