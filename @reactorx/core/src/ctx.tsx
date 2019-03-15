@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo } from "react";
+import { createContext, useContext, useEffect } from "react";
 import { IEpic, Store } from "./core";
 
 const StoreContext = createContext({} as Store<any>);
@@ -12,11 +12,16 @@ export const useStore = () => {
 export const useEpic = (epic: IEpic, inputs: any[] = []) => {
   const store$ = useStore();
 
-  const subscription = useMemo(() => store$.epicOn(epic), inputs);
-
   useEffect(() => {
+    const subscription = store$.epicOn(epic);
+
     return () => {
       subscription.unsubscribe();
     };
   }, inputs);
+};
+
+export const EpicOn = ({ children, inputs }: { children: IEpic; inputs: any[] }) => {
+  useEpic(children, inputs);
+  return null;
 };
