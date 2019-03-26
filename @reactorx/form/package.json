@@ -1,6 +1,6 @@
 {
   "name": "@reactorx/form",
-  "version": "0.7.5",
+  "version": "0.7.6",
   "main": "cjs/index.js",
   "module": "es/index.js",
   "types": "src/index.ts",
