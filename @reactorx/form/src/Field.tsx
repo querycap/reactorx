@@ -77,18 +77,21 @@ export const createValidate = (validate?: TValidate | TValidate[], required?: bo
 
 export function Field<TName extends string = string>(props: IFieldProps<TName>) {
   const store$ = useStore();
-  const { fieldPrefix, formName } = useFormContext();
+  const { fieldPrefix, formName, getFormState } = useFormContext();
 
   const fieldName = `${fieldPrefix || ""}${props.name}`;
 
   const fieldFullName = `${formName}.${fieldName}`;
 
   useEffect(() => {
+    const values = getFormState().values;
+    const defaultValue = get(values, fieldName) || props.defaultValue;
+
     formAddField
       .with(
         {
-          defaultValue: props.defaultValue,
-          error: createValidate(props.validate, props.required)(props.defaultValue),
+          defaultValue,
+          error: createValidate(props.validate, props.required)(defaultValue),
         },
         {
           field: fieldName,
