@@ -10,7 +10,7 @@
     "cjs/"
   ],
   "peerDependencies": {
-    "react": ">= 16.8.0",
+    "react": ">=16.8.6",
     "rxjs": ">= 6.x"
   },
   "dependencies": {

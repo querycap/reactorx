@@ -25,6 +25,10 @@ class Persister {
     this.storage = createInstance(opts);
   }
 
+  clear() {
+    return this.storage.clear();
+  }
+
   hydrate(callback?: (data: { [k: string]: any }) => void) {
     return this.load(persistedKeys)
       .then((keys = {}) => {

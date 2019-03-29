@@ -49,8 +49,17 @@ describe("Persister", () => {
     });
 
     store$.next({ ...store$.getState(), ping: undefined, pong: undefined } as any);
+    await timeout(200);
 
-    await timeout(1000);
+    await persister.hydrate((data) => {
+      console.log(data);
+      expect(data).toEqual({});
+    });
+
+    store$.next({ ...store$.getState(), ping: 1, pong: 1 } as any);
+    await timeout(200);
+
+    await persister.clear();
 
     await persister.hydrate((data) => {
       console.log(data);
