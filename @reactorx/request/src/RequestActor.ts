@@ -68,7 +68,7 @@ export class RequestActor<TReq = IRequestOpts, TRespBody = any, TError = any> ex
 
 export function requestConfigFromRequestOptions(
   requestOpts: IRequestOpts,
-  requestConfig: AxiosRequestConfig,
+  requestConfig: AxiosRequestConfig = {},
 ): AxiosRequestConfig {
   const { method, url, headers, query, data } = requestOpts;
 
@@ -78,6 +78,12 @@ export function requestConfigFromRequestOptions(
     url,
     params: query,
     data: data,
-    headers: pickBy(headers as any, (v: any) => !isUndefined(v)),
+    headers: pickBy(
+      {
+        ...headers,
+        ...requestConfig.headers,
+      },
+      (v: any) => !isUndefined(v),
+    ),
   };
 }
