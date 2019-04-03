@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
-import { createMemoryHistory as createHistory } from "history";
+import { createMemoryHistory as createHistory, createMemoryHistory } from "history";
 import { Redirect, Route, Router } from "..";
 
 import { mount } from "@reactorx/testutils";
 import { IRouterContext } from "../RouterContext";
-import { default as createMemoryHistory } from "history/createMemoryHistory";
 import { act } from "react-dom/test-utils";
 
 describe("A <Route>", () => {
