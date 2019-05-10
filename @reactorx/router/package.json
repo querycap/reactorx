@@ -1,6 +1,6 @@
 {
   "name": "@reactorx/router",
-  "version": "0.7.9",
+  "version": "0.7.10",
   "main": "cjs/index.js",
   "module": "es/index.js",
   "types": "src/index.ts",
