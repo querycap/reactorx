@@ -1,5 +1,5 @@
 import { Actor, useStore } from "@reactorx/core";
-import { useEffect } from "react";
+import { useMemo } from "react";
 import { IStoreOpts, persistedKeys } from "./Persister";
 
 const PersisterActor = Actor.of("persister");
@@ -12,7 +12,9 @@ const persist = PersisterActor.named<void, IStoreOpts>("register").effectOn(pers
 export const usePersist = (key: string, opts: Partial<IStoreOpts> = {}) => {
   const store$ = useStore();
 
-  useEffect(() => {
+  // register persist key before all
+  // ugly but have to
+  useMemo(() => {
     if (!(store$.getState()[persistedKeys] || {})[key]) {
       persist
         .with(undefined, {
@@ -21,7 +23,7 @@ export const usePersist = (key: string, opts: Partial<IStoreOpts> = {}) => {
         })
         .invoke(store$);
     }
-  }, [key]);
+  }, []);
 
   return null;
 };
