@@ -64,7 +64,7 @@ export class Actor<TArg = any, TOpts = any> {
   effectOn<TState>(
     keyOrKeyCreator: string | TKeyCreator<Actor<TArg, TOpts>>,
     effect: (state: TState, actor: Actor<TArg, TOpts>) => TState | undefined,
-  ) {
+  ): this {
     return this.effectWith(effectOn(keyOrKeyCreator, effect));
   }
 
