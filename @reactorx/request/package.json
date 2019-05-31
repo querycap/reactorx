@@ -1,6 +1,6 @@
 {
   "name": "@reactorx/request",
-  "version": "0.7.8",
+  "version": "0.7.12",
   "main": "cjs/index.js",
   "module": "es/index.js",
   "types": "src/index.ts",
@@ -10,11 +10,11 @@
     "cjs/"
   ],
   "peerDependencies": {
-    "react": ">=16.8.6",
-    "rxjs": ">= 6.x",
-    "axios": "0.19.x",
     "@types/lodash": "4.14.x",
-    "lodash": "4.17.x"
+    "axios": "0.19.x",
+    "lodash": "4.17.x",
+    "react": ">=16.8.6",
+    "rxjs": ">= 6.x"
   },
   "dependencies": {
     "@reactorx/core": "^0.7.7"
