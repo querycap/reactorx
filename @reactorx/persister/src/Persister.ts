@@ -123,8 +123,8 @@ class Persister {
 
   load(key: string) {
     return this.storage
-      .getItem(key)
-      .then((data: Partial<IStorageValues> = {}) => {
+      .getItem<Partial<IStorageValues>>(key)
+      .then((data = {}) => {
         if (data && !!data.expiredAt && new Date(data.expiredAt).getTime() >= Date.now()) {
           return data.values;
         }
