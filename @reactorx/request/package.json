@@ -11,13 +11,13 @@
   ],
   "peerDependencies": {
     "react": ">=16.8.6",
-    "rxjs": ">= 6.x"
+    "rxjs": ">= 6.x",
+    "axios": "0.19.x",
+    "@types/lodash": "4.14.x",
+    "lodash": "4.17.x"
   },
   "dependencies": {
-    "@reactorx/core": "^0.7.7",
-    "@types/lodash": "4.14.x",
-    "axios": "0.18.x",
-    "lodash": "4.17.x"
+    "@reactorx/core": "^0.7.7"
   },
   "publishConfig": {
     "access": "public"
