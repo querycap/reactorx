@@ -20,16 +20,17 @@ export function useRequest<TReq, TRespBody, TError>(
 ): [
   (
     arg: IUseRequestOpts<TReq, TRespBody, TError>["arg"],
-    opts?: IUseRequestOpts<TReq, TRespBody, TError>["opts"],
+    opts?: Pick<typeof options, "onSuccess" | "onFail"> & IUseRequestOpts<TReq, TRespBody, TError>["opts"],
   ) => void,
-  BehaviorSubject<boolean>
+  BehaviorSubject<boolean>,
 ] {
   const requesting$ = useMemo(() => new BehaviorSubject(!!options.required), []);
   const lastArg = useRef(options.arg);
   const { actor$, dispatch } = useStore();
   const optionsRef = useRef(options);
-
   optionsRef.current = options;
+
+  const callbackRef = useRef<Pick<typeof options, "onSuccess" | "onFail">>({});
 
   useEffect(() => {
     const subject$ = new Subject<Actor<any>>();
@@ -47,14 +48,20 @@ export function useRequest<TReq, TRespBody, TError>(
         rxFilter(requestActor.done.is),
         rxFilter((actor) => isEqual(actor.opts.parentActor.arg, lastArg.current)),
         rxTap((actor: typeof requestActor.done) => {
-          end(() => (optionsRef.current.onSuccess || noop)(actor, dispatch));
+          end(() => {
+            callbackRef.current.onSuccess && callbackRef.current.onSuccess(actor, dispatch);
+            optionsRef.current.onSuccess && optionsRef.current.onSuccess(actor, dispatch);
+          });
         }),
       ),
       subject$.pipe(
         rxFilter(requestActor.failed.is),
         rxFilter((actor) => isEqual(actor.opts.parentActor.arg, lastArg.current)),
         rxTap((actor: typeof requestActor.failed) => {
-          end(() => (optionsRef.current.onFail || noop)(actor, dispatch));
+          end(() => {
+            callbackRef.current.onFail && callbackRef.current.onFail(actor, dispatch);
+            optionsRef.current.onFail && optionsRef.current.onFail(actor, dispatch);
+          });
         }),
       ),
     ).subscribe();
@@ -65,15 +72,21 @@ export function useRequest<TReq, TRespBody, TError>(
     };
   }, [requestActor]);
 
-  return [
-    (
+  const request = useMemo(
+    () => (
       arg: (typeof options)["arg"] = optionsRef.current.arg || ({} as any),
-      opts: (typeof options)["opts"] = optionsRef.current.opts,
+      opts: (Pick<typeof options, "onSuccess" | "onFail">) & (typeof options)["opts"] = {
+        ...optionsRef.current.opts,
+      },
     ) => {
       lastArg.current = arg;
+      callbackRef.current.onSuccess = opts.onSuccess;
+      callbackRef.current.onFail = opts.onFail;
       requesting$.next(true);
       dispatch(requestActor.with(arg, opts));
     },
-    requesting$,
-  ];
+    [],
+  );
+
+  return [request, requesting$];
 }

@@ -44,17 +44,16 @@ describe("full flow", () => {
     function useEmoijs() {
       const [emoijs, updateEmoijs] = useState({});
 
-      const [request] = useRequest(getEmojis, {
-        onSuccess: ({ arg }) => {
-          // todo remove this in future
-          act(() => {
-            updateEmoijs(arg.data);
-          });
-        },
-      });
+      const [request] = useRequest(getEmojis);
 
       useEffect(() => {
-        request();
+        request(undefined, {
+          onSuccess: ({ arg }) => {
+            act(() => {
+              updateEmoijs(arg.data);
+            });
+          },
+        });
       }, []);
 
       return emoijs;
