@@ -80,7 +80,7 @@ export class Actor<TArg = any, TOpts = any> {
   }
 
   invoke(dispatcher: { dispatch: (actor: Actor) => void }) {
-    return dispatcher.dispatch(this);
+    dispatcher.dispatch(this);
   }
 
   get type(): string {
