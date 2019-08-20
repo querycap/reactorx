@@ -19,7 +19,6 @@ export const createPersister = (opts: LocalForageOptions) => {
 
 class Persister {
   storage: LocalForage;
-  keyOpts: { [k: string]: IStoreOpts } = {};
 
   constructor(opts: LocalForageOptions) {
     this.storage = createInstance(opts);
@@ -32,8 +31,6 @@ class Persister {
   hydrate(callback?: (data: { [k: string]: any }) => void) {
     return this.load(persistedKeys)
       .then((keys = {}) => {
-        this.keyOpts = keys;
-
         return Promise.all(
           Object.keys(keys).map((key) => {
             return this.load(key).then((values) => ({
@@ -65,22 +62,22 @@ class Persister {
     let prevState: any = {};
 
     const subscription = store$.subscribe((nextState = {}) => {
-      this.keyOpts = nextState[persistedKeys] || {};
-
       const nextData: { [key: string]: any } = {};
 
       const keysToDelete = [] as string[];
 
-      Object.keys(this.keyOpts).forEach((key) => {
-        if (typeof nextState[key] === "undefined") {
-          keysToDelete.push(key);
-          return;
-        }
+      Object.keys(nextState[persistedKeys])
+        .concat(persistedKeys)
+        .forEach((key) => {
+          if (typeof nextState[key] === "undefined") {
+            keysToDelete.push(key);
+            return;
+          }
 
-        if (nextState[key] !== prevState[key]) {
-          nextData[key] = nextState[key];
-        }
-      });
+          if (nextState[key] !== prevState[key]) {
+            nextData[key] = nextState[key];
+          }
+        });
 
       prevState = nextState;
 
@@ -106,19 +103,18 @@ class Persister {
     ).catch(console.error);
   }
 
-  saveAll(nextData: { [key: string]: any }) {
+  saveAll(nextData: { [key: string]: any } = {}) {
     const keys = Object.keys(nextData);
 
     if (keys.length === 0) {
       return Promise.resolve();
     }
 
-    return Promise.all([
-      this.save(persistedKeys, this.keyOpts),
-      ...keys.map((key) => {
-        return this.save(key, nextData[key], this.keyOpts[key]);
+    return Promise.all(
+      keys.map((key) => {
+        return this.save(key, nextData[key], (nextData[persistedKeys] || {})[key]);
       }),
-    ]).catch(console.error);
+    ).catch(console.error);
   }
 
   load(key: string) {
@@ -133,10 +129,6 @@ class Persister {
   }
 
   save(key: string, values: any, opts: IStoreOpts = {} as IStoreOpts) {
-    if (key !== persistedKeys) {
-      this.keyOpts[key] = opts;
-    }
-
     return this.storage.setItem(key, {
       values,
       expiredAt: Date.now() + (opts.expiresIn || 24 * 3600) * 1000,
