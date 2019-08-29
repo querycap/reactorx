@@ -9,6 +9,7 @@ export interface IUseRequestOpts<TReq, TRespBody, TError> {
   arg?: RequestActor<TReq, TRespBody, TError>["arg"];
   opts?: RequestActor<TReq, TRespBody, TError>["opts"];
   required?: boolean;
+  ignoreArg?: boolean;
   onSuccess?: (actor: RequestActor<TReq, TRespBody, TError>["done"], dispatch: IDispatch) => void;
   onFail?: (actor: RequestActor<TReq, TRespBody, TError>["failed"], dispatch: IDispatch) => void;
   onFinish?: (dispatch: IDispatch) => void;
@@ -30,7 +31,7 @@ export function useRequest<TReq, TRespBody, TError>(
   const optionsRef = useRef(options);
   optionsRef.current = options;
 
-  const callbackRef = useRef<Pick<typeof options, "onSuccess" | "onFail">>({});
+  const lastCallbackRef = useRef<Pick<typeof options, "onSuccess" | "onFail">>({});
 
   useEffect(() => {
     const subject$ = new Subject<Actor<any>>();
@@ -46,20 +47,24 @@ export function useRequest<TReq, TRespBody, TError>(
     const subscription = observableMerge(
       subject$.pipe(
         rxFilter(requestActor.done.is),
-        rxFilter((actor) => isEqual(actor.opts.parentActor.arg, lastArg.current)),
+        rxFilter((actor) =>
+          optionsRef.current.ignoreArg ? true : isEqual(actor.opts.parentActor.arg, lastArg.current),
+        ),
         rxTap((actor: typeof requestActor.done) => {
           end(() => {
-            callbackRef.current.onSuccess && callbackRef.current.onSuccess(actor, dispatch);
+            lastCallbackRef.current.onSuccess && lastCallbackRef.current.onSuccess(actor, dispatch);
             optionsRef.current.onSuccess && optionsRef.current.onSuccess(actor, dispatch);
           });
         }),
       ),
       subject$.pipe(
         rxFilter(requestActor.failed.is),
-        rxFilter((actor) => isEqual(actor.opts.parentActor.arg, lastArg.current)),
+        rxFilter((actor) =>
+          optionsRef.current.ignoreArg ? true : isEqual(actor.opts.parentActor.arg, lastArg.current),
+        ),
         rxTap((actor: typeof requestActor.failed) => {
           end(() => {
-            callbackRef.current.onFail && callbackRef.current.onFail(actor, dispatch);
+            lastCallbackRef.current.onFail && lastCallbackRef.current.onFail(actor, dispatch);
             optionsRef.current.onFail && optionsRef.current.onFail(actor, dispatch);
           });
         }),
@@ -80,8 +85,9 @@ export function useRequest<TReq, TRespBody, TError>(
       },
     ) => {
       lastArg.current = arg;
-      callbackRef.current.onSuccess = opts.onSuccess;
-      callbackRef.current.onFail = opts.onFail;
+      lastCallbackRef.current.onSuccess = opts.onSuccess;
+      lastCallbackRef.current.onFail = opts.onFail;
+
       requesting$.next(true);
       dispatch(requestActor.with(arg, opts));
     },
