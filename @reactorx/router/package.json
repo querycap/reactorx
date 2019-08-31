@@ -17,7 +17,7 @@
     "@reactorx/core": "^0.9.0",
     "@types/history": "4.7.x",
     "history": "4.9.x",
-    "path-to-regexp": "3.0.0"
+    "path-to-regexp": "3.1.0"
   },
   "publishConfig": {
     "access": "public"
