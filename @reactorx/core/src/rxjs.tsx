@@ -41,13 +41,21 @@ function Observer(props: IObserverProps<any>) {
   return <>{children(state)}</>;
 }
 
+type TEqualFn = (a: any, b: any) => boolean;
+
+interface IMapper<T, TOutput> {
+  (state: T): TOutput;
+
+  equalFn?: TEqualFn;
+}
+
 declare module "rxjs/internal/Observable" {
   interface Observable<T> {
-    conn<TOutput>(this: Observable<T>, mapper: (state: T) => TOutput): Observable<TOutput>;
+    conn<TOutput>(this: Observable<T>, mapper: IMapper<T, TOutput>): Observable<TOutput>;
 
     useConn<TOutput>(
       this: Observable<T>,
-      mapper: (state: T) => TOutput,
+      mapper: IMapper<T, TOutput>,
       inputs?: ReadonlyArray<any>,
     ): Observable<TOutput>;
 
@@ -55,13 +63,18 @@ declare module "rxjs/internal/Observable" {
   }
 }
 
-Observable.prototype.conn = function<T, TOutput>(this: Observable<T>, mapper: (state: T) => TOutput) {
-  return new StateMapperObservable<T, TOutput>(this, mapper);
+Observable.prototype.conn = function<T, TOutput>(this: Observable<T>, mapper: IMapper<T, TOutput>) {
+  return new StateMapperObservable<T, TOutput>(this, mapper, mapper.equalFn);
 };
+
+export function withEqualFn<T, TOutput>(mapper: (state: T) => TOutput, equalFn: TEqualFn): IMapper<T, TOutput> {
+  (mapper as IMapper<T, TOutput>).equalFn = equalFn;
+  return mapper;
+}
 
 Observable.prototype.useConn = function<T, TOutput>(
   this: Observable<T>,
-  mapper: (state: T) => TOutput,
+  mapper: IMapper<T, TOutput>,
   inputs: ReadonlyArray<any> = [],
 ) {
   return useMemo(() => this.conn(mapper), [this, ...inputs]);
@@ -77,12 +90,12 @@ class StateMapperObservable<T, TOutput> extends Observable<TOutput> {
     return typeof value === "undefined" ? undefined : this.mapper(value);
   }
 
-  constructor(private state$: Observable<T>, private mapper: (state: T) => TOutput) {
+  constructor(private state$: Observable<T>, private mapper: (state: T) => TOutput, equalFn: TEqualFn = shallowEqual) {
     super((s) => {
       return this.state$
         .pipe(
           rxMap(mapper),
-          rxDistinctUntilChanged(shallowEqual),
+          rxDistinctUntilChanged(equalFn),
         )
         .subscribe(s);
     });
