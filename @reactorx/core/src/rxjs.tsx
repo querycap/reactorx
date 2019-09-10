@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import { distinctUntilChanged as rxDistinctUntilChanged, map as rxMap } from "rxjs/operators";
+import { distinctUntilChanged, map } from "rxjs/operators";
 import React, { createElement, useEffect, useMemo, useState } from "react";
 import { shallowEqual } from "./utils";
 
@@ -85,17 +85,28 @@ Observable.prototype.useState = function<TOutput>(this: Observable<TOutput>) {
 };
 
 class StateMapperObservable<T, TOutput> extends Observable<TOutput> {
+  // value cache
+  private _value: TOutput | undefined = undefined;
+
   get value() {
-    const value = (this.state$ as any).value;
-    return typeof value === "undefined" ? undefined : this.mapper(value);
+    if (typeof this._value === "undefined") {
+      this._value = this.mapper((this.state$ as any).value);
+    }
+    return this._value;
   }
 
   constructor(private state$: Observable<T>, private mapper: (state: T) => TOutput, equalFn: TEqualFn = shallowEqual) {
     super((s) => {
       return this.state$
         .pipe(
-          rxMap(mapper),
-          rxDistinctUntilChanged(equalFn),
+          map((state) => {
+            const nextValue = this.mapper(state);
+            if (!equalFn(nextValue, this._value)) {
+              this._value = nextValue;
+            }
+            return this._value;
+          }),
+          distinctUntilChanged(),
         )
         .subscribe(s);
     });
