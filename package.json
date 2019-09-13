@@ -34,7 +34,7 @@
     "babel-loader": "8.0.6",
     "babel-plugin-pure-calls-annotation": "0.2.2",
     "glamor": "2.20.40",
-    "history": "4.9.0",
+    "history": "4.10.1",
     "html-webpack-plugin": "3.2.0",
     "husky": "3.0.5",
     "jest": "24.9.0",
