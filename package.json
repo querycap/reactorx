@@ -56,7 +56,7 @@
     "typescript": "3.6.2",
     "webpack": "4.39.3",
     "webpack-browser-sync": "0.12.1",
-    "webpack-cli": "3.3.8"
+    "webpack-cli": "3.3.9"
   },
   "lint-staged": {
     "*.{ts,tsx,json}": [
