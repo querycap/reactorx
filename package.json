@@ -30,7 +30,7 @@
     "@types/node": "12.7.4",
     "@types/react": "16.9.2",
     "@types/react-dom": "16.9.0",
-    "@types/webpack": "4.39.1",
+    "@types/webpack": "4.39.3",
     "babel-loader": "8.0.6",
     "babel-plugin-pure-calls-annotation": "0.2.2",
     "glamor": "2.20.40",
@@ -54,7 +54,7 @@
     "ts-loader": "6.0.4",
     "ts-node": "8.3.0",
     "typescript": "3.6.2",
-    "webpack": "4.39.3",
+    "webpack": "4.41.2",
     "webpack-browser-sync": "0.12.1",
     "webpack-cli": "3.3.8"
   },
