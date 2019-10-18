@@ -28,8 +28,11 @@ export function useRequest<TReq, TRespBody, TError>(
   const requesting$ = useMemo(() => new BehaviorSubject(!!options.required), []);
   const lastArg = useRef(options.arg);
   const { actor$, dispatch } = useStore();
+
   const optionsRef = useRef(options);
-  optionsRef.current = options;
+  useEffect(() => {
+    optionsRef.current = options;
+  });
 
   const lastCallbackRef = useRef<Pick<typeof options, "onSuccess" | "onFail">>({});
 

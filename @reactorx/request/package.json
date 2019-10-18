@@ -13,7 +13,7 @@
     "@types/lodash": "4.14.x",
     "axios": "0.19.x",
     "lodash": "4.17.x",
-    "react": ">=16.9.0",
+    "react": ">=16.10.2",
     "rxjs": ">= 6.x"
   },
   "dependencies": {

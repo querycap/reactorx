@@ -13,7 +13,9 @@
     "localforage": "1.7.x"
   },
   "peerDependencies": {
-    "rxjs": "*"
+    "rxjs": "*",
+    "react": "*",
+    "react-dom": "*"
   },
   "devDependencies": {
     "localforage-memoryStorageDriver": "0.9.2"
