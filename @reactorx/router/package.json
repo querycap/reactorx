@@ -1,6 +1,6 @@
 {
   "name": "@reactorx/router",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "main": "cjs/index.js",
   "module": "es/index.js",
   "types": "src/index.ts",
@@ -16,7 +16,7 @@
     "rxjs": "6.x"
   },
   "dependencies": {
-    "@reactorx/core": "^0.11.0",
+    "@reactorx/core": "^0.11.1",
     "@types/history": "4.7.x",
     "path-to-regexp": "3.1.0"
   },
