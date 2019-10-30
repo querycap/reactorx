@@ -18,13 +18,7 @@ export interface IUseRequestOpts<TReq, TRespBody, TError> {
 export function useRequest<TReq, TRespBody, TError>(
   requestActor: RequestActor<TReq, TRespBody, TError>,
   options: IUseRequestOpts<TReq, TRespBody, TError> = {},
-): [
-  (
-    arg: IUseRequestOpts<TReq, TRespBody, TError>["arg"],
-    opts?: Pick<typeof options, "onSuccess" | "onFail"> & IUseRequestOpts<TReq, TRespBody, TError>["opts"],
-  ) => void,
-  BehaviorSubject<boolean>,
-] {
+) {
   const requesting$ = useMemo(() => new BehaviorSubject(!!options.required), []);
   const lastArg = useRef(options.arg);
   const { actor$, dispatch } = useStore();
@@ -83,7 +77,7 @@ export function useRequest<TReq, TRespBody, TError>(
   const request = useMemo(
     () => (
       arg: (typeof options)["arg"] = optionsRef.current.arg || ({} as any),
-      opts: (Pick<typeof options, "onSuccess" | "onFail">) & (typeof options)["opts"] = {
+      opts: (typeof options)["opts"] & (Pick<typeof options, "onSuccess" | "onFail">) = {
         ...optionsRef.current.opts,
       },
     ) => {
@@ -97,5 +91,5 @@ export function useRequest<TReq, TRespBody, TError>(
     [],
   );
 
-  return [request, requesting$];
+  return [request, requesting$] as const;
 }
