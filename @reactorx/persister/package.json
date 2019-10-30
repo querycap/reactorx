@@ -1,13 +1,12 @@
 {
   "name": "@reactorx/persister",
   "version": "0.12.0-alpha.0",
-  "main": "cjs/index.js",
-  "module": "es/index.js",
   "ts": "src/index.ts",
-  "types": "es/index.d.ts",
+  "main": "lib/index.js",
+  "module": "lib/index.mjs",
+  "types": "lib/index.d.ts",
   "files": [
-    "es/",
-    "cjs/"
+    "lib/"
   ],
   "dependencies": {
     "localforage": "1.7.x"
