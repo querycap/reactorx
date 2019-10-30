@@ -11,7 +11,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "react": ">=16.10.x",
+    "react": ">=16.11.x",
     "rxjs": ">= 6.x"
   },
   "publishConfig": {
