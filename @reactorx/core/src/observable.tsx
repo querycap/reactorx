@@ -3,7 +3,7 @@ import { distinctUntilChanged, map } from "rxjs/operators";
 import React, { createElement, useEffect, useMemo, useState } from "react";
 import { shallowEqual } from "./utils";
 
-export function useObservable<T>(ob$: Observable<T>, defaultValue?: T): T | undefined {
+export function useObservable<T>(ob$: Observable<T>, defaultValue?: T): T {
   const [value, setValue] = useState(() => defaultValue || (ob$ as any).value);
 
   useEffect(() => {
