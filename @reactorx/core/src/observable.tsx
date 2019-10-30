@@ -48,7 +48,7 @@ export function withEqualFn<T, TOutput>(mapper: (state: T) => TOutput, equalFn: 
   return mapper;
 }
 
-export function conn<T, TOutput>(ob$: Observable<T>, mapper: IMapper<T, TOutput>) {
+export function conn<T, TOutput>(ob$: Observable<T>, mapper: IMapper<T, TOutput>): Observable<TOutput> {
   return new StateMapperObservable<T, TOutput>(ob$, mapper, mapper.equalFn);
 }
 
