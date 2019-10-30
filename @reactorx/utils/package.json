@@ -3,7 +3,7 @@
   "version": "0.12.1",
   "ts": "src/index.ts",
   "main": "lib/index.js",
-  "module": "lib/index.mjs",
+  "module": "lib/index.es.js",
   "types": "lib/index.d.ts",
   "files": [
     "lib/"
