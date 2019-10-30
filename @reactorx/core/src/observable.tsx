@@ -3,16 +3,16 @@ import { distinctUntilChanged, map } from "rxjs/operators";
 import React, { createElement, useEffect, useMemo, useState } from "react";
 import { shallowEqual } from "./utils";
 
-export function useObservable<T>(observable: Observable<T>, defaultValue: T) {
-  const [value, setValue] = useState(defaultValue);
+export function useObservable<T>(ob$: Observable<T>, defaultValue?: T) {
+  const [value, setValue] = useState(() => defaultValue || (ob$ as any).value);
 
   useEffect(() => {
-    const subscription = observable.subscribe(setValue);
+    const subscription = ob$.subscribe(setValue);
 
     return () => {
       subscription.unsubscribe();
     };
-  }, [observable]);
+  }, [ob$]);
 
   return value;
 }
@@ -22,70 +22,53 @@ export interface IObserverProps<TState> {
   children: (state: TState) => React.ReactNode;
 }
 
-declare module "rxjs/internal/Observable" {
-  interface Observable<T> {
-    render<T>(this: Observable<T>, render: (state: T) => React.ReactNode): React.ReactNode;
-  }
-}
-
-Observable.prototype.render = function<T>(this: Observable<T>, render: (state: T) => React.ReactNode) {
+export function renderOn<T>(ob$: Observable<T>, render: (state: T) => React.ReactNode) {
   return createElement(Observer, {
-    state$: this,
+    state$: ob$,
     children: render,
   });
-};
+}
 
 function Observer(props: IObserverProps<any>) {
   const { state$, children } = props;
-  const state = state$.useState();
+  const state = useObservable(state$);
   return <>{children(state)}</>;
 }
 
-type TEqualFn = (a: any, b: any) => boolean;
+export type TEqualFn = (a: any, b: any) => boolean;
 
-interface IMapper<T, TOutput> {
+export interface IMapper<T, TOutput> {
   (state: T): TOutput;
 
   equalFn?: TEqualFn;
 }
-
-declare module "rxjs/internal/Observable" {
-  interface Observable<T> {
-    conn<TOutput>(this: Observable<T>, mapper: IMapper<T, TOutput>): Observable<TOutput>;
-
-    useConn<TOutput>(
-      this: Observable<T>,
-      mapper: IMapper<T, TOutput>,
-      inputs?: ReadonlyArray<any>,
-    ): Observable<TOutput>;
-
-    useState<TOutput>(this: Observable<TOutput>): TOutput;
-  }
-}
-
-Observable.prototype.conn = function<T, TOutput>(this: Observable<T>, mapper: IMapper<T, TOutput>) {
-  return new StateMapperObservable<T, TOutput>(this, mapper, mapper.equalFn);
-};
 
 export function withEqualFn<T, TOutput>(mapper: (state: T) => TOutput, equalFn: TEqualFn): IMapper<T, TOutput> {
   (mapper as IMapper<T, TOutput>).equalFn = equalFn;
   return mapper;
 }
 
-Observable.prototype.useConn = function<T, TOutput>(
-  this: Observable<T>,
+export function conn<T, TOutput>(ob$: Observable<T>, mapper: IMapper<T, TOutput>) {
+  return new StateMapperObservable<T, TOutput>(ob$, mapper, mapper.equalFn);
+}
+
+export function useConn<T, TOutput = T>(
+  ob$: Observable<T>,
   mapper: IMapper<T, TOutput>,
   inputs: ReadonlyArray<any> = [],
 ) {
-  return useMemo(() => this.conn(mapper), [this, ...inputs]);
-};
+  return useMemo(() => conn(ob$, mapper), [ob$, ...inputs]);
+}
 
-Observable.prototype.useState = function<TOutput>(this: Observable<TOutput>) {
-  return useObservable(this, (this as any).value);
-};
+export function useSelector<T, TOutput = T>(
+  ob$: Observable<T>,
+  mapper?: IMapper<T, TOutput>,
+  inputs: ReadonlyArray<any> = [],
+) {
+  return useObservable(useConn(ob$, mapper || (((v: T) => v) as any), inputs));
+}
 
 class StateMapperObservable<T, TOutput> extends Observable<TOutput> {
-  // value cache
   private _value: TOutput | undefined = undefined;
 
   get value() {

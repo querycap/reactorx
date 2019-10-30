@@ -1,6 +1,6 @@
 import { createRequestActor } from "../RequestActor";
 import { useRequesting$ } from "../useRequesting$";
-import { Store, StoreProvider } from "@reactorx/core";
+import { Store, StoreProvider, useSelector } from "@reactorx/core";
 import React from "react";
 import { mount } from "@reactorx/testutils";
 import { act } from "react-dom/test-utils";
@@ -19,7 +19,7 @@ describe("useRequesting$", () => {
 
     function Loading() {
       const requesting$ = useRequesting$();
-      const loading = requesting$.useState();
+      const loading = useSelector(requesting$);
       return <span id={"loading"}>{`${loading}`}</span>;
     }
 

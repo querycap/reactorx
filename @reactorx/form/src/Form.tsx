@@ -1,6 +1,6 @@
 import { cloneDeep, Dictionary, every, filter, get, isArray, isFunction, isObject, map, mapValues } from "lodash";
 import React, { ReactNode, RefObject, useEffect, useMemo, useRef } from "react";
-import { Store, useStore } from "@reactorx/core";
+import { conn, Store, useStore } from "@reactorx/core";
 import {
   formDestroy,
   formEndSubmit,
@@ -100,7 +100,7 @@ function createFormContext<TFormValues extends object>(
     setErrors,
     createSubmit,
     submit,
-    state$: store$.conn((state) =>
+    state$: conn(store$, (state) =>
       get(state, formKey(formName), {
         values: propsRef.current ? cloneDeep(propsRef.current.initialValues) : {},
       }),

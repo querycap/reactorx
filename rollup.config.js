@@ -1,6 +1,7 @@
 import path, { resolve } from "path";
 import glob from "glob";
 import rollupBabel from "rollup-plugin-babel";
+import dts from "rollup-plugin-dts";
 import nodeResolve from "rollup-plugin-node-resolve";
 
 const rootNodeModules = path.resolve(__dirname, "node_modules");
@@ -33,45 +34,55 @@ const external = [
   }, []),
 ];
 
-module.exports = {
-  input: pkg.types,
-  output: [
-    {
-      file: pkg.main,
-      format: "cjs",
-    },
-    {
-      file: pkg.module,
-      format: "es",
-    },
-  ],
-  external: external,
-  plugins: [
-    nodeResolve({
-      extensions: [".ts", ".tsx", ".js", ".jsx"],
-    }),
-    rollupBabel({
-      babelrc: false,
-      exclude: "node_modules/**",
-      runtimeHelpers: true,
-      extensions: [".ts", ".tsx", ".js", ".jsx"],
-      ...require("./babel.config"),
-      overrides: [
-        {
-          presets: [
-            [
-              "@babel/preset-env",
-              {
-                targets: {
-                  chrome: 50,
-                  ie: 11,
-                  esmodules: true,
+module.exports = [
+  {
+    input: pkg.ts,
+    output: [
+      {
+        file: pkg.main,
+        format: "cjs",
+      },
+      {
+        file: pkg.module,
+        format: "es",
+      },
+    ],
+    external: external,
+    plugins: [
+      nodeResolve({
+        extensions: [".ts", ".tsx", ".js", ".jsx"],
+      }),
+      rollupBabel({
+        babelrc: false,
+        exclude: "node_modules/**",
+        runtimeHelpers: true,
+        extensions: [".ts", ".tsx", ".js", ".jsx"],
+        ...require("./babel.config"),
+        overrides: [
+          {
+            presets: [
+              [
+                "@babel/preset-env",
+                {
+                  targets: {
+                    chrome: 50,
+                    ie: 11,
+                    esmodules: true,
+                  },
                 },
-              },
+              ],
             ],
-          ],
-        },
-      ],
-    }),
-  ],
-};
+          },
+        ],
+      }),
+    ],
+  },
+  {
+    input: path.join(__dirname, process.cwd().replace(__dirname, "").replace("@reactorx", "tmp"), "src/index.d.ts"),
+    output: [{
+      file: pkg.types,
+      format: "es",
+    }],
+    plugins: [dts()],
+  },
+];

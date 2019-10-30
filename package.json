@@ -6,8 +6,8 @@
     "start": "npm run prepare",
     "bootstrap": "lerna bootstrap",
     "fmt": "npx prettier --write @reactorx/{,**/}{,**/}*.{ts,tsx,json,md}",
-    "test": "tsc --noEmit && jest --coverage",
-    "build": "lerna exec -- rollup -c ../../rollup.config.js",
+    "test": "jest --coverage",
+    "build": "tsc && lerna exec -- rollup -c ../../rollup.config.js",
     "prepare": "npm run bootstrap && npm test && npm run build"
   },
   "commitlint": {
@@ -47,6 +47,7 @@
     "redux-logger": "3.0.6",
     "rollup": "1.24.0",
     "rollup-plugin-babel": "4.3.3",
+    "rollup-plugin-dts": "1.1.10",
     "rollup-plugin-node-resolve": "5.2.0",
     "typescript": "3.6.4"
   },

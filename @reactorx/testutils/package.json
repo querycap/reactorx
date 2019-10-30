@@ -3,9 +3,9 @@
   "version": "0.11.0",
   "main": "cjs/index.js",
   "module": "es/index.js",
-  "types": "src/index.tsx",
+  "ts": "src/index.tsx",
+  "types": "es/index.d.ts",
   "files": [
-    "src/",
     "es/",
     "cjs/"
   ],

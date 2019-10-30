@@ -1,5 +1,5 @@
 import { filter, map } from "rxjs/operators";
-import { Actor, AsyncActor, Store, StoreProvider, useEpic, useStore } from "..";
+import { Actor, AsyncActor, conn, renderOn, Store, StoreProvider, useConn, useEpic, useSelector, useStore } from "..";
 import React from "react";
 import { Observable } from "rxjs";
 import { mount } from "@reactorx/testutils";
@@ -34,19 +34,15 @@ describe("@reactorx/core", () => {
     const pingStates: number[] = [];
     const pongStates: number[] = [];
 
-    so$
-      .conn((state) => state["ping"])
-      .subscribe((nextState) => {
-        pingStates.push(nextState);
-      });
+    conn(so$, (state) => state["ping"]).subscribe((nextState) => {
+      pingStates.push(nextState);
+    });
 
-    so$
-      .conn((state) => state["pong"])
-      .subscribe((nextState) => {
-        pongStates.push(nextState);
-      });
+    conn(so$, (state) => state["pong"]).subscribe((nextState) => {
+      pongStates.push(nextState);
+    });
 
-    so$.render(() => {
+    renderOn(so$, () => {
       return null;
     });
 
@@ -97,11 +93,11 @@ describe("@reactorx/core", () => {
     const Ping = () => {
       useEpic(pingToPong);
 
-      const ping$ = so$.useConn((state) => state["ping"]);
+      const ping$ = useConn(so$, (state) => state["ping"]);
 
       return (
         <>
-          {ping$.render((ping) => (
+          {renderOn(ping$, (ping) => (
             <span id={"ping"}>{ping}</span>
           ))}
         </>
@@ -110,8 +106,7 @@ describe("@reactorx/core", () => {
 
     function PongOrPing({ name }: { name: string }) {
       const store$ = useStore();
-      const pongOrPing$ = store$.useConn((state) => state[name as any], [name]);
-      const pingOrPong = pongOrPing$.useState();
+      const pingOrPong = useSelector(store$, (state) => state[name as any], [name]);
 
       return (
         <span id={"pingOrPong"}>
@@ -121,12 +116,12 @@ describe("@reactorx/core", () => {
     }
 
     const App = (props: { ping: boolean }) => {
-      const pong$ = so$.useConn((state) => state["pong"]);
+      const pong$ = useConn(so$, (state) => state["pong"]);
 
       return (
         <StoreProvider value={so$}>
           {props.ping && <Ping />}
-          {pong$.render((pong) => (
+          {renderOn(pong$, (pong) => (
             <span id={"pong"}>{pong}</span>
           ))}
           <PongOrPing name={props.ping ? "ping" : "pong"} />

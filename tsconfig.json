@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "*": ["*", "__types__/*"]
+      "*": ["__types__/*", "*/src", "*"]
     },
     "noImplicitAny": true,
     "experimentalDecorators": true,
@@ -23,7 +23,11 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
-    "removeComments": true
+    "removeComments": true,
+    "declaration": true,
+    "noEmitOnError": false,
+    "emitDeclarationOnly": true,
+    "outDir": "./tmp"
   },
-  "exclude": ["node_modules/*"]
+  "exclude": ["tmp/*", "node_modules/*"]
 }
