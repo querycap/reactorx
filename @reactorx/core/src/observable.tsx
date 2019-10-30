@@ -56,7 +56,7 @@ export function useConn<T, TOutput = T>(
   ob$: Observable<T>,
   mapper: IMapper<T, TOutput>,
   inputs: ReadonlyArray<any> = [],
-) {
+): Observable<TOutput> {
   return useMemo(() => conn(ob$, mapper), [ob$, ...inputs]);
 }
 
@@ -64,7 +64,7 @@ export function useSelector<T, TOutput = T>(
   ob$: Observable<T>,
   mapper?: IMapper<T, TOutput>,
   inputs: ReadonlyArray<any> = [],
-) {
+): TOutput {
   return useObservable(useConn(ob$, mapper || (((v: T) => v) as any), inputs));
 }
 

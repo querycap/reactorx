@@ -1,6 +1,6 @@
 {
   "name": "@reactorx/request",
-  "version": "0.12.4",
+  "version": "0.12.5",
   "ts": "src/index.ts",
   "main": "lib/index.js",
   "module": "lib/index.es.js",
@@ -16,7 +16,7 @@
     "rxjs": ">= 6.x"
   },
   "dependencies": {
-    "@reactorx/core": "^0.12.4"
+    "@reactorx/core": "^0.12.5"
   },
   "publishConfig": {
     "access": "public"
