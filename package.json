@@ -31,7 +31,7 @@
     "@types/lodash": "4.14.144",
     "@types/node": "12.11.1",
     "@types/react": "16.9.9",
-    "@types/react-dom": "16.9.2",
+    "@types/react-dom": "16.9.3",
     "babel-jest": "24.9.0",
     "babel-plugin-pure-calls-annotation": "0.2.2",
     "babel-plugin-typescript-iife-enum": "0.2.1",
