@@ -11,14 +11,11 @@ export interface INavLinkProps extends ILinkProps {
 }
 
 export const NavLink = ({ to, exact, strict, isActive: getIsActive, ...otherProps }: INavLinkProps) => (
-  <Route
-    path={typeof to === "object" ? to.pathname : to}
-    exact={exact}
-    strict={strict}
-    children={({ location, match }) => {
+  <Route path={typeof to === "object" ? to.pathname : to} exact={exact} strict={strict}>
+    {({ location, match }) => {
       const isActive = !!(getIsActive ? getIsActive(match || ({} as IMatch<any>), location) : match);
 
       return <Link to={to} {...otherProps} data-current={isActive ? true : undefined} />;
     }}
-  />
+  </Route>
 );

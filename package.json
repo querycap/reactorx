@@ -32,9 +32,14 @@
     "@types/node": "12.12.3",
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.3",
+    "@typescript-eslint/eslint-plugin": "2.6.0",
+    "@typescript-eslint/parser": "2.6.0",
     "babel-jest": "24.9.0",
     "babel-plugin-pure-calls-annotation": "0.2.2",
     "babel-plugin-typescript-iife-enum": "0.2.1",
+    "eslint": "6.6.0",
+    "eslint-plugin-react": "7.16.0",
+    "eslint-plugin-react-hooks": "2.2.0",
     "history": "4.10.1",
     "husky": "3.0.9",
     "jest": "24.9.0",
@@ -52,7 +57,12 @@
     "typescript": "3.6.4"
   },
   "lint-staged": {
-    "*.{ts,tsx,json}": [
+    "*.{ts,tsx}": [
+      "npx prettier --write",
+      "npx eslint --fix",
+      "git add"
+    ],
+    "*.{json}": [
       "npx prettier --write",
       "git add"
     ]

@@ -40,7 +40,7 @@ export function ReactorxConnect({ history }: { history: History }) {
     if (state[locationStorageKey]) {
       history.replace(state[locationStorageKey]);
     }
-  }, []);
+  }, [history, store$]);
 
   useEffect(() => {
     const unlisten = history.listen((location) => {
@@ -49,14 +49,14 @@ export function ReactorxConnect({ history }: { history: History }) {
     return () => {
       unlisten();
     };
-  }, []);
+  }, [history, store$]);
 
   useEpic(createRouterEpic(history));
 
   return null;
 }
 
-const createRouterEpic = (history: History) => {
+function createRouterEpic(history: History) {
   return (action$: Observable<typeof routerActors.push>) =>
     action$.pipe(
       filter(RouterActor.isSameGroup),
@@ -81,4 +81,4 @@ const createRouterEpic = (history: History) => {
       }),
       ignoreElements(),
     );
-};
+}

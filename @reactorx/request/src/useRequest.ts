@@ -19,7 +19,7 @@ export function useRequest<TReq, TRespBody, TError>(
   requestActor: RequestActor<TReq, TRespBody, TError>,
   options: IUseRequestOpts<TReq, TRespBody, TError> = {},
 ) {
-  const requesting$ = useMemo(() => new BehaviorSubject(!!options.required), []);
+  const requesting$ = useMemo(() => new BehaviorSubject(!!options.required), [options.required]);
   const lastArg = useRef(options.arg);
   const { actor$, dispatch } = useStore();
 
@@ -72,7 +72,7 @@ export function useRequest<TReq, TRespBody, TError>(
       subscription.unsubscribe();
       actorSubscription.unsubscribe();
     };
-  }, [requestActor]);
+  }, [actor$, dispatch, requestActor, requesting$]);
 
   const request = useMemo(
     () => (
@@ -88,7 +88,7 @@ export function useRequest<TReq, TRespBody, TError>(
       requesting$.next(true);
       dispatch(requestActor.with(arg, opts));
     },
-    [],
+    [dispatch, options, requestActor, requesting$],
   );
 
   return [request, requesting$] as const;

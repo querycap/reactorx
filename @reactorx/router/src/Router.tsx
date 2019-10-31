@@ -41,7 +41,7 @@ function HistoryListener({ history, onLocationChange }: { history: History; onLo
     return () => {
       unlisten();
     };
-  }, []);
+  }, [history, onLocationChange]);
 
   return null;
 }

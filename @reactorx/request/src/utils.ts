@@ -7,7 +7,7 @@ export interface ISelectOption {
 }
 
 export const optionsFromEnum = (enums: any, displayFn: (val: string) => string): ISelectOption[] => {
-  const strings = pickBy<string>(enums, isString) as Dictionary<string>;
+  const strings = pickBy<string>(enums, isString);
 
   return map<Dictionary<string>, ISelectOption>(strings, (key: string) => ({
     label: displayFn(key),
@@ -15,10 +15,9 @@ export const optionsFromEnum = (enums: any, displayFn: (val: string) => string):
   }));
 };
 
-export const isMultipartFormData = (contentType: string = "") => contentType.indexOf("multipart/form-data") > -1;
+export const isMultipartFormData = (contentType = "") => contentType.includes("multipart/form-data");
 
-export const isFormURLEncoded = (contentType: string = "") =>
-  contentType.indexOf("application/x-www-form-urlencoded") > -1;
+export const isFormURLEncoded = (contentType = "") => contentType.includes("application/x-www-form-urlencoded");
 
 export const paramsSerializer = (params: any) => {
   const data = {} as any;

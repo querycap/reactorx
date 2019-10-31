@@ -14,7 +14,7 @@ function Root({ child$ }: { child$: BehaviorSubject<ReactElement<any>> }) {
     return () => {
       subscription.unsubscribe();
     };
-  }, []);
+  }, [child$]);
 
   return <>{child}</>;
 }

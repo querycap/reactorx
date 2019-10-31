@@ -1,7 +1,7 @@
 import { mount } from "../index";
 import React, { useEffect } from "react";
 
-function App({ count }: { count: number }) {
+function App({ count }: { count: number }): JSX.Element {
   useEffect(() => {
     console.log("mount");
   }, []);
@@ -10,7 +10,7 @@ function App({ count }: { count: number }) {
 }
 
 test("mount", async () => {
-  let node = await mount(<App count={0} />);
+  const node = await mount(<App count={0} />);
   expect(node.innerHTML).toContain(0);
 
   for (let i = 1; i < 10; i++) {

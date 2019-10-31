@@ -103,7 +103,7 @@ export function Field<TName extends string = string>(props: IFieldProps<TName>) 
         })
         .invoke(store$);
     };
-  }, [fieldFullName]);
+  }, [fieldFullName, fieldName, formName, getFormState, props.defaultValue, props.required, props.validate, store$]);
 
   const callbacks = useMemo(() => {
     const changeValue = (nextValue: any) => {

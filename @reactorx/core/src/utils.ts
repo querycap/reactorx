@@ -8,6 +8,7 @@ export function compose(...funcs: Array<(...args: any[]) => any>) {
   return funcs.reduce((a, b) => (...args) => a(b(...args)));
 }
 
+// eslint-disable-next-line @typescript-eslint/unbound-method
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 
 function is(x: any, y: any) {

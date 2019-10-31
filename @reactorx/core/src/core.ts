@@ -87,7 +87,7 @@ export class Actor<TArg = any, TOpts = any> {
     const opts = {} as any;
     let hasOpts = false;
 
-    for (let k in this.opts) {
+    for (const k in this.opts) {
       if (k !== "parentActor") {
         opts[k] = this.opts[k];
         hasOpts = true;
@@ -153,7 +153,7 @@ export class Store<TRoot extends { [key: string]: any } = {}> extends BehaviorSu
 
   epicOn(epic: IEpic<TRoot>) {
     return epic(this.actor$, this).subscribe((actor) => {
-      if (!!actor) {
+      if (actor) {
         this.dispatch(actor);
       }
     });
@@ -194,7 +194,7 @@ export function effectOn<TRoot, TActor extends Actor>(
 
     const nextRoot: typeof root = {};
 
-    for (let key in root) {
+    for (const key in root) {
       if (key === k) {
         continue;
       }

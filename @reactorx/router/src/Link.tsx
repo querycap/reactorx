@@ -29,7 +29,11 @@ export function Link(props: ILinkProps) {
           props.onClick(event);
         }
         handleClick(event, () => {
-          (replace ? context.history.replace : context.history.push)(location);
+          if (replace) {
+            context.history.replace(location);
+          } else {
+            context.history.push(location);
+          }
         });
       }}
     />

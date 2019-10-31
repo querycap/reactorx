@@ -23,7 +23,7 @@ export const usePersist = (key: string, opts: Partial<IStoreOpts> = {}) => {
         })
         .invoke(store$);
     }
-  }, []);
+  }, [key, opts, store$]);
 
   return null;
 };

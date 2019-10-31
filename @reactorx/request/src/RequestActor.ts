@@ -60,7 +60,7 @@ export class RequestActor<TReq = IRequestOpts, TRespBody = any, TError = any> ex
     );
   }
 
-  href(baseURL: string = ""): string {
+  href(baseURL = ""): string {
     const conf = this.requestConfig();
     return `${baseURL || conf.baseURL || ""}${conf.url}?${paramsSerializer(conf.params)}`;
   }

@@ -18,7 +18,7 @@ export const useEpic = (epic: IEpic, inputs: any[] = []) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, inputs);
+  }, [epic, store$]);
 };
 
 export const epicOn = (epic: IEpic, inputs?: any[]) => {

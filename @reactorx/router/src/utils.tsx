@@ -47,7 +47,7 @@ export function matchPath(pathname: string, optionsOrPath: IMatchPathOpt | strin
     optionsOrPath = { path: optionsOrPath };
   }
 
-  let { path = "", exact = false, strict = false, sensitive = false } = optionsOrPath as IMatchPathOpt;
+  const { path = "", exact = false, strict = false, sensitive = false } = optionsOrPath;
 
   const paths = ([] as string[]).concat(path);
 

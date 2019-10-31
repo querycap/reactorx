@@ -117,7 +117,7 @@ export function Form<TFormValues extends object>(props: IFormProps<TFormValues>)
 
   const ctx = useMemo(() => {
     return createFormContext<TFormValues>(store$, formName, propsRef);
-  }, [formName]);
+  }, [formName, store$]);
 
   return (
     <FormProvider key={formName} value={ctx}>
@@ -133,7 +133,7 @@ function FormMount({ formName, initialValues }: { formName: string; initialValue
 
   useEffect(() => {
     formInitial.with(initialValues, { form: formName }).invoke(store$);
-  }, [formName]);
+  }, [formName, initialValues, store$]);
 
   return null;
 }
@@ -145,7 +145,7 @@ function FormUnmount({ formName }: { formName: string }) {
     return () => {
       formDestroy.with(undefined, { form: formName }).invoke(store$);
     };
-  }, [formName]);
+  }, [formName, store$]);
 
   return null;
 }

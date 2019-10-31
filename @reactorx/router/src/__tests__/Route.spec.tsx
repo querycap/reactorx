@@ -232,13 +232,12 @@ describe("A <Route>", () => {
 
         await mount(
           <Router history={history}>
-            <Route
-              path="/"
-              children={(p) => {
+            <Route path="/">
+              {(p) => {
                 props = p;
                 return null;
               }}
-            />
+            </Route>
           </Router>,
         );
 
@@ -253,7 +252,7 @@ describe("A <Route>", () => {
 
         const node = await mount(
           <Router history={createMemoryHistory({ initialEntries: ["/"] })}>
-            <Route path="/" children={() => <h1>{text}</h1>} />
+            <Route path="/">{() => <h1>{text}</h1>}</Route>
           </Router>,
         );
 

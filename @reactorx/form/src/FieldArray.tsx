@@ -31,7 +31,7 @@ export const FieldArray = ({ name, children }: IFieldArrayProps) => {
               fieldPrefix: fieldName,
             }}>
             {children({
-              add: (defaultValue) =>
+              add(defaultValue) {
                 formUpdateField
                   .with(
                     {
@@ -42,8 +42,9 @@ export const FieldArray = ({ name, children }: IFieldArrayProps) => {
                       field: fieldName,
                     },
                   )
-                  .invoke(store$),
-              remove: (idx) => {
+                  .invoke(store$);
+              },
+              remove(idx) {
                 formUpdateField
                   .with(
                     {
@@ -56,7 +57,7 @@ export const FieldArray = ({ name, children }: IFieldArrayProps) => {
                   )
                   .invoke(store$);
               },
-              each: (render: (idx: number) => React.ReactNode) => {
+              each(render: (idx: number) => React.ReactNode) {
                 return <>{map(value || [], (_, i: number) => render(i))}</>;
               },
             })}

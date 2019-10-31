@@ -33,7 +33,7 @@ export const createRequestEpic = (options: AxiosRequestConfig, ...interceptors: 
 
         return observableMerge(
           observableOf(actor.started.with(axiosRequestConfig)),
-          observableFrom(client.request(axiosRequestConfig) as Promise<AxiosResponse>).pipe(
+          observableFrom(client.request(axiosRequestConfig)).pipe(
             rxMap((response) => actor.done.with(response)),
             rxCatchError((err) => observableOf(actor.failed.with(err))),
           ),

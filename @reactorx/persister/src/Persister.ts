@@ -55,7 +55,7 @@ class Persister {
 
         return data;
       })
-      .catch(console.error);
+      .catch((e) => console.error(e));
   }
 
   connect(store$: Store<any>) {
@@ -100,7 +100,7 @@ class Persister {
       keys.map((key) => {
         return this.remove(key);
       }),
-    ).catch(console.error);
+    ).catch((e) => console.error(e));
   }
 
   saveAll(nextData: { [key: string]: any } = {}) {
@@ -114,7 +114,7 @@ class Persister {
       keys.map((key) => {
         return this.save(key, nextData[key], (nextData[persistedKeys] || {})[key]);
       }),
-    ).catch(console.error);
+    ).catch((e) => console.error(e));
   }
 
   load(key: string) {

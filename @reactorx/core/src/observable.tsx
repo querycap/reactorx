@@ -41,7 +41,7 @@ export function useConn<T, TOutput = T>(
   mapper: IMapper<T, TOutput>,
   inputs: ReadonlyArray<any> = [],
 ): Observable<TOutput> {
-  return useMemo(() => Volume.from(ob$, mapper), [ob$, ...inputs]);
+  return useMemo(() => Volume.from(ob$, mapper), [mapper, ob$]);
 }
 
 export function useSelector<T, TOutput = T>(

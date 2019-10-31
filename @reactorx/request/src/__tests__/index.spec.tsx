@@ -54,7 +54,7 @@ describe("full flow", () => {
             });
           },
         });
-      }, []);
+      }, [request]);
 
       return emoijs;
     }
