@@ -2,7 +2,7 @@ import { get, isEmpty } from "lodash";
 import React, { ChangeEvent, useEffect, useMemo } from "react";
 import { TValidate, useFormContext } from "./FormContext";
 import { formAddField, formBlurField, formFocusField, formRemoveField, formUpdateField, IFieldState } from "./Actors";
-import { conn, renderOn, useStore } from "@reactorx/core";
+import { renderOn, useConn, useStore } from "@reactorx/core";
 
 export interface IFieldStateProps {
   name: string;
@@ -14,13 +14,8 @@ export function FieldState(props: IFieldStateProps) {
 
   const { state$ } = useFormContext();
 
-  const { fieldState$, fieldValue$ } = useMemo(
-    () => ({
-      fieldState$: conn(state$, (state) => get(state, ["fields", name])),
-      fieldValue$: conn(state$, (state) => get(state, "values." + name)),
-    }),
-    [name],
-  );
+  const fieldState$ = useConn(state$, (state) => get(state, ["fields", name]), [name]);
+  const fieldValue$ = useConn(state$, (state) => get(state, `values.${name}`), [name]);
 
   return (
     <>

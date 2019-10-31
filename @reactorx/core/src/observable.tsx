@@ -2,6 +2,7 @@ import { Observable } from "rxjs";
 import { distinctUntilChanged, map } from "rxjs/operators";
 import React, { createElement, useEffect, useMemo, useState } from "react";
 import { shallowEqual } from "./utils";
+import { useStore } from "./ctx";
 
 export function useObservable<T>(ob$: Observable<T>, defaultValue?: T): T {
   const [value, setValue] = useState(() => defaultValue || (ob$ as any).value);
@@ -35,6 +36,33 @@ function Observer(props: IObserverProps<any>) {
   return <>{children(state)}</>;
 }
 
+export function useConn<T, TOutput = T>(
+  ob$: Observable<T>,
+  mapper: IMapper<T, TOutput>,
+  inputs: ReadonlyArray<any> = [],
+): Observable<TOutput> {
+  return useMemo(() => Volume.from(ob$, mapper), [ob$, ...inputs]);
+}
+
+export function useSelector<T, TOutput = T>(
+  ob$: Observable<T>,
+  mapper?: IMapper<T, TOutput>,
+  inputs: ReadonlyArray<any> = [],
+): TOutput {
+  return useObservable(useConn(ob$, mapper || (((v: T) => v) as any), inputs));
+}
+
+export function useStoreConn<TOutput>(
+  mapper?: IMapper<any, TOutput>,
+  inputs: ReadonlyArray<any> = [],
+): Observable<TOutput> {
+  return useConn(useStore(), mapper || (((v: any) => v) as any), inputs);
+}
+
+export function useStoreSelector<TOutput>(mapper?: IMapper<any, TOutput>, inputs: ReadonlyArray<any> = []): TOutput {
+  return useObservable(useStoreConn(mapper, inputs));
+}
+
 export type TEqualFn = (a: any, b: any) => boolean;
 
 export interface IMapper<T, TOutput> {
@@ -48,27 +76,11 @@ export function withEqualFn<T, TOutput>(mapper: (state: T) => TOutput, equalFn: 
   return mapper;
 }
 
-export function conn<T, TOutput>(ob$: Observable<T>, mapper: IMapper<T, TOutput>): Observable<TOutput> {
-  return new StateMapperObservable<T, TOutput>(ob$, mapper, mapper.equalFn);
-}
+export class Volume<T, TOutput> extends Observable<TOutput> {
+  static from<T, TOutput>(ob$: Observable<T>, mapper: IMapper<T, TOutput>): Observable<TOutput> {
+    return new Volume<T, TOutput>(ob$, mapper, mapper.equalFn);
+  }
 
-export function useConn<T, TOutput = T>(
-  ob$: Observable<T>,
-  mapper: IMapper<T, TOutput>,
-  inputs: ReadonlyArray<any> = [],
-): Observable<TOutput> {
-  return useMemo(() => conn(ob$, mapper), [ob$, ...inputs]);
-}
-
-export function useSelector<T, TOutput = T>(
-  ob$: Observable<T>,
-  mapper?: IMapper<T, TOutput>,
-  inputs: ReadonlyArray<any> = [],
-): TOutput {
-  return useObservable(useConn(ob$, mapper || (((v: T) => v) as any), inputs));
-}
-
-class StateMapperObservable<T, TOutput> extends Observable<TOutput> {
   private _value: TOutput | undefined = undefined;
 
   get value() {

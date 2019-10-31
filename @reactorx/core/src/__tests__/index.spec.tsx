@@ -1,5 +1,5 @@
 import { filter, map } from "rxjs/operators";
-import { Actor, AsyncActor, conn, renderOn, Store, StoreProvider, useConn, useEpic, useSelector, useStore } from "..";
+import { Actor, AsyncActor, renderOn, Store, StoreProvider, useConn, useEpic, useSelector, useStore, Volume } from "..";
 import React from "react";
 import { Observable } from "rxjs";
 import { mount } from "@reactorx/testutils";
@@ -34,11 +34,11 @@ describe("@reactorx/core", () => {
     const pingStates: number[] = [];
     const pongStates: number[] = [];
 
-    conn(so$, (state) => state["ping"]).subscribe((nextState) => {
+    Volume.from(so$, (state) => state["ping"]).subscribe((nextState) => {
       pingStates.push(nextState);
     });
 
-    conn(so$, (state) => state["pong"]).subscribe((nextState) => {
+    Volume.from(so$, (state) => state["pong"]).subscribe((nextState) => {
       pongStates.push(nextState);
     });
 

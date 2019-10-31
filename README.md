@@ -57,15 +57,14 @@ This is a redux-like library, and:
 #### Example
 
 ```typescript
-import { Store, Actor } from "@reactorx/core"
-import { filter, map } from "rxjs"
+import { Store, Actor, Volume, renderOn } from "@reactorx/core"
+import { filter, map } from "rxjs/operators"
 
 const testActor = Actor.of("test");
-const ping = testActor
-  .named<{ step?: number }, { o: string }>("ping")
-  .effectOn("ping", (state: any = 0, actor) => {
-    return state + (actor.arg.step || 1);
-  });
+
+const ping = testActor.named<{ step?: number }, { o: string }>("ping").effectOn("ping", (state: any = 0, actor) => {
+  return state + (actor.arg.step || 1);
+});
 
 const pong = testActor.named("pong").effectOn("pong", (state: any = 0) => {
   return state + 1;
@@ -78,19 +77,15 @@ so$.applyMiddleware(() => (next) => (actor) => next(actor));
 const pingStates: number[] = [];
 const pongStates: number[] = [];
 
-so$
-  .conn((state) => state["ping"])
-  .subscribe((nextState) => {
-    pingStates.push(nextState);
-  });
+Volume.from(so$, (state) => state["ping"]).subscribe((nextState) => {
+  pingStates.push(nextState);
+});
 
-so$
-  .conn((state) => state["pong"])
-  .subscribe((nextState) => {
-    pongStates.push(nextState);
-  });
+Volume.from(so$, (state) => state["pong"]).subscribe((nextState) => {
+  pongStates.push(nextState);
+});
 
-so$.render(() => {
+renderOn(so$, () => {
   return null;
 });
 
