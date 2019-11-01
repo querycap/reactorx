@@ -56,7 +56,7 @@ export const FieldArray = ({ name, children }: IFieldArrayProps) => {
                   )
                   .invoke(store$);
               },
-              each: (render: (idx: number) => React.ReactNode) => {
+              each(render: (idx: number) => React.ReactNode) {
                 return <>{map(value || [], (_, i: number) => render(i))}</>;
               },
             })}

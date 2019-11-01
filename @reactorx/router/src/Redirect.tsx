@@ -1,4 +1,4 @@
-import { createLocation, LocationDescriptor, LocationDescriptorObject, locationsAreEqual } from "history";
+import { createLocation, LocationDescriptor, locationsAreEqual } from "history";
 import { useEffect } from "react";
 import { generatePath, IMatch, usePrevious } from "./utils";
 import { IRouterContext, useRouter } from "./RouterContext";
@@ -38,7 +38,7 @@ function computeTo({ computedMatch, to }: IRedirectProps) {
     }
     return {
       ...to,
-      pathname: generatePath((to as LocationDescriptorObject).pathname, computedMatch.params),
+      pathname: generatePath(to.pathname, computedMatch.params),
     };
   }
   return to;

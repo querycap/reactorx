@@ -6,7 +6,7 @@ export const toSearchString = (query: any) => {
 };
 
 export function parseSearchString<T extends ReturnType<typeof parse> = any>(search: string): T {
-  if (search[0] === "?") {
+  if (search.startsWith("?")) {
     search = search.slice(1);
   }
   return parse(search) as any;
