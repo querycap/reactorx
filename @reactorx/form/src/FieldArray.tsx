@@ -1,7 +1,7 @@
 import { filter, map } from "lodash";
 import { formUpdateField } from "./Actors";
-import { FieldState } from "./Field";
-import { FormProvider, useFormContext } from "./FormContext";
+import { useFieldState } from "./Field";
+import { FormProvider, useForm } from "./FormContext";
 import { useStore } from "@reactorx/core";
 import React from "react";
 
@@ -18,51 +18,49 @@ export interface IFieldArrayProps {
 
 export const FieldArray = ({ name, children }: IFieldArrayProps) => {
   const store$ = useStore();
-  const formCtx = useFormContext();
-  const fieldName = `${formCtx.fieldPrefix || ""}${name}`;
+  const ctx = useForm();
+  const fieldName = `${ctx.fieldPrefix || ""}${name}`;
+  const { value } = useFieldState(fieldName);
+
+  const triggers = {
+    add(defaultValue?: any) {
+      formUpdateField
+        .with(
+          {
+            value: [...(value || []), defaultValue],
+          },
+          {
+            form: ctx.formName,
+            field: fieldName,
+          },
+        )
+        .invoke(store$);
+    },
+    remove(idx: number) {
+      formUpdateField
+        .with(
+          {
+            value: filter(value, (_, i: number) => i !== idx),
+          },
+          {
+            form: ctx.formName,
+            field: fieldName,
+          },
+        )
+        .invoke(store$);
+    },
+    each(render: (idx: number) => React.ReactNode) {
+      return <>{map(value || [], (_, i: number) => render(i))}</>;
+    },
+  };
 
   return (
-    <FieldState name={fieldName}>
-      {({ value }) => {
-        return (
-          <FormProvider
-            value={{
-              ...formCtx,
-              fieldPrefix: fieldName,
-            }}>
-            {children({
-              add: (defaultValue) =>
-                formUpdateField
-                  .with(
-                    {
-                      value: [...(value || []), defaultValue],
-                    },
-                    {
-                      form: formCtx.formName,
-                      field: fieldName,
-                    },
-                  )
-                  .invoke(store$),
-              remove: (idx) => {
-                formUpdateField
-                  .with(
-                    {
-                      value: filter(value, (_, i: number) => i !== idx),
-                    },
-                    {
-                      form: formCtx.formName,
-                      field: fieldName,
-                    },
-                  )
-                  .invoke(store$);
-              },
-              each(render: (idx: number) => React.ReactNode) {
-                return <>{map(value || [], (_, i: number) => render(i))}</>;
-              },
-            })}
-          </FormProvider>
-        );
-      }}
-    </FieldState>
+    <FormProvider
+      value={{
+        ...ctx,
+        fieldPrefix: fieldName,
+      }}>
+      {children(triggers)}
+    </FormProvider>
   );
 };

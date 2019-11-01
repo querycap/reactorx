@@ -1,35 +1,35 @@
 import { get, isEmpty } from "lodash";
 import React, { ChangeEvent, useEffect, useMemo } from "react";
-import { TValidate, useFormContext } from "./FormContext";
+import { TValidate, useForm } from "./FormContext";
 import { formAddField, formBlurField, formFocusField, formRemoveField, formUpdateField, IFieldState } from "./Actors";
-import { renderOn, useConn, useStore } from "@reactorx/core";
+import { useSelector, useStore } from "@reactorx/core";
+
+export const useFieldState = (name: string): IFieldState & { name: string; value: any } => {
+  const { state$ } = useForm();
+
+  return useSelector(
+    state$,
+    (state) => ({
+      ...get(state, ["fields", name]),
+      value: get(state, `values.${name}`),
+      name,
+    }),
+    [name],
+  );
+};
 
 export interface IFieldStateProps {
   name: string;
   children: (formState: IFieldState & { name: string; value: any }) => React.ReactNode;
 }
 
+/**
+ * @deprecated use useFieldState(name: string) instead
+ */
 export function FieldState(props: IFieldStateProps) {
-  const name = props.name;
+  const fieldState = useFieldState(props.name);
 
-  const { state$ } = useFormContext();
-
-  const fieldState$ = useConn(state$, (state) => get(state, ["fields", name]), [name]);
-  const fieldValue$ = useConn(state$, (state) => get(state, `values.${name}`), [name]);
-
-  return (
-    <>
-      {renderOn(fieldState$, (fieldState) => {
-        return renderOn(fieldValue$, (value) => {
-          return props.children({
-            ...fieldState,
-            value,
-            name,
-          });
-        });
-      })}
-    </>
-  );
+  return <>{props.children(fieldState)}</>;
 }
 
 export interface IFieldInnerProps<TName extends string = string> extends IFieldState {
@@ -72,7 +72,7 @@ export const createValidate = (validate?: TValidate | TValidate[], required?: bo
 
 export function Field<TName extends string = string>(props: IFieldProps<TName>) {
   const store$ = useStore();
-  const { fieldPrefix, formName, getFormState } = useFormContext();
+  const { fieldPrefix, formName, getFormState } = useForm();
 
   const fieldName = `${fieldPrefix || ""}${props.name}`;
 
@@ -141,19 +141,19 @@ export function Field<TName extends string = string>(props: IFieldProps<TName>) 
     };
   }, [formName, fieldName, props.validate, props.required, props.defaultValue, store$]);
 
-  return (
-    <FieldState name={fieldName}>
-      {(fieldState) => {
-        const { value, touched, error } = fieldState;
+  const fieldState = useFieldState(fieldName);
 
-        return props.children({
-          ...(fieldState as any),
-          ...callbacks,
-          fieldError: touched ? error : undefined, // show error after touched
-          value: value,
-          required: props.required,
-        });
-      }}
-    </FieldState>
+  const { value, touched, error } = fieldState;
+
+  return (
+    <>
+      {props.children({
+        ...(fieldState as any),
+        ...callbacks,
+        fieldError: touched ? error : undefined, // show error after touched
+        value: value,
+        required: props.required,
+      })}
+    </>
   );
 }

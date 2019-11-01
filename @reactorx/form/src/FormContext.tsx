@@ -5,22 +5,28 @@ import { createContext, SyntheticEvent, useContext } from "react";
 
 export type TValidate = (value: any) => string | undefined;
 
-export interface IFormContexts<TFormValues> {
+export interface IFormContexts<TFormValues = any> {
   formName: string;
   fieldPrefix?: string;
-  startSubmit: () => void;
-  endSubmit: () => void;
+
   setErrors: (errors: Dictionary<string>) => void;
   getFormState: () => IFormState<TFormValues>;
   createSubmit: (cb: () => void) => (evt: SyntheticEvent<any>) => void;
-  submit: (evt: SyntheticEvent<any>) => void;
-  state$: Observable<IFormState<any>>;
+  startSubmit: () => void;
+  endSubmit: () => void;
+
+  state$: Observable<IFormState<TFormValues>>;
 }
 
 const FormContext = createContext({} as IFormContexts<any>);
 
 export const FormProvider = FormContext.Provider;
 
-export function useFormContext() {
+export function useForm<TFormValues>(): IFormContexts<TFormValues> {
   return useContext(FormContext);
 }
+
+/**
+ * @deprecated useForm instead
+ */
+export const useFormContext = useForm;

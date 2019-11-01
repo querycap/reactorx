@@ -1,5 +1,5 @@
 import React from "react";
-import { FormProvider, useFormContext } from "./FormContext";
+import { FormProvider, useForm } from "./FormContext";
 
 export interface IFormSection {
   name: string;
@@ -7,13 +7,13 @@ export interface IFormSection {
 }
 
 export const FormSection = ({ name, children }: IFormSection) => {
-  const formCtx = useFormContext();
+  const ctx = useForm();
 
   return (
     <FormProvider
       value={{
-        ...formCtx,
-        fieldPrefix: `${formCtx.fieldPrefix || ""}${name}.`,
+        ...ctx,
+        fieldPrefix: `${ctx.fieldPrefix || ""}${name}.`,
       }}>
       {children}
     </FormProvider>
