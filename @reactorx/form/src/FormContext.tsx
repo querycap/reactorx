@@ -22,7 +22,7 @@ const FormContext = createContext({} as IFormContexts<any>);
 
 export const FormProvider = FormContext.Provider;
 
-export function useForm<TFormValues>(): IFormContexts<TFormValues> {
+export function useForm<TFormValues extends any>(): IFormContexts<TFormValues> {
   return useContext(FormContext);
 }
 
