@@ -10,8 +10,9 @@ export interface IFormContexts<TFormValues = any> {
   fieldPrefix?: string;
 
   setErrors: (errors: Dictionary<string>) => void;
+  getFormValues: () => TFormValues;
   getFormState: () => IFormState<TFormValues>;
-  createSubmit: (cb: () => void) => (evt: SyntheticEvent<any>) => void;
+  createSubmit: (cb: (values: TFormValues) => void) => (evt: SyntheticEvent<any>) => void;
   startSubmit: () => void;
   endSubmit: () => void;
 

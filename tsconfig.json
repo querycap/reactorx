@@ -23,7 +23,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
-    "removeComments": true,
+    "removeComments": false,
     "declaration": true,
     "noEmitOnError": false,
     "emitDeclarationOnly": true,

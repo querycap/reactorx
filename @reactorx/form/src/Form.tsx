@@ -121,23 +121,32 @@ export function useNewForm<TFormValues extends object>(formName: string, initial
       return store$.getState()[formKey(formName)] || ({} as IFormState<TFormValues>);
     };
 
-    const createSubmit = (cb: () => void) => {
+    const getFormValues = () => {
+      return getFormState().values;
+    };
+
+    const createSubmit = (cb: (values: TFormValues) => void) => {
       return (e: React.FormEvent) => {
         e.preventDefault();
         e.stopPropagation();
 
         startSubmit();
-        if (!isValid(getFormState().fields)) {
+
+        const formState = getFormState();
+
+        if (!isValid(formState.fields)) {
           endSubmit();
           return;
         }
-        cb();
+
+        cb(formState.values);
       };
     };
 
     return {
       formName,
       getFormState,
+      getFormValues,
       startSubmit,
       endSubmit,
       setErrors,
@@ -164,9 +173,9 @@ export function useNewForm<TFormValues extends object>(formName: string, initial
           ) : (
             <form
               noValidate
-              onSubmit={ctx.createSubmit(() => {
+              onSubmit={ctx.createSubmit((values) => {
                 if (onSubmit) {
-                  onSubmit(ctx.getFormState().values, () => {
+                  onSubmit(values, () => {
                     ctx.endSubmit();
                   });
                 }
