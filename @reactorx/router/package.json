@@ -17,7 +17,7 @@
   "dependencies": {
     "@reactorx/core": "^0.14.0",
     "@types/history": "4.7.x",
-    "path-to-regexp": "3.1.0"
+    "path-to-regexp": "3.2.0"
   },
   "publishConfig": {
     "access": "public"
