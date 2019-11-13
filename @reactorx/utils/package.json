@@ -10,7 +10,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@emotion/is-prop-valid": "0.8.4"
+    "@emotion/is-prop-valid": "0.8.5"
   },
   "publishConfig": {
     "access": "public"
