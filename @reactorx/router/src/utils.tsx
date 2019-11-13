@@ -1,4 +1,4 @@
-import pathToRegexp, { Key } from "path-to-regexp";
+import { compile, Key, ParseOptions, pathToRegexp, TokensToRegexpOptions } from "path-to-regexp";
 import { useEffect, useRef } from "react";
 
 export interface IMatchPathOpt {
@@ -14,7 +14,7 @@ export const createCompilePath = () => {
   const cacheLimit = 10000;
   let cacheCount = 0;
 
-  return (path: string, options: pathToRegexp.RegExpOptions) => {
+  return (path: string, options: TokensToRegexpOptions & ParseOptions) => {
     const cacheKey = `${options.end}${options.strict}${options.sensitive}`;
     const pathCache = cache[cacheKey] || (cache[cacheKey] = {});
 
@@ -98,7 +98,7 @@ const createCompileGenerator = () => {
 
     if (cache[pattern]) return cache[pattern];
 
-    const compiledGenerator = pathToRegexp.compile(pattern);
+    const compiledGenerator = compile(pattern, { encode: encodeURIComponent });
 
     if (cacheCount < cacheLimit) {
       cache[pattern] = compiledGenerator;

@@ -15,6 +15,14 @@ describe("matchPath", () => {
       const match = matchPath(pathname, path);
       expect(match!.url).toBe("/");
     });
+
+    it("wild match", () => {
+      const path = "(.*)";
+      const pathname = "/somewhere/else";
+      const match = matchPath(pathname, path);
+
+      expect(match!.url).toBe("/somewhere/else");
+    });
   });
 
   describe('with path="/somewhere"', () => {
@@ -92,6 +100,7 @@ describe("matchPath", () => {
         exact: true,
         strict: false,
       });
+
       const falseTrue = matchPath("/one/two", {
         path: "/one/two/",
         exact: false,
