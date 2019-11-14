@@ -37,6 +37,15 @@ export class AsyncActor<TArg = any, TOpts = any, TAsyncDerived extends IAsyncDer
     });
   }
 
+  get cancel() {
+    return new Actor<TAsyncDerived["failedArg"], { parentActor: Actor<TArg, TOpts> }>({
+      group: this.group,
+      name: this.name,
+      stage: AsyncStage.CANCEL,
+      opts: { parentActor: this },
+    });
+  }
+
   get done() {
     return new Actor<TAsyncDerived["doneArg"], { parentActor: Actor<TArg, TOpts> }>({
       group: this.group,

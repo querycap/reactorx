@@ -16,64 +16,103 @@ const getEmojis = createRequestActor<void, { [k: string]: string }, IGitHubError
 }));
 
 describe("full flow", () => {
-  it("in react", async (done) => {
-    const store$ = Store.create({});
-
-    const mock = (config: AxiosRequestConfig): Promise<AxiosResponse> => {
-      return Promise.resolve({
-        status: Status.OK,
-        statusText: Status[Status.OK],
-        data: {
-          "100": "https://assets-cdn.github.com/images/icons/emoji/unicode/1f4af.png?v8",
-        },
-        headers: {},
-        config,
-      });
-    };
-
-    store$.epicOn(
-      composeEpics(
-        createCombineDuplicatedRequestEpic(),
-        createRequestEpic({
-          baseURL: "https://api.github.com",
-          adapter: mock,
-        }),
-      ),
-    );
-
-    function useEmoijs() {
-      const [emoijs, updateEmoijs] = useState({});
-
-      const [request] = useRequest(getEmojis);
-
-      useEffect(() => {
-        request(undefined, {
-          onSuccess: ({ arg }) => {
-            act(() => {
-              updateEmoijs(arg.data);
-            });
+  const mock = (config: AxiosRequestConfig): Promise<AxiosResponse> => {
+    return new Promise<AxiosResponse>((resolve) => {
+      setTimeout(() => {
+        resolve({
+          status: Status.OK,
+          statusText: Status[Status.OK],
+          data: {
+            "100": "https://assets-cdn.github.com/images/icons/emoji/unicode/1f4af.png?v8",
           },
+          headers: {},
+          config,
         });
-      }, []);
+      }, 500);
+    });
+  };
 
-      return emoijs;
-    }
+  const store$ = Store.create({});
 
-    function Root() {
-      const emojis = useEmoijs();
+  store$.epicOn(
+    composeEpics(
+      createCombineDuplicatedRequestEpic(),
+      createRequestEpic({
+        baseURL: "https://api.github.com",
+        adapter: mock,
+      }),
+    ),
+  );
 
-      return <div>{JSON.stringify(emojis)}</div>;
-    }
+  function useEmoijs() {
+    const [emoijs, updateEmoijs] = useState({});
 
+    const [request] = useRequest(getEmojis);
+
+    useEffect(() => {
+      request(undefined, {
+        onSuccess: ({ arg }) => {
+          act(() => {
+            updateEmoijs(arg.data);
+          });
+        },
+        onFail: (actor) => {
+          console.log(actor);
+        },
+      });
+    }, []);
+
+    return emoijs;
+  }
+
+  function Emojis() {
+    const emojis = useEmoijs();
+    return <div>{JSON.stringify(emojis)}</div>;
+  }
+  it("in react", async (done) => {
     const node = await mount(
       <StoreProvider value={store$}>
-        <Root />
+        <Emojis />
       </StoreProvider>,
     );
 
     setTimeout(() => {
       expect(node.innerHTML).toContain("100");
       done();
-    }, 200);
+    }, 600);
+  });
+
+  it("cancelable", async (done) => {
+    const stages: string[] = [];
+
+    const sub = store$.actor$.subscribe((actor) => {
+      stages.push(actor.stage as string);
+    });
+
+    function Root() {
+      const [close, setClose] = useState(false);
+
+      useEffect(() => {
+        setTimeout(() => {
+          act(() => {
+            setClose(true);
+          });
+        }, 100);
+      }, []);
+
+      return close ? null : <Emojis />;
+    }
+
+    await mount(
+      <StoreProvider value={store$}>
+        <Root />
+      </StoreProvider>,
+    );
+
+    setTimeout(() => {
+      sub.unsubscribe();
+      expect(stages).toEqual([undefined, "STARTED", "CANCEL", "FAILED"]);
+      done();
+    }, 700);
   });
 });

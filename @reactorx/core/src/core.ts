@@ -7,6 +7,7 @@ export enum AsyncStage {
   STARTED = "STARTED",
   DONE = "DONE",
   FAILED = "FAILED",
+  CANCEL = "CANCEL",
 }
 
 export interface IActorOpt<TArg = any, TOpts = any> {
@@ -99,7 +100,7 @@ export class Actor<TArg = any, TOpts = any> {
     }`;
   }
 
-  is = (actor: Actor<TArg, TOpts>) => {
+  is = (actor: Actor): actor is Actor<TArg, TOpts> => {
     const isSame = this.isSameGroup(actor) && actor.name === this.name;
     if (this.stage) {
       return isSame && actor.stage === this.stage;

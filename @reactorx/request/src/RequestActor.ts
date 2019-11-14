@@ -43,6 +43,10 @@ export class RequestActor<TReq = IRequestOpts, TRespBody = any, TError = any> ex
     return actor.group === RequestActor.group && !actor.stage;
   };
 
+  static isCancelRequestActor = (actor: Actor): actor is Actor<AxiosResponse<any>> => {
+    return actor.group === RequestActor.group && actor.stage === AsyncStage.CANCEL;
+  };
+
   static isFailedRequestActor = (actor: Actor): actor is Actor<AxiosResponse<any>> => {
     return actor.group === RequestActor.group && actor.stage === AsyncStage.FAILED;
   };
@@ -63,6 +67,15 @@ export class RequestActor<TReq = IRequestOpts, TRespBody = any, TError = any> ex
   href(baseURL = ""): string {
     const conf = this.requestConfig();
     return `${baseURL || conf.baseURL || ""}${conf.url}?${paramsSerializer(conf.params)}`;
+  }
+
+  private _uid = "";
+
+  uid(): string {
+    if (!this._uid) {
+      this._uid = `${this.type}${JSON.stringify(this.arg)}`;
+    }
+    return this._uid;
   }
 }
 

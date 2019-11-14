@@ -1,4 +1,4 @@
-import { isEqual, noop } from "lodash";
+import { noop } from "lodash";
 import { useEffect, useMemo, useRef } from "react";
 import { Actor, IDispatch, useStore } from "@reactorx/core";
 import { RequestActor } from "./RequestActor";
@@ -19,35 +19,45 @@ export function useRequest<TReq, TRespBody, TError>(
   requestActor: RequestActor<TReq, TRespBody, TError>,
   options: IUseRequestOpts<TReq, TRespBody, TError> = {},
 ) {
-  const requesting$ = useMemo(() => new BehaviorSubject(!!options.required), []);
-  const lastArg = useRef(options.arg);
   const { actor$, dispatch } = useStore();
+  const requesting$ = useMemo(() => new BehaviorSubject(!!options.required), []);
+
+  const lastRequestActor = useRef<RequestActor<TReq, TRespBody, TError> | null>(null);
+  const lastCallbackRef = useRef<Pick<typeof options, "onSuccess" | "onFail">>({});
 
   const optionsRef = useRef(options);
   useEffect(() => {
     optionsRef.current = options;
   });
 
-  const lastCallbackRef = useRef<Pick<typeof options, "onSuccess" | "onFail">>({});
+  const cancelIfExists = () => {
+    lastRequestActor.current && lastRequestActor.current.cancel.invoke({ dispatch });
+  };
 
   useEffect(() => {
-    const subject$ = new Subject<Actor<any>>();
+    const subject$ = new Subject<Actor>();
 
     const actorSubscription = actor$.subscribe(subject$);
 
     const end = (cb: () => void) => {
+      lastRequestActor.current = null;
+      requesting$.next(false);
       cb();
       (optionsRef.current.onFinish || noop)(dispatch);
-      requesting$.next(false);
+    };
+
+    const isSameRequest = <T extends typeof requestActor.done | typeof requestActor.failed>(actor: T) => {
+      return optionsRef.current.ignoreArg
+        ? true
+        : !!lastRequestActor.current &&
+            lastRequestActor.current.uid() === (actor.opts.parentActor as RequestActor<TReq, TRespBody, TError>).uid();
     };
 
     const subscription = observableMerge(
       subject$.pipe(
         rxFilter(requestActor.done.is),
-        rxFilter((actor) =>
-          optionsRef.current.ignoreArg ? true : isEqual(actor.opts.parentActor.arg, lastArg.current),
-        ),
-        rxTap((actor: typeof requestActor.done) => {
+        rxFilter(isSameRequest),
+        rxTap((actor) => {
           end(() => {
             lastCallbackRef.current.onSuccess && lastCallbackRef.current.onSuccess(actor, dispatch);
             optionsRef.current.onSuccess && optionsRef.current.onSuccess(actor, dispatch);
@@ -56,10 +66,8 @@ export function useRequest<TReq, TRespBody, TError>(
       ),
       subject$.pipe(
         rxFilter(requestActor.failed.is),
-        rxFilter((actor) =>
-          optionsRef.current.ignoreArg ? true : isEqual(actor.opts.parentActor.arg, lastArg.current),
-        ),
-        rxTap((actor: typeof requestActor.failed) => {
+        rxFilter(isSameRequest),
+        rxTap((actor) => {
           end(() => {
             lastCallbackRef.current.onFail && lastCallbackRef.current.onFail(actor, dispatch);
             optionsRef.current.onFail && optionsRef.current.onFail(actor, dispatch);
@@ -69,6 +77,7 @@ export function useRequest<TReq, TRespBody, TError>(
     ).subscribe();
 
     return () => {
+      cancelIfExists();
       subscription.unsubscribe();
       actorSubscription.unsubscribe();
     };
@@ -76,17 +85,21 @@ export function useRequest<TReq, TRespBody, TError>(
 
   const request = useMemo(
     () => (
-      arg: (typeof options)["arg"] = optionsRef.current.arg || ({} as any),
-      opts: (typeof options)["opts"] & (Pick<typeof options, "onSuccess" | "onFail">) = {
+      arg: typeof options["arg"] = optionsRef.current.arg || ({} as any),
+      opts: typeof options["opts"] & Pick<typeof options, "onSuccess" | "onFail"> = {
         ...optionsRef.current.opts,
       },
     ) => {
-      lastArg.current = arg;
+      cancelIfExists();
+
       lastCallbackRef.current.onSuccess = opts.onSuccess;
       lastCallbackRef.current.onFail = opts.onFail;
 
       requesting$.next(true);
-      dispatch(requestActor.with(arg, opts));
+
+      const actor = requestActor.with(arg, opts);
+      lastRequestActor.current = actor;
+      actor.invoke({ dispatch });
     },
     [],
   );
