@@ -1,6 +1,6 @@
 import { createRequestActor } from "../RequestActor";
-import { Status } from "../Status";
 import { AxiosResponse } from "axios";
+import { StatusOK, StatusUnauthorized } from "@reactorx/request";
 
 interface IGitHubError {
   message: string;
@@ -54,8 +54,8 @@ describe("request", () => {
     it("async stages", () => {
       const resp: AxiosResponse = {
         config: {},
-        status: Status.OK,
-        statusText: Status[Status.OK],
+        status: StatusOK,
+        statusText: "OK",
         headers: {},
         data: {
           emojis_url: "https://api.github.com/emojis",
@@ -69,11 +69,11 @@ describe("request", () => {
 
       const err = {
         config: {},
-        status: Status.Unauthorized,
-        statusText: Status[Status.Unauthorized],
+        status: StatusUnauthorized,
+        statusText: "Unauthorized",
         headers: {},
         data: {
-          message: Status[Status.Unauthorized],
+          message: "Unauthorized",
           documentation_url: "",
         },
       };

@@ -1,4 +1,4 @@
-import { createCombineDuplicatedRequestEpic, createRequestActor, createRequestEpic, Status, useRequest } from "..";
+import { createCombineDuplicatedRequestEpic, createRequestActor, createRequestEpic, StatusOK, useRequest } from "..";
 import { composeEpics, Store, StoreProvider } from "@reactorx/core";
 import { mount } from "@reactorx/testutils";
 import React, { useEffect, useState } from "react";
@@ -20,8 +20,8 @@ describe("full flow", () => {
     return new Promise<AxiosResponse>((resolve) => {
       setTimeout(() => {
         resolve({
-          status: Status.OK,
-          statusText: Status[Status.OK],
+          status: StatusOK,
+          statusText: "OK",
           data: {
             "100": "https://assets-cdn.github.com/images/icons/emoji/unicode/1f4af.png?v8",
           },
