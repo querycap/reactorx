@@ -1,5 +1,5 @@
 import { Dictionary, every, filter, get, isArray, isFunction, isObject, map, mapValues } from "lodash";
-import React, { FormHTMLAttributes, ReactNode, SyntheticEvent, useEffect, useMemo } from "react";
+import React, { FormHTMLAttributes, ReactNode, SyntheticEvent, useEffect, useLayoutEffect, useMemo } from "react";
 import { useStore, Volume } from "@reactorx/core";
 import {
   formDestroy,
@@ -44,7 +44,10 @@ export function pickValidValues(values: any): any {
   }
 
   if (isArray(values)) {
-    return map(filter(values, (item) => item != null), pickValidValues);
+    return map(
+      filter(values, (item) => item != null),
+      pickValidValues,
+    );
   }
 
   if (isObject(values)) {
@@ -82,7 +85,8 @@ export function Form<TFormValues extends object>(props: IFormProps<TFormValues>)
 function FormMount({ formName, initialValues }: { formName: string; initialValues: any }) {
   const store$ = useStore();
 
-  useEffect(() => {
+  // to make sure before autoFocus
+  useLayoutEffect(() => {
     formInitial.with(initialValues, { form: formName }).invoke(store$);
   }, [formName]);
 
