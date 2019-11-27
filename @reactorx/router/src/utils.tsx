@@ -56,6 +56,8 @@ export function matchPath(pathname: string, optionsOrPath: IMatchPathOpt | strin
       return matched;
     }
 
+    path = path.split("?")[0];
+
     const { regexp, keys } = compilePath(path, {
       end: exact,
       strict,

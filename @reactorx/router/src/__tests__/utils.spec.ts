@@ -9,6 +9,13 @@ describe("matchPath", () => {
       expect(match!.url).toBe("/");
     });
 
+    it('returns correct url at "/" with location search ignored', () => {
+      const path = "/a?query=1";
+      const pathname = "/a";
+      const match = matchPath(pathname, path);
+      expect(match!.url).toBe("/a");
+    });
+
     it('returns correct url at "/somewhere/else"', () => {
       const path = "/";
       const pathname = "/somewhere/else";
