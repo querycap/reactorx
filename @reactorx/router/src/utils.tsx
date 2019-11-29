@@ -113,11 +113,14 @@ const createCompileGenerator = () => {
 
 const compileGenerator = createCompileGenerator();
 
-export const generatePath = (pattern = "/", params = {}) => {
+export const generatePath = (pattern = "/", params = {}): string => {
   if (pattern === "/") {
     return pattern;
   }
-  return compileGenerator(pattern)(params);
+
+  const [path, search] = pattern.split("?");
+
+  return `${compileGenerator(path)(params)}${search ? `?${search}` : ""}`;
 };
 
 export function usePrevious<T>(value: T) {

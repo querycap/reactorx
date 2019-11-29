@@ -28,7 +28,7 @@ export const Redirect = (props: IRedirectProps) => {
 function perform(props: IRedirectProps, { history }: IRouterContext) {
   const { push = false } = props;
   const to = computeTo(props);
-  (push ? history.push : history.replace)(to);
+  (push ? history.push : history.replace)(to as any);
 }
 
 function computeTo({ computedMatch, to }: IRedirectProps) {
