@@ -54,7 +54,7 @@
     "redux-logger": "3.0.6",
     "rollup": "1.27.5",
     "rollup-plugin-babel": "4.3.3",
-    "rollup-plugin-dts": "1.1.12",
+    "rollup-plugin-dts": "1.2.0",
     "rollup-plugin-node-resolve": "5.2.0",
     "typescript": "3.7.2"
   },
