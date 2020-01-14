@@ -28,7 +28,7 @@
     "@babel/runtime": "7.7.4",
     "@commitlint/cli": "8.2.0",
     "@commitlint/config-conventional": "8.2.0",
-    "@types/history": "4.7.3",
+    "@types/history": "4.7.4",
     "@types/jest": "24.0.23",
     "@types/lodash": "4.14.149",
     "@types/node": "12.12.14",
