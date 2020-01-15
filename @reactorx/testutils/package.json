@@ -1,6 +1,6 @@
 {
   "name": "@reactorx/testutils",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "ts": "src/index.tsx",
   "main": "lib/index.js",
   "module": "lib/index.es.js",
