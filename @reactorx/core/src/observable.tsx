@@ -1,8 +1,44 @@
-import { Observable } from "rxjs";
+import { merge, Observable } from "rxjs";
 import { distinctUntilChanged, map } from "rxjs/operators";
-import React, { createElement, useEffect, useMemo, useState } from "react";
+import React, { createElement, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { shallowEqual } from "./utils";
 import { useStore } from "./ctx";
+
+export const useObservableEffect = (
+  effect: () => undefined | Observable<any> | Array<Observable<any>>,
+  deps: any[] = [],
+) => {
+  useEffect(() => {
+    const ob = effect();
+    if (!ob) {
+      return;
+    }
+
+    const sub = merge(...([] as Array<Observable<any>>).concat(ob)).subscribe();
+
+    return () => {
+      sub.unsubscribe();
+    };
+  }, deps);
+};
+
+export const useObservableLayoutEffect = (
+  effect: () => undefined | Observable<any> | Array<Observable<any>>,
+  deps: any[] = [],
+) => {
+  useLayoutEffect(() => {
+    const ob = effect();
+    if (!ob) {
+      return;
+    }
+
+    const sub = merge(...([] as Array<Observable<any>>).concat(ob)).subscribe();
+
+    return () => {
+      sub.unsubscribe();
+    };
+  }, deps);
+};
 
 export function useObservable<T>(ob$: Observable<T>, defaultValue?: T): T {
   const [value, setValue] = useState(() => defaultValue || (ob$ as any).value);
