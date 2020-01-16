@@ -1,6 +1,6 @@
 {
   "name": "@reactorx/persister",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "ts": "src/index.ts",
   "main": "lib/index.js",
   "module": "lib/index.es.js",
