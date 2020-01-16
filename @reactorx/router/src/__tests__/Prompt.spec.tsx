@@ -1,11 +1,10 @@
 import React from "react";
 import { createMemoryHistory as createHistory } from "history";
 import { Prompt, Router } from "..";
-import { mount } from "@reactorx/testutils";
-import { act } from "react-dom/test-utils";
+import { act, render } from "@testing-library/react";
 
 describe("A <Prompt>", () => {
-  it("calls getUserConfirmation with the prompt message", async () => {
+  it("calls getUserConfirmation with the prompt message", () => {
     const getUserConfirmation = jest.fn((_, callback) => {
       callback(false);
     });
@@ -14,7 +13,7 @@ describe("A <Prompt>", () => {
       getUserConfirmation: getUserConfirmation,
     });
 
-    await mount(
+    render(
       <Router history={history}>
         <Prompt message="Are you sure?" />
       </Router>,
@@ -28,7 +27,7 @@ describe("A <Prompt>", () => {
   });
 
   describe("with when=false", () => {
-    it("does not call getUserConfirmation", async () => {
+    it("does not call getUserConfirmation", () => {
       const getUserConfirmation = jest.fn((_, callback) => {
         callback(false);
       });
@@ -37,7 +36,7 @@ describe("A <Prompt>", () => {
         getUserConfirmation: getUserConfirmation,
       });
 
-      await mount(
+      render(
         <Router history={history}>
           <Prompt message="Are you sure?" when={false} />
         </Router>,

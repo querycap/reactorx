@@ -1,6 +1,6 @@
 import { Store, StoreProvider } from "@reactorx/core";
 import { createPersister, persistedKeys } from "../Persister";
-import { mount } from "@reactorx/testutils";
+import { render } from "@testing-library/react";
 import React, { useEffect } from "react";
 import localforage from "localforage";
 import memoryStorageDriver from "localforage-memoryStorageDriver";
@@ -25,7 +25,7 @@ describe("Persister", () => {
       return null;
     }
 
-    await mount(
+    render(
       <StoreProvider value={store$}>
         <App />
       </StoreProvider>,

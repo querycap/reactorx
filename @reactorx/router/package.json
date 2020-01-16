@@ -9,7 +9,6 @@
     "lib/"
   ],
   "peerDependencies": {
-    "@types/history": "4.7.x",
     "history": "4.10.x",
     "react": "*",
     "react-dom": "*",

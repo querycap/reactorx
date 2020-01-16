@@ -3,5 +3,6 @@
   "publish": {
     "ignoreChanges": ["*.js", "__tests__/**"]
   },
+  "npmClientArgs": ["--no-lockfile"],
   "version": "0.17.0"
 }

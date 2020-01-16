@@ -4,12 +4,11 @@ import { Route } from "../Route";
 import { Redirect } from "../Redirect";
 import React from "react";
 import { ReactorxRouter, routerActors } from "../ReactorxRouter";
-import { mount } from "@reactorx/testutils";
+import { act, render } from "@testing-library/react";
 import { Store, StoreProvider } from "@reactorx/core";
-import { act } from "react-dom/test-utils";
 
 describe("ReactorxRouter", () => {
-  it("renders the first <Redirect> that matches the URL", async () => {
+  it("renders the first <Redirect> that matches the URL", () => {
     const store$ = Store.create({
       $$location: {
         pathname: "/three",
@@ -19,7 +18,7 @@ describe("ReactorxRouter", () => {
       },
     });
 
-    const node = await mount(
+    const $node = render(
       <StoreProvider value={store$}>
         <ReactorxRouter history={createMemoryHistory({ keyLength: 0 })}>
           <Switch>
@@ -29,7 +28,7 @@ describe("ReactorxRouter", () => {
           </Switch>
         </ReactorxRouter>
       </StoreProvider>,
-    );
+    ).container;
 
     expect(store$.getState()).toEqual({
       $$location: {
@@ -39,7 +38,7 @@ describe("ReactorxRouter", () => {
         state: undefined,
       },
     });
-    expect(node.innerHTML).toContain("two");
+    expect($node.innerHTML).toContain("two");
 
     act(() => {
       routerActors.push.with("/one").invoke(store$);
@@ -53,6 +52,6 @@ describe("ReactorxRouter", () => {
         state: undefined,
       },
     });
-    expect(node.innerHTML).toContain("one");
+    expect($node.innerHTML).toContain("one");
   });
 });

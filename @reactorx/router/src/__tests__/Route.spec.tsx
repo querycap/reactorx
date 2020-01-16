@@ -2,65 +2,64 @@ import React, { useEffect } from "react";
 import { createMemoryHistory as createHistory, createMemoryHistory } from "history";
 import { Redirect, Route, Router } from "..";
 
-import { mount } from "@reactorx/testutils";
+import { act, render } from "@testing-library/react";
 import { IRouterContext } from "../RouterContext";
-import { act } from "react-dom/test-utils";
 
 describe("A <Route>", () => {
-  it("renders when it matches", async () => {
+  it("renders when it matches", () => {
     const text = "cupcakes";
 
-    const node = await mount(
+    const node = render(
       <Router history={createMemoryHistory({ initialEntries: ["/cupcakes"] })}>
         <Route path="/cupcakes" render={() => <h1>{text}</h1>} />
       </Router>,
     );
 
-    expect(node.innerHTML).toContain(text);
+    expect(node.container.innerHTML).toContain(text);
   });
 
-  it("renders when it matches at the root URL", async () => {
+  it("renders when it matches at the root URL", () => {
     const text = "cupcakes";
 
-    const node = await mount(
+    const node = render(
       <Router history={createMemoryHistory({ initialEntries: ["/"] })}>
         <Route path="/" render={() => <h1>{text}</h1>} />
       </Router>,
     );
 
-    expect(node.innerHTML).toContain(text);
+    expect(node.container.innerHTML).toContain(text);
   });
 
-  it("does not render when it does not match", async () => {
+  it("does not render when it does not match", () => {
     const text = "bubblegum";
 
-    const node = await mount(
+    const node = render(
       <Router history={createMemoryHistory({ initialEntries: ["/bunnies"] })}>
         <Route path="/flowers" render={() => <h1>{text}</h1>} />
       </Router>,
     );
 
-    expect(node.innerHTML).not.toContain(text);
+    expect(node.container.innerHTML).not.toContain(text);
   });
 
-  it("matches using nextContext when updating", async () => {
+  it("matches using nextContext when updating", () => {
     const history = createHistory({
       initialEntries: ["/sushi/california"],
     });
 
-    const node = await mount(
+    const node = render(
       <Router history={history}>
         <Route path="/sushi/:roll" render={({ match }) => <h1>{match.url}</h1>} />
         <Redirect from={"/sushi/california"} to={"/sushi/spicy-tuna"} />
       </Router>,
     );
 
-    expect(node.innerHTML).toContain("/sushi/spicy-tuna");
+    expect(node.container.innerHTML).toContain("/sushi/spicy-tuna");
   });
 
   describe("with dynamic segments in the path", () => {
-    it("decodes them", async () => {
-      const node = await mount(
+    it("decodes them", () => {
+      const node = render(
         <Router
           history={createMemoryHistory({
             initialEntries: ["/a%20dynamic%20segment"],
@@ -69,22 +68,22 @@ describe("A <Route>", () => {
         </Router>,
       );
 
-      expect(node.innerHTML).toContain("a dynamic segment");
+      expect(node.container.innerHTML).toContain("a dynamic segment");
     });
   });
 
   describe("with an array of paths", () => {
-    it("matches the first provided path", async () => {
-      const node = await mount(
+    it("matches the first provided path", () => {
+      const node = render(
         <Router history={createMemoryHistory({ initialEntries: ["/hello"] })}>
           <Route path={["/hello", "/world"]} render={() => <div>Hello World</div>} />
         </Router>,
       );
-      expect(node.innerHTML).toContain("Hello World");
+      expect(node.container.innerHTML).toContain("Hello World");
     });
 
-    it("matches other provided paths", async () => {
-      const node = await mount(
+    it("matches other provided paths", () => {
+      const node = render(
         <Router
           history={createMemoryHistory({
             initialEntries: ["/other", "/world"],
@@ -94,11 +93,11 @@ describe("A <Route>", () => {
         </Router>,
       );
 
-      expect(node.innerHTML).toContain("Hello World");
+      expect(node.container.innerHTML).toContain("Hello World");
     });
 
-    it("provides the matched path as a string", async () => {
-      const node = await mount(
+    it("provides the matched path as a string", () => {
+      const node = render(
         <Router
           history={createMemoryHistory({
             initialEntries: ["/other", "/world"],
@@ -108,10 +107,10 @@ describe("A <Route>", () => {
         </Router>,
       );
 
-      expect(node.innerHTML).toContain("/world");
+      expect(node.container.innerHTML).toContain("/world");
     });
 
-    it("doesn't remount when moving from one matching path to another", async () => {
+    it("doesn't remount when moving from one matching path to another", () => {
       const history = createHistory();
       const routeMount = jest.fn();
 
@@ -127,110 +126,110 @@ describe("A <Route>", () => {
         history.push("/hello");
       });
 
-      const node = await mount(
+      const node = render(
         <Router history={history}>
           <Route path={["/hello", "/world"]} component={MatchedRoute} />
         </Router>,
       );
 
       expect(routeMount).toHaveBeenCalledTimes(1);
-      expect(node.innerHTML).toContain("Hello World");
+      expect(node.container.innerHTML).toContain("Hello World");
 
       act(() => {
         history.push("/world/somewhere/else");
       });
 
       expect(routeMount).toHaveBeenCalledTimes(1);
-      expect(node.innerHTML).toContain("Hello World");
+      expect(node.container.innerHTML).toContain("Hello World");
     });
   });
 
   describe("with a unicode path", () => {
-    it("is able to match", async () => {
-      const node = await mount(
+    it("is able to match", () => {
+      const node = render(
         <Router history={createMemoryHistory({ initialEntries: ["/パス名"] })}>
           <Route path="/パス名" render={({ match }) => <h1>{match.url}</h1>} />
         </Router>,
       );
 
-      expect(node.innerHTML).toContain("/パス名");
+      expect(node.container.innerHTML).toContain("/パス名");
     });
   });
 
   describe("with escaped special characters in the path", () => {
-    it("is able to match", async () => {
-      const node = await mount(
+    it("is able to match", () => {
+      const node = render(
         <Router history={createMemoryHistory({ initialEntries: ["/pizza (1)"] })}>
           <Route path="/pizza \(1\)" render={({ match }) => <h1>{match.url}</h1>} />
         </Router>,
       );
 
-      expect(node.innerHTML).toContain("/pizza (1)");
+      expect(node.container.innerHTML).toContain("/pizza (1)");
     });
   });
 
   describe("with `exact=true`", () => {
-    it("renders when the URL does not have a trailing slash", async () => {
+    it("renders when the URL does not have a trailing slash", () => {
       const text = "bubblegum";
 
-      const node = await mount(
+      const node = render(
         <Router history={createMemoryHistory({ initialEntries: ["/somepath/"] })}>
           <Route exact path="/somepath" render={() => <h1>{text}</h1>} />
         </Router>,
       );
 
-      expect(node.innerHTML).toContain(text);
+      expect(node.container.innerHTML).toContain(text);
     });
 
     describe("and `strict=true`", () => {
-      it("does not render when the URL has a trailing slash", async () => {
+      it("does not render when the URL has a trailing slash", () => {
         const text = "bubblegum";
 
-        const node = await mount(
+        const node = render(
           <Router history={createMemoryHistory({ initialEntries: ["/somepath/"] })}>
             <Route exact strict path="/somepath" render={() => <h1>{text}</h1>} />
           </Router>,
         );
 
-        expect(node.innerHTML).not.toContain(text);
+        expect(node.container.innerHTML).not.toContain(text);
       });
 
-      it("does not render when the URL does not have a trailing slash", async () => {
+      it("does not render when the URL does not have a trailing slash", () => {
         const text = "bubblegum";
 
-        const node = await mount(
+        const node = render(
           <Router history={createMemoryHistory({ initialEntries: ["/somepath"] })}>
             <Route exact strict path="/somepath/" render={() => <h1>{text}</h1>} />
           </Router>,
         );
 
-        expect(node.innerHTML).not.toContain(text);
+        expect(node.container.innerHTML).not.toContain(text);
       });
     });
   });
 
   describe("the `location` prop", () => {
-    it("overrides `context.location`", async () => {
+    it("overrides `context.location`", () => {
       const text = "bubblegum";
 
-      const node = await mount(
+      const node = render(
         <Router history={createMemoryHistory({ initialEntries: ["/cupcakes"] })}>
           <Route location={{ pathname: "/bubblegum" }} path="/bubblegum" render={() => <h1>{text}</h1>} />
         </Router>,
       );
 
-      expect(node.innerHTML).toContain(text);
+      expect(node.container.innerHTML).toContain(text);
     });
   });
 
   describe("the `children` prop", () => {
     describe("that is a function", () => {
-      it("receives { history, location, match } props", async () => {
+      it("receives { history, location, match } props", () => {
         const history = createHistory();
 
         let props: IRouterContext | null = null;
 
-        await mount(
+        render(
           <Router history={history}>
             <Route
               path="/"
@@ -248,36 +247,36 @@ describe("A <Route>", () => {
         expect(typeof props!.match).toBe("object");
       });
 
-      it("renders", async () => {
+      it("renders", () => {
         const text = "bubblegum";
 
-        const node = await mount(
+        const node = render(
           <Router history={createMemoryHistory({ initialEntries: ["/"] })}>
             <Route path="/" children={() => <h1>{text}</h1>} />
           </Router>,
         );
 
-        expect(node.innerHTML).toContain(text);
+        expect(node.container.innerHTML).toContain(text);
       });
     });
   });
 
   describe("the `component` prop", () => {
-    it("renders the component", async () => {
+    it("renders the component", () => {
       const text = "bubblegum";
 
       const Home = () => <h1>{text}</h1>;
 
-      const node = await mount(
+      const node = render(
         <Router history={createMemoryHistory({ initialEntries: ["/"] })}>
           <Route path="/" component={Home} />
         </Router>,
       );
 
-      expect(node.innerHTML).toContain(text);
+      expect(node.container.innerHTML).toContain(text);
     });
 
-    it("receives { history, location, match } props", async () => {
+    it("receives { history, location, match } props", () => {
       const history = createHistory();
 
       let props: IRouterContext | null = null;
@@ -287,7 +286,7 @@ describe("A <Route>", () => {
         return null;
       };
 
-      await mount(
+      render(
         <Router history={history}>
           <Route path="/" component={Component} />
         </Router>,
@@ -301,24 +300,24 @@ describe("A <Route>", () => {
   });
 
   describe("the `render` prop", () => {
-    it("renders its return value", async () => {
+    it("renders its return value", () => {
       const text = "Mrs. Kato";
 
-      const node = await mount(
+      const node = render(
         <Router history={createMemoryHistory({ initialEntries: ["/"] })}>
           <Route path="/" render={() => <h1>{text}</h1>} />
         </Router>,
       );
 
-      expect(node.innerHTML).toContain(text);
+      expect(node.container.innerHTML).toContain(text);
     });
 
-    it("receives { history, location, match } props", async () => {
+    it("receives { history, location, match } props", () => {
       const history = createHistory();
 
       let props: IRouterContext | null = null;
 
-      await mount(
+      render(
         <Router history={history}>
           <Route
             path="/"

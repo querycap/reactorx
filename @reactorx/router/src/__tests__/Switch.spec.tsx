@@ -1,11 +1,11 @@
 import React from "react";
 import { Redirect, Route, Router, Switch } from "..";
-import { mount } from "@reactorx/testutils";
+import { render } from "@testing-library/react";
 import { createMemoryHistory } from "history";
 
 describe("A <Switch>", () => {
-  it("does not render a second <Route> that also matches the URL", async () => {
-    const node = await mount(
+  it("does not render a second <Route> that also matches the URL", () => {
+    const node = render(
       <Router history={createMemoryHistory({ initialEntries: ["/one"] })}>
         <Switch>
           <Route path="/one" render={() => <h1>one</h1>} />
@@ -14,11 +14,11 @@ describe("A <Switch>", () => {
       </Router>,
     );
 
-    expect(node.innerHTML).not.toContain("two");
+    expect(node.container.innerHTML).not.toContain("two");
   });
 
-  it("renders the first <Redirect> that matches the URL", async () => {
-    const node = await mount(
+  it("renders the first <Redirect> that matches the URL", () => {
+    const node = render(
       <Router history={createMemoryHistory({ initialEntries: ["/three"] })}>
         <Switch>
           <Route path="/one" render={() => <h1>one</h1>} />
@@ -28,11 +28,11 @@ describe("A <Switch>", () => {
       </Router>,
     );
 
-    expect(node.innerHTML).toContain("two");
+    expect(node.container.innerHTML).toContain("two");
   });
 
-  it("does not render a second <Redirect> that also matches the URL", async () => {
-    const node = await mount(
+  it("does not render a second <Redirect> that also matches the URL", () => {
+    const node = render(
       <Router history={createMemoryHistory({ initialEntries: ["/three"] })}>
         <Switch>
           <Route path="/one" render={() => <h1>one</h1>} />
@@ -43,11 +43,11 @@ describe("A <Switch>", () => {
       </Router>,
     );
 
-    expect(node.innerHTML).toContain("two");
+    expect(node.container.innerHTML).toContain("two");
   });
 
-  it("renders a Route with no `path` prop", async () => {
-    const node = await mount(
+  it("renders a Route with no `path` prop", () => {
+    const node = render(
       <Router history={createMemoryHistory({ initialEntries: ["/two"] })}>
         <Switch>
           <Route path="/one" render={() => <h1>one</h1>} />
@@ -56,11 +56,11 @@ describe("A <Switch>", () => {
       </Router>,
     );
 
-    expect(node.innerHTML).toContain("two");
+    expect(node.container.innerHTML).toContain("two");
   });
 
-  it("renders a Redirect with no `from` prop", async () => {
-    const node = await mount(
+  it("renders a Redirect with no `from` prop", () => {
+    const node = render(
       <Router history={createMemoryHistory({ initialEntries: ["/three"] })}>
         <Switch>
           <Route path="/one" render={() => <h1>one</h1>} />
@@ -70,11 +70,11 @@ describe("A <Switch>", () => {
       </Router>,
     );
 
-    expect(node.innerHTML).toContain("one");
+    expect(node.container.innerHTML).toContain("one");
   });
 
-  it("handles subsequent redirects", async () => {
-    const node = await mount(
+  it("handles subsequent redirects", () => {
+    const node = render(
       <Router history={createMemoryHistory({ initialEntries: ["/one"] })}>
         <Switch>
           <Redirect from="/one" to="/two" />
@@ -84,11 +84,11 @@ describe("A <Switch>", () => {
       </Router>,
     );
 
-    expect(node.innerHTML).toContain("three");
+    expect(node.container.innerHTML).toContain("three");
   });
 
-  it("handles comments", async () => {
-    const node = await mount(
+  it("handles comments", () => {
+    const node = render(
       <Router history={createMemoryHistory({ initialEntries: ["/cupcakes"] })}>
         <Switch>
           <Route path="/bubblegum" render={() => <div>bub</div>} />
@@ -98,12 +98,12 @@ describe("A <Switch>", () => {
       </Router>,
     );
 
-    expect(node.innerHTML).not.toContain("bub");
-    expect(node.innerHTML).toContain("cup");
+    expect(node.container.innerHTML).not.toContain("bub");
+    expect(node.container.innerHTML).toContain("cup");
   });
 
-  it("renders with non-element children", async () => {
-    const node = await mount(
+  it("renders with non-element children", () => {
+    const node = render(
       <Router history={createMemoryHistory({ initialEntries: ["/one"] })}>
         <Switch>
           <Route path="/one" render={() => <h1>one</h1>} />
@@ -113,11 +113,11 @@ describe("A <Switch>", () => {
       </Router>,
     );
 
-    expect(node.innerHTML).toMatch(/one/);
+    expect(node.container.innerHTML).toMatch(/one/);
   });
 
-  it("can use a `location` prop instead of `router.location`", async () => {
-    const node = await mount(
+  it("can use a `location` prop instead of `router.location`", () => {
+    const node = render(
       <Router history={createMemoryHistory({ initialEntries: ["/one"] })}>
         <Switch location={{ pathname: "/two" }}>
           <Route path="/one" render={() => <h1>one</h1>} />
@@ -126,6 +126,6 @@ describe("A <Switch>", () => {
       </Router>,
     );
 
-    expect(node.innerHTML).toMatch(/two/);
+    expect(node.container.innerHTML).toMatch(/two/);
   });
 });

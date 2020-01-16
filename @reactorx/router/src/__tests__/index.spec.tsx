@@ -1,14 +1,14 @@
 import React from "react";
 import { Route, Router } from "..";
-import { mount } from "@reactorx/testutils";
+import { render } from "@testing-library/react";
 import { createMemoryHistory } from "history";
 
 describe("Integration Tests", () => {
-  it("renders nested matches", async () => {
+  it("renders nested matches", () => {
     const TEXT1 = "Ms. Tripp";
     const TEXT2 = "Mrs. Schiffman";
 
-    const node = await mount(
+    const $node = render(
       <Router history={createMemoryHistory({ initialEntries: ["/nested"] })}>
         <Route
           path="/"
@@ -20,17 +20,17 @@ describe("Integration Tests", () => {
           )}
         />
       </Router>,
-    );
+    ).container;
 
-    expect(node.innerHTML).toContain(TEXT1);
-    expect(node.innerHTML).toContain(TEXT2);
+    expect($node.innerHTML).toContain(TEXT1);
+    expect($node.innerHTML).toContain(TEXT2);
   });
 
-  it("renders only as deep as the matching Route", async () => {
+  it("renders only as deep as the matching Route", () => {
     const TEXT1 = "Ms. Tripp";
     const TEXT2 = "Mrs. Schiffman";
 
-    const node = await mount(
+    const $node = render(
       <Router history={createMemoryHistory({ initialEntries: ["/"] })}>
         <Route
           path="/"
@@ -42,17 +42,17 @@ describe("Integration Tests", () => {
           )}
         />
       </Router>,
-    );
+    ).container;
 
-    expect(node.innerHTML).toContain(TEXT1);
-    expect(node.innerHTML).not.toContain(TEXT2);
+    expect($node.innerHTML).toContain(TEXT1);
+    expect($node.innerHTML).not.toContain(TEXT2);
   });
 
-  it("renders multiple matching routes", async () => {
+  it("renders multiple matching routes", () => {
     const TEXT1 = "Mrs. Schiffman";
     const TEXT2 = "Mrs. Burton";
 
-    const node = await mount(
+    const $node = render(
       <Router history={createMemoryHistory({ initialEntries: ["/double"] })}>
         <div>
           <aside>
@@ -63,9 +63,9 @@ describe("Integration Tests", () => {
           </main>
         </div>
       </Router>,
-    );
+    ).container;
 
-    expect(node.innerHTML).toContain(TEXT1);
-    expect(node.innerHTML).toContain(TEXT2);
+    expect($node.innerHTML).toContain(TEXT1);
+    expect($node.innerHTML).toContain(TEXT2);
   });
 });
