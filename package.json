@@ -58,7 +58,7 @@
     "rollup-plugin-babel": "4.3.3",
     "rollup-plugin-dts": "1.2.0",
     "rollup-plugin-node-resolve": "5.2.0",
-    "typescript": "3.7.4"
+    "typescript": "3.7.5"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
