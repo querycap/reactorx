@@ -9,7 +9,6 @@ export interface IUseRequestOpts<TReq, TRespBody, TError> {
   arg?: RequestActor<TReq, TRespBody, TError>["arg"];
   opts?: RequestActor<TReq, TRespBody, TError>["opts"];
   required?: boolean;
-  ignoreArg?: boolean;
   onSuccess?: (actor: RequestActor<TReq, TRespBody, TError>["done"], dispatch: IDispatch) => void;
   onFail?: (actor: RequestActor<TReq, TRespBody, TError>["failed"], dispatch: IDispatch) => void;
   onFinish?: (dispatch: IDispatch) => void;
@@ -47,10 +46,7 @@ export function useRequest<TReq, TRespBody, TError>(
     };
 
     const isSameRequest = <T extends typeof requestActor.done | typeof requestActor.failed>(actor: T) => {
-      return optionsRef.current.ignoreArg
-        ? true
-        : !!lastRequestActor.current &&
-            lastRequestActor.current.uid() === (actor.opts.parentActor as RequestActor<TReq, TRespBody, TError>).uid();
+      return lastRequestActor.current === actor.opts.parentActor;
     };
 
     const subscription = observableMerge(

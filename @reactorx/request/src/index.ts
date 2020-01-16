@@ -1,4 +1,3 @@
-export * from "./createCombineDuplicatedRequestEpic";
 export * from "./createRequestEpic";
 export * from "./RequestActor";
 export * from "./Status";

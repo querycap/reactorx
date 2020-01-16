@@ -1,13 +1,14 @@
-import axios, { AxiosInterceptorManager, AxiosRequestConfig, AxiosResponse } from "axios";
-import { forEach, set } from "lodash";
+import axios, { AxiosInstance, AxiosInterceptorManager, AxiosRequestConfig, AxiosResponse } from "axios";
+import { forEach, has, set } from "lodash";
 import { IEpic } from "@reactorx/core";
-import { from as observableFrom, merge as observableMerge, of as observableOf } from "rxjs";
+import { asyncScheduler, from as observableFrom, merge as observableMerge, Observable, of as observableOf } from "rxjs";
 import {
   catchError as rxCatchError,
   filter as rxFilter,
   ignoreElements,
   map as rxMap,
   mergeMap as rxMergeMap,
+  observeOn,
   tap as rxTap,
 } from "rxjs/operators";
 import { RequestActor } from "./RequestActor";
@@ -32,40 +33,32 @@ export const createRequestEpic = (options: AxiosRequestConfig, ...interceptors: 
     interceptor(client.interceptors.request, client.interceptors.response);
   });
 
-  const cancelTokenSources: { [k: string]: ReturnType<typeof axios.CancelToken.source> } = {};
-
-  const clearTokenSource = (uid: string) => {
-    delete cancelTokenSources[uid];
-  };
-
-  const cancelRequestIfExists = (uid: string) => {
-    cancelTokenSources[uid] && cancelTokenSources[uid].cancel();
-    clearTokenSource(uid);
-  };
-
-  const registerCancelToken = (uid: string) => {
-    cancelRequestIfExists(uid);
-
-    const source = axios.CancelToken.source();
-    cancelTokenSources[uid] = source;
-    return source.token;
-  };
+  const cancelableRequestFactory = createCancelableRequestFactory();
+  const requestFactory = creatRequestFactory(client);
 
   return (actor$) => {
     return observableMerge(
       actor$.pipe(
         rxFilter(RequestActor.isPreRequestActor),
         rxMergeMap((actor) => {
+          const cancelable = cancelableRequestFactory.register(actor.uid());
+
           const axiosRequestConfig = actor.requestConfig();
-          axiosRequestConfig.cancelToken = registerCancelToken(actor.uid());
+
+          axiosRequestConfig.cancelToken = cancelable.token;
+
+          const request = requestFactory.create(axiosRequestConfig);
 
           return observableMerge(
             observableOf(actor.started.with(axiosRequestConfig)),
-            observableFrom(client.request(axiosRequestConfig)).pipe(
+            request().pipe(
               rxMap((response) => actor.done.with(response)),
-              rxCatchError((err) => observableOf(actor.failed.with(err))),
+              rxCatchError((err) => {
+                return observableOf(actor.failed.with(err));
+              }),
               rxTap(() => {
-                clearTokenSource(actor.uid());
+                request.clear();
+                cancelable.clear();
               }),
             ),
           );
@@ -74,13 +67,67 @@ export const createRequestEpic = (options: AxiosRequestConfig, ...interceptors: 
       actor$.pipe(
         rxFilter(RequestActor.isCancelRequestActor),
         rxMap((actor) => {
-          cancelRequestIfExists(actor.opts.parentActor.uid());
+          cancelableRequestFactory.cancel(actor.opts.parentActor.uid());
         }),
         ignoreElements(),
       ),
-    );
+    ).pipe(observeOn(asyncScheduler));
   };
 };
+
+function creatRequestFactory(client: AxiosInstance) {
+  const cachedRequest$: { [k: string]: Observable<AxiosResponse> } = {};
+
+  return {
+    create: (axiosRequestConfig: AxiosRequestConfig) => {
+      const uri = axiosRequestConfig.method?.toLowerCase() === "get" && client.getUri(axiosRequestConfig);
+
+      const request = () => {
+        if (uri) {
+          return has(cachedRequest$, uri)
+            ? cachedRequest$[uri]
+            : (cachedRequest$[uri] = observableFrom(client.request(axiosRequestConfig)));
+        }
+        return observableFrom(client.request(axiosRequestConfig));
+      };
+
+      request.clear = () => {
+        if (uri) {
+          delete cachedRequest$[uri];
+        }
+      };
+
+      return request;
+    },
+  };
+}
+
+function createCancelableRequestFactory() {
+  const cancelTokenSources: { [k: string]: ReturnType<typeof axios.CancelToken.source> } = {};
+
+  const clear = (uid: string) => {
+    delete cancelTokenSources[uid];
+  };
+
+  const cancel = (uid: string) => {
+    cancelTokenSources[uid] && cancelTokenSources[uid].cancel();
+    clear(uid);
+  };
+
+  const register = (uid: string) => {
+    const source = axios.CancelToken.source();
+    cancelTokenSources[uid] = source;
+    return {
+      token: source.token,
+      clear: () => clear(uid),
+    };
+  };
+
+  return {
+    register: register,
+    cancel: cancel,
+  };
+}
 
 function setDefaultContentType(config: AxiosRequestConfig): AxiosRequestConfig {
   if (!config.headers || !config.headers["Content-Type"]) {

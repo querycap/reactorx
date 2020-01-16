@@ -2,8 +2,7 @@ import { createRequestActor } from "../RequestActor";
 import { useRequesting$ } from "../useRequesting$";
 import { Store, StoreProvider, useSelector } from "@reactorx/core";
 import React from "react";
-import { mount } from "@reactorx/testutils";
-import { act } from "react-dom/test-utils";
+import { act, render } from "@testing-library/react";
 
 describe("useRequesting$", () => {
   const getApiList = createRequestActor<void, { [k: string]: string }, any>("github", () => ({
@@ -14,7 +13,7 @@ describe("useRequesting$", () => {
     },
   }));
 
-  it("loading", async () => {
+  it("loading", () => {
     const actor = getApiList.with(undefined);
 
     function Loading() {
@@ -25,14 +24,14 @@ describe("useRequesting$", () => {
 
     const store$ = Store.create({});
 
-    const node = await mount(
+    const node = render(
       <StoreProvider value={store$}>
         <Loading />
       </StoreProvider>,
     );
 
     for (let i = 0; i < 1000; i++) {
-      const $loading = node.querySelector("#loading")!;
+      const $loading = node.container.querySelector("#loading")!;
 
       act(() => {
         actor.started.invoke(store$);
