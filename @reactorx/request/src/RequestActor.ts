@@ -25,10 +25,12 @@ export function createRequestActor<TReq, TResBody, TError>(
   });
 }
 
+export type AxiosPlainResponse<T = any> = Omit<AxiosResponse<T>, "request" | "config">;
+
 export class RequestActor<TReq = IRequestOpts, TRespBody = any, TError = any> extends AsyncActor<
   TReq,
   AxiosRequestConfig & { requestOptsFromReq?: (arg: TReq) => IRequestOpts },
-  IAsyncDerived<AxiosRequestConfig, AxiosResponse<TRespBody>, AxiosResponse<TError>>
+  IAsyncDerived<AxiosRequestConfig, AxiosPlainResponse<TRespBody>, AxiosPlainResponse<TError>>
 > {
   constructor(opt: IActorOpt<TReq, AxiosRequestConfig & { requestOptsFromReq?: (arg: TReq) => IRequestOpts }>) {
     super({
