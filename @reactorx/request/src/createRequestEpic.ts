@@ -20,7 +20,7 @@ export type TRequestInterceptor = (
   response: AxiosInterceptorManager<AxiosResponse>,
 ) => void;
 
-export const createRequestEpic = (options: AxiosRequestConfig, ...interceptors: TRequestInterceptor[]): IEpic => {
+export const createAxiosInstance = (options: AxiosRequestConfig, ...interceptors: TRequestInterceptor[]) => {
   const client = axios.create({
     ...options,
     paramsSerializer,
@@ -33,6 +33,10 @@ export const createRequestEpic = (options: AxiosRequestConfig, ...interceptors: 
     interceptor(client.interceptors.request, client.interceptors.response);
   });
 
+  return client;
+};
+
+export const createRequestEpicFromAxiosInstance = (client: AxiosInstance): IEpic => {
   const cancelableRequestFactory = createCancelableRequestFactory();
   const requestFactory = creatRequestFactory(client);
 
@@ -73,6 +77,10 @@ export const createRequestEpic = (options: AxiosRequestConfig, ...interceptors: 
       ),
     ).pipe(observeOn(asyncScheduler));
   };
+};
+
+export const createRequestEpic = (options: AxiosRequestConfig, ...interceptors: TRequestInterceptor[]): IEpic => {
+  return createRequestEpicFromAxiosInstance(createAxiosInstance(options, ...interceptors));
 };
 
 function creatRequestFactory(client: AxiosInstance) {
@@ -129,7 +137,7 @@ function createCancelableRequestFactory() {
   };
 }
 
-function setDefaultContentType(config: AxiosRequestConfig): AxiosRequestConfig {
+export function setDefaultContentType(config: AxiosRequestConfig): AxiosRequestConfig {
   if (!config.headers || !config.headers["Content-Type"]) {
     set(config, ["headers", "Content-Type"], "application/json");
   }
