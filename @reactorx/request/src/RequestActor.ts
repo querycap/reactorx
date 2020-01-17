@@ -25,7 +25,7 @@ export function createRequestActor<TReq, TResBody, TError>(
   });
 }
 
-export type AxiosPlainResponse<T = any> = Omit<AxiosResponse<T>, "request" | "config">;
+export type AxiosPlainResponse<T = any> = Omit<AxiosResponse<T>, "request">;
 
 export class RequestActor<TReq = IRequestOpts, TRespBody = any, TError = any> extends AsyncActor<
   TReq,
