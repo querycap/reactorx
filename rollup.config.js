@@ -1,5 +1,6 @@
 import path, { resolve } from "path";
 import glob from "glob";
+import { uniq } from "lodash";
 import rollupBabel from "rollup-plugin-babel";
 import dts from "rollup-plugin-dts";
 import nodeResolve from "rollup-plugin-node-resolve";
@@ -13,13 +14,17 @@ const getPkgPaths = (from, nodeModules) => {
   return glob.sync("**/*.js", {
     absolute: true,
     cwd,
-  }).map((p) => path.relative(nodeModules, p).replace(/.js$/, ""));
+  }).map((p) => path
+    .relative(nodeModules, p)
+    .replace(/.js$/, "")
+    .replace(/\/index$/, ""),
+  );
 };
 
 const pkg = require(path.join(process.cwd(), "package.json"));
 
-const external = [
-  ...Object.keys(process.binding("natives")),
+const external = uniq([
+  // ...Object.keys(process.binding("natives")),
   ...getPkgPaths("@babel/runtime", rootNodeModules),
   ...[
     ...Object.keys(pkg.dependencies || {}),
@@ -32,7 +37,7 @@ const external = [
       ...getPkgPaths(pkgName, localNodeModules),
     ];
   }, []),
-];
+]);
 
 module.exports = [
   {
