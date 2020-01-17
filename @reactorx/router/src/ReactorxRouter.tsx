@@ -15,7 +15,7 @@ export const routerActors = {
   goForward: RouterActor.named<void>("goForward"),
 };
 
-export const locationStorageKey = "$$location";
+export const locationStorageKey = "_location";
 
 export const routerChanged = RouterActor.named<LocationDescriptorObject>("changed").effectOn(
   locationStorageKey,

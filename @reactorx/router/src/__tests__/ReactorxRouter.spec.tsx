@@ -10,7 +10,7 @@ import { Store, StoreProvider } from "@reactorx/core";
 describe("ReactorxRouter", () => {
   it("renders the first <Redirect> that matches the URL", () => {
     const store$ = Store.create({
-      $$location: {
+      _location: {
         pathname: "/three",
         search: "",
         hash: "",
@@ -31,7 +31,7 @@ describe("ReactorxRouter", () => {
     ).container;
 
     expect(store$.getState()).toEqual({
-      $$location: {
+      _location: {
         pathname: "/two",
         search: "",
         hash: "",
@@ -45,7 +45,7 @@ describe("ReactorxRouter", () => {
     });
 
     expect(store$.getState()).toEqual({
-      $$location: {
+      _location: {
         pathname: "/one",
         search: "",
         hash: "",
