@@ -39,7 +39,7 @@ const Emojis = () => {
 };
 
 const nextLoop = (cb: () => void, count = 1) => {
-  setTimeout(cb, 10 * count);
+  setTimeout(cb, 20 * count);
 };
 
 const waitLoop = (count = 1) => {
@@ -68,7 +68,7 @@ describe("full flow", () => {
           headers: {},
           config,
         });
-      }, 2);
+      }, 5);
     });
   };
 
@@ -97,7 +97,7 @@ describe("full flow", () => {
       </StoreProvider>,
     );
 
-    await act(waitLoop(3));
+    await act(waitLoop(7));
 
     console.log(node.container.innerHTML);
 
@@ -105,7 +105,7 @@ describe("full flow", () => {
     expect(node.container.innerHTML).toContain("1f4af");
   });
 
-  it("cancelable when unmount", async () => {
+  it("cancel when unmount", async () => {
     const stages: string[] = [];
 
     const sub = store$.actor$.subscribe((actor) => {
@@ -121,7 +121,12 @@ describe("full flow", () => {
         });
       }, []);
 
-      return close ? null : <Emojis />;
+      return (
+        <>
+          {close ? null : <Emojis />}
+          {close ? null : <Emojis />}
+        </>
+      );
     };
 
     render(
@@ -131,9 +136,64 @@ describe("full flow", () => {
     );
 
     // waiting
-    await act(waitLoop(5));
+    await act(waitLoop(7));
 
     sub.unsubscribe();
-    expect(stages).toEqual([undefined, "STARTED", "CANCEL", "FAILED"]);
+
+    expect(stages).toEqual([undefined, undefined, "STARTED", "STARTED", "CANCEL", "CANCEL", "FAILED", "FAILED"]);
+  });
+
+  it("cancel should ignore when alive requesting", async () => {
+    const stages: string[] = [];
+
+    const sub = store$.actor$.subscribe((actor) => {
+      console.log(actor.type);
+      stages.push(actor.stage as string);
+    });
+
+    const Root = () => {
+      const [close, setClose] = useState(false);
+
+      useEffect(() => {
+        nextLoop(() => {
+          setClose(true);
+        }, 0);
+      }, []);
+
+      return (
+        <>
+          {close ? null : <Emojis />}
+          {close ? null : <Emojis />}
+          {<Emojis />}
+        </>
+      );
+    };
+
+    render(
+      <StoreProvider value={store$}>
+        <Root />
+      </StoreProvider>,
+    );
+
+    // waiting
+    await act(waitLoop(7));
+
+    sub.unsubscribe();
+
+    expect(count).toEqual(1);
+
+    expect(stages).toEqual([
+      undefined,
+      undefined,
+      undefined,
+      "STARTED",
+      "STARTED",
+      "STARTED",
+      "CANCEL",
+      "CANCEL",
+      "DONE",
+      "FAILED",
+      "FAILED",
+    ]);
   });
 });

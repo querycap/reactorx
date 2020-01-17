@@ -45,11 +45,11 @@ export class RequestActor<TReq = IRequestOpts, TRespBody = any, TError = any> ex
     return actor.group === RequestActor.group && !actor.stage;
   };
 
-  static isCancelRequestActor = (actor: Actor): actor is Actor<AxiosResponse<any>> => {
+  static isCancelRequestActor = (actor: Actor): actor is Actor<AxiosResponse<any>, { parentActor: RequestActor }> => {
     return actor.group === RequestActor.group && actor.stage === AsyncStage.CANCEL;
   };
 
-  static isFailedRequestActor = (actor: Actor): actor is Actor<AxiosResponse<any>> => {
+  static isFailedRequestActor = (actor: Actor): actor is Actor<AxiosResponse<any>, { parentActor: RequestActor }> => {
     return actor.group === RequestActor.group && actor.stage === AsyncStage.FAILED;
   };
 
