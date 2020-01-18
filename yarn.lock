@@ -1962,10 +1962,10 @@
     babel-plugin-pure-calls-annotation "0.2.2"
     babel-plugin-typescript-iife-enum "0.2.1"
 
-"@querycap/eslint-config@0.0.16":
-  version "0.0.16"
-  resolved "https://registry.yarnpkg.com/@querycap/eslint-config/-/eslint-config-0.0.16.tgz#dc09750c364b4cf8d90a35eee4f14ec59dd41892"
-  integrity sha512-BmrjPJ+War8S/bll5xXhX58N4S/kR2OdO1CX9cJzYMTssO9euVi3Guh6NCzYliYhrELKXAOlq65nHMrcMFSvLQ==
+"@querycap/eslint-config@0.0.17":
+  version "0.0.17"
+  resolved "https://registry.yarnpkg.com/@querycap/eslint-config/-/eslint-config-0.0.17.tgz#070fc9c635aae3d2168d4c9d85ab48c4fcee9e29"
+  integrity sha512-XGeK4j6frvhcfW28ErH7z3g5bSjjTCLI6VrB8DieIOYkZzALVZeHJNZ0hap6A1NYHn+40IzUcBm/Puqd2zk1eA==
 
 "@rollup/plugin-node-resolve@7.0.0":
   version "7.0.0"
