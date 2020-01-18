@@ -59,12 +59,16 @@ const isCancelActor = (actor: any) => {
 export const createRequestEpicFromAxiosInstance = (client: AxiosInstance): IEpic => {
   const requestFactory = creatRequestFactory(client);
 
-  const fakeCancelRequest = (actor: RequestActor) => {
+  const fakeCancelRequest = (axiosRequestConfig: AxiosRequestConfig) => {
     const source = axios.CancelToken.source();
     source.cancel();
-    const c = actor.requestConfig();
-    c.cancelToken = source.token;
-    return observableFrom(client.request(c));
+
+    return observableFrom(
+      client.request({
+        ...axiosRequestConfig,
+        cancelToken: source.token,
+      }),
+    );
   };
 
   return (actor$) => {
@@ -79,7 +83,7 @@ export const createRequestEpicFromAxiosInstance = (client: AxiosInstance): IEpic
             request().pipe(
               switchMap((response) => {
                 if (isCancelActor(actor)) {
-                  return fakeCancelRequest(actor);
+                  return fakeCancelRequest(request.config);
                 }
                 return observableOf(response);
               }),
