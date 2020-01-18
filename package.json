@@ -6,6 +6,7 @@
     "@reactorx/*"
   ],
   "scripts": {
+    "clean": "rm -rf  @reactorx/*/lib",
     "fmt": "prettier --write @reactorx/{,**/}{,**/}*.{ts,tsx,json,md}",
     "test": "jest --coverage",
     "build": "tsc && lerna exec -- ts-node ../../rollup.config.ts",

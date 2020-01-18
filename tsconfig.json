@@ -4,13 +4,10 @@
     "baseUrl": ".",
     "outDir": "./.tmp",
     "paths": {
-      "@querycap/*": [
-        "@querycap/*/src"
-      ],
       "*": [
-        "node_modules/*",
-        "__types__/*",
-        "*"
+        "*",
+        "*/src",
+        "__types__/*"
       ]
     },
     "noImplicitAny": true,

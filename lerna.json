@@ -3,9 +3,6 @@
     "@reactorx/*"
   ],
   "npmClient": "yarn",
-  "npmClientArgs": [
-    "--no-lockfile"
-  ],
   "useWorkspaces": true,
   "publish": {
     "ignoreChanges": [

@@ -147,7 +147,6 @@ describe("full flow", () => {
     const stages: string[] = [];
 
     const sub = store$.actor$.subscribe((actor) => {
-      console.log(actor.type);
       stages.push(actor.stage as string);
     });
 
