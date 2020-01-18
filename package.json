@@ -2,13 +2,14 @@
   "name": "reactorx",
   "version": "0.0.0",
   "private": true,
+  "workspaces": [
+    "@reactorx/*"
+  ],
   "scripts": {
-    "start": "npm run prepare",
-    "bootstrap": "lerna bootstrap",
-    "fmt": "npx prettier --write @reactorx/{,**/}{,**/}*.{ts,tsx,json,md}",
+    "fmt": "prettier --write @reactorx/{,**/}{,**/}*.{ts,tsx,json,md}",
     "test": "jest --coverage",
-    "build": "tsc && lerna exec -- rollup -c ../../rollup.config.js",
-    "prepare": "npm run bootstrap && npm test && npm run build"
+    "build": "tsc && lerna exec -- ts-node ../../rollup.config.ts",
+    "prepare": "yarn test && yarn run build"
   },
   "commitlint": {
     "extends": [
@@ -17,35 +18,28 @@
   },
   "devDependencies": {
     "@babel/core": "7.8.3",
-    "@babel/plugin-proposal-class-properties": "7.8.3",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "7.8.3",
-    "@babel/plugin-proposal-object-rest-spread": "7.8.3",
-    "@babel/plugin-proposal-optional-chaining": "7.8.3",
-    "@babel/plugin-transform-react-jsx": "7.8.3",
-    "@babel/plugin-transform-runtime": "7.8.3",
-    "@babel/plugin-transform-typescript": "7.8.3",
     "@babel/preset-env": "7.8.3",
     "@babel/runtime": "7.8.3",
-    "@commitlint/cli": "8.3.4",
+    "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4",
+    "@querycap/babel-preset": "0.0.17",
+    "@querycap/eslint-config": "0.0.16",
     "@testing-library/react": "9.4.0",
     "@types/history": "4.7.4",
     "@types/jest": "24.9.0",
     "@types/lodash": "4.14.149",
-    "@types/node": "13.1.7",
+    "@types/node": "13.1.8",
     "@types/react": "16.9.17",
     "@types/react-dom": "16.9.4",
     "@typescript-eslint/eslint-plugin": "2.16.0",
     "@typescript-eslint/parser": "2.16.0",
     "axios": "0.19.1",
     "babel-jest": "24.9.0",
-    "babel-plugin-pure-calls-annotation": "0.2.2",
-    "babel-plugin-typescript-iife-enum": "0.2.1",
     "eslint": "6.8.0",
-    "eslint-plugin-react": "7.17.0",
+    "eslint-plugin-react": "7.18.0",
     "eslint-plugin-react-hooks": "2.3.0",
     "history": "4.10.1",
-    "husky": "4.0.9",
+    "husky": "4.0.10",
     "jest": "24.9.0",
     "lerna": "3.20.2",
     "lint-staged": "9.5.0",
@@ -57,17 +51,19 @@
     "rollup": "1.29.0",
     "rollup-plugin-babel": "4.3.3",
     "rollup-plugin-dts": "1.2.0",
-    "rollup-plugin-node-resolve": "5.2.0",
-    "typescript": "3.7.4"
+    "ts-node": "8.6.2",
+    "typescript": "3.7.5",
+    "@rollup/plugin-node-resolve": "7.0.0",
+    "chalk": "3.0.0"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "npx prettier --write",
-      "npx eslint --fix",
+      "prettier --write",
+      "eslint --fix",
       "git add"
     ],
     "*.{json}": [
-      "npx prettier --write",
+      "prettier --write",
       "git add"
     ]
   },
@@ -87,7 +83,7 @@
       "<rootDir>"
     ],
     "moduleNameMapper": {
-      "@reactorx/(.*)": "<rootDir>/@reactorx/$1/src"
+      "^@reactorx/([^/]+)$": "<rootDir>/@reactorx/$1/src"
     },
     "testRegex": ".*/__tests__/.+\\.(generator|test|spec)\\.(ts|tsx)$"
   },

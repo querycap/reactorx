@@ -1,8 +1,17 @@
 {
-  "packages": ["@reactorx/*"],
+  "packages": [
+    "@reactorx/*"
+  ],
+  "npmClient": "yarn",
+  "npmClientArgs": [
+    "--no-lockfile"
+  ],
+  "useWorkspaces": true,
   "publish": {
-    "ignoreChanges": ["*.js", "__tests__/**"]
+    "ignoreChanges": [
+      "*.js",
+      "__tests__/**"
+    ]
   },
-  "npmClientArgs": ["--no-lockfile"],
   "version": "0.19.5"
 }

@@ -243,8 +243,7 @@ fabric.properties
 # End of https://www.gitignore.io/api/vim,node,macos,linux,webstorm,visualstudiocode
 
 
-tmp/
+.tmp/
 
 !babel.config.js
-!rollup.config.js
 !.eslintrc.js
