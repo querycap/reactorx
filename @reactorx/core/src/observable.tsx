@@ -4,10 +4,9 @@ import React, { createElement, useEffect, useLayoutEffect, useMemo, useState } f
 import { shallowEqual } from "./utils";
 import { useStore } from "./ctx";
 
-export const useObservableEffect = (
-  effect: () => undefined | Observable<any> | Array<Observable<any>>,
-  deps: any[] = [],
-) => {
+export type ArrayOrNone<T> = T | T[] | undefined;
+
+export const useObservableEffect = (effect: () => ArrayOrNone<Observable<any>>, deps: any[] = []) => {
   useEffect(() => {
     const ob = effect();
     if (!ob) {
@@ -22,10 +21,7 @@ export const useObservableEffect = (
   }, deps);
 };
 
-export const useObservableLayoutEffect = (
-  effect: () => undefined | Observable<any> | Array<Observable<any>>,
-  deps: any[] = [],
-) => {
+export const useObservableLayoutEffect = (effect: () => ArrayOrNone<Observable<any>>, deps: any[] = []) => {
   useLayoutEffect(() => {
     const ob = effect();
     if (!ob) {
