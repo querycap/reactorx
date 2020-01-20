@@ -1,6 +1,6 @@
 {
   "name": "@reactorx/utils",
-  "version": "0.20.1-alpha.0",
+  "version": "0.20.1",
   "types": "dist/utils.cjs.d.ts",
   "main": "dist/utils.cjs.js",
   "module": "dist/utils.esm.js",
