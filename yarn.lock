@@ -1997,10 +1997,10 @@
     pirates "^4.0.1"
     source-map-support "^0.5.13"
 
-"@querycap/babel-preset@0.0.17":
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/@querycap/babel-preset/-/babel-preset-0.0.17.tgz#9dd3449596e990c64e5f228d7e8e7c252111bcbc"
-  integrity sha512-1tmlkg4C9yVRQF6YCHJhCx9nAOKUSp+Qkn3W631AntcuphSuMU4ocE/GdgnmQzYoU1CxeVDRxyIRLEbj1DRsGA==
+"@querycap/babel-preset@0.0.18":
+  version "0.0.18"
+  resolved "https://registry.yarnpkg.com/@querycap/babel-preset/-/babel-preset-0.0.18.tgz#bb68d8b73f05b013c8894b3ce318ed12093888a6"
+  integrity sha512-NCDu9J0ZOSjtHraygtcXdrSQnpC3ZiliKluG2M/N1L8FG7R4WpWsV0o3rC4ObAUpdKXqvq9+T4ML+5od/Imbew==
   dependencies:
     "@babel/plugin-proposal-class-properties" "7.8.x"
     "@babel/plugin-proposal-nullish-coalescing-operator" "7.8.x"
