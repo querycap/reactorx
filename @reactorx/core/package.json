@@ -1,6 +1,6 @@
 {
   "name": "@reactorx/core",
-  "version": "0.20.1",
+  "version": "0.20.2",
   "types": "dist/core.cjs.d.ts",
   "main": "dist/core.cjs.js",
   "module": "dist/core.esm.js",

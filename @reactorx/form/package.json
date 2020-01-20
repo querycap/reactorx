@@ -1,6 +1,6 @@
 {
   "name": "@reactorx/form",
-  "version": "0.20.1",
+  "version": "0.20.2",
   "types": "dist/form.cjs.d.ts",
   "main": "dist/form.cjs.js",
   "module": "dist/form.esm.js",
@@ -14,7 +14,7 @@
     "rxjs": ">= 6.x"
   },
   "dependencies": {
-    "@reactorx/core": "^0.20.1",
+    "@reactorx/core": "^0.20.2",
     "@types/lodash": "4.14.x",
     "lodash": "4.17.x"
   },
