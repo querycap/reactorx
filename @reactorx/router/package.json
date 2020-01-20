@@ -1,20 +1,20 @@
 {
   "name": "@reactorx/router",
-  "version": "0.19.3",
+  "version": "0.20.0-alpha.0",
   "main": "dist/router.cjs.js",
   "module": "dist/router.esm.js",
   "files": [
     "dist/"
   ],
   "peerDependencies": {
+    "@babel/runtime": "*",
     "history": "4.10.x",
     "react": "*",
     "react-dom": "*",
-    "rxjs": "6.x",
-    "@babel/runtime": "*"
+    "rxjs": "6.x"
   },
   "dependencies": {
-    "@reactorx/core": "^0.19.1",
+    "@reactorx/core": "^0.20.0-alpha.0",
     "path-to-regexp": "6.1.0"
   },
   "publishConfig": {
