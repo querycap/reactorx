@@ -11,7 +11,7 @@
     "@babel/runtime": "*"
   },
   "dependencies": {
-    "@emotion/is-prop-valid": "0.8.5"
+    "@emotion/is-prop-valid": "0.8.6"
   },
   "publishConfig": {
     "access": "public"
