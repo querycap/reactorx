@@ -1,6 +1,6 @@
 {
   "name": "@reactorx/router",
-  "version": "0.20.0-alpha.0",
+  "version": "0.20.1-alpha.0",
   "types": "dist/router.cjs.d.ts",
   "main": "dist/router.cjs.js",
   "module": "dist/router.esm.js",
@@ -15,7 +15,7 @@
     "rxjs": "6.x"
   },
   "dependencies": {
-    "@reactorx/core": "^0.20.0-alpha.0",
+    "@reactorx/core": "^0.20.1-alpha.0",
     "path-to-regexp": "6.1.0"
   },
   "publishConfig": {

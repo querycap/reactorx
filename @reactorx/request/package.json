@@ -1,6 +1,6 @@
 {
   "name": "@reactorx/request",
-  "version": "0.20.0-alpha.0",
+  "version": "0.20.1-alpha.0",
   "types": "dist/request.cjs.d.ts",
   "main": "dist/request.cjs.js",
   "module": "dist/request.esm.js",
@@ -15,7 +15,7 @@
     "rxjs": ">= 6.x"
   },
   "dependencies": {
-    "@reactorx/core": "^0.20.0-alpha.0"
+    "@reactorx/core": "^0.20.1-alpha.0"
   },
   "publishConfig": {
     "access": "public"
