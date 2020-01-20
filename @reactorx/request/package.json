@@ -1,18 +1,17 @@
 {
   "name": "@reactorx/request",
   "version": "0.19.5",
-  "ts": "src/index.ts",
-  "main": "lib/index.js",
-  "module": "lib/index.es.js",
-  "types": "lib/index.d.ts",
+  "main": "dist/request.cjs.js",
+  "module": "dist/request.esm.js",
   "files": [
-    "lib/"
+    "dist/"
   ],
   "peerDependencies": {
     "axios": "0.19.x",
     "lodash": "4.17.x",
     "react": ">=16.12.0",
-    "rxjs": ">= 6.x"
+    "rxjs": ">= 6.x",
+    "@babel/runtime": "*"
   },
   "dependencies": {
     "@reactorx/core": "^0.19.1"

@@ -2,12 +2,11 @@
   "compileOnSave": true,
   "compilerOptions": {
     "baseUrl": ".",
-    "outDir": "./.tmp",
     "paths": {
       "*": [
-        "*",
+        "__types__/*",
         "*/src",
-        "__types__/*"
+        "*"
       ]
     },
     "noImplicitAny": true,
@@ -34,10 +33,11 @@
     "removeComments": false,
     "declaration": true,
     "noEmitOnError": false,
-    "emitDeclarationOnly": true
+    "noEmit": true
   },
   "exclude": [
     ".tmp/*",
+    "dist/*",
     "node_modules/*"
   ]
 }
