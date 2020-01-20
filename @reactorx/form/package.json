@@ -1,6 +1,7 @@
 {
   "name": "@reactorx/form",
   "version": "0.20.0-alpha.0",
+  "types": "dist/form.cjs.d.ts",
   "main": "dist/form.cjs.js",
   "module": "dist/form.esm.js",
   "files": [

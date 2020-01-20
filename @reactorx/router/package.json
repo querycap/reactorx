@@ -1,6 +1,7 @@
 {
   "name": "@reactorx/router",
   "version": "0.20.0-alpha.0",
+  "types": "dist/router.cjs.d.ts",
   "main": "dist/router.cjs.js",
   "module": "dist/router.esm.js",
   "files": [
