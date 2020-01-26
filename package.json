@@ -57,7 +57,7 @@
     "react-dom": "16.12.x",
     "redux-logger": "3.0.6",
     "rollup": "1.29.0",
-    "rollup-plugin-dts": "1.2.0",
+    "rollup-plugin-dts": "1.2.1",
     "ts-node": "8.6.2",
     "typescript": "3.7.5"
   },
