@@ -31,7 +31,7 @@
     "@querycap/babel-preset": "0.0.17",
     "@querycap/eslint-config": "0.0.16",
     "@testing-library/react": "9.4.0",
-    "@types/history": "4.7.4",
+    "@types/history": "4.7.5",
     "@types/jest": "24.9.0",
     "@types/lodash": "4.14.149",
     "@types/node": "13.1.8",
