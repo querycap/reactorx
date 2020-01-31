@@ -50,7 +50,7 @@
     "husky": "4.0.10",
     "jest": "24.9.0",
     "lerna": "3.20.2",
-    "lint-staged": "9.5.0",
+    "lint-staged": "10.0.7",
     "lodash": "4.17.15",
     "prettier": "1.19.1",
     "react": "16.12.x",
