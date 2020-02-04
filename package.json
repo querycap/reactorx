@@ -54,6 +54,7 @@
     "lint-staged": "10.0.7",
     "lodash": "4.17.15",
     "prettier": "1.19.1",
+    "pretty-quick": "2.0.1",
     "react": "16.12.x",
     "react-dom": "16.12.x",
     "redux-logger": "3.0.6",
@@ -61,17 +62,6 @@
     "rollup-plugin-dts": "1.2.1",
     "ts-node": "8.6.2",
     "typescript": "3.7.5"
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "prettier --write",
-      "eslint --fix",
-      "git add"
-    ],
-    "*.{json}": [
-      "prettier --write",
-      "git add"
-    ]
   },
   "jest": {
     "testEnvironment": "jsdom",
@@ -95,8 +85,13 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged",
+      "pre-commit": "lint-staged && pretty-quick --staged",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --quiet"
+    ]
   }
 }
