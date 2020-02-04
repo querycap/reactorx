@@ -111,34 +111,6 @@ expect(pingStates).toEqual([0, 1, 2, 3, 4, 5]);
 expect(pongStates).toEqual([0, 1, 2, 3, 4, 5]);
 ```        
 
-### `@reactorx/persister` [![NPM](https://img.shields.io/npm/v/@reactorx/persister.svg?style=flat-square)](https://npmjs.org/package/@reactorx/persister)
-
-persist registered keys in state, base on [localforage](https://github.com/localForage/localForage)
-
-#### Example
-
-```typescript jsx
-import { createPersister } from "@reactorx/persister"
-import { Store } from "@reactorx/core"
-import { render, useEffect } from "react"
-
-
-const persister = createPersister({
-  name: "app",
-});
-
-
-function Root({ store$ }: { store$: Store }) {
-  useEffect(() => persister.connect(store$), []);
-  return null
-}
-
-persister.hydrate((storeState = {}) => {
-  const store$ = Store.create(storeState);
-  render(<Root store$={store$} />, document.getElementById("root"));
-})    
-```
-
 ### `@reactorx/router` [![NPM](https://img.shields.io/npm/v/@reactorx/router.svg?style=flat-square)](https://npmjs.org/package/@reactorx/router)
 
 Core rules **copy** form [react-router](https://github.com/ReactTraining/react-router) 
