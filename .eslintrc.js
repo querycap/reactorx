@@ -1,13 +1,11 @@
 module.exports = {
-  extends: [
-    "@querycap/eslint-config"
-  ],
+  extends: ["@querycap-dev/eslint-config"],
   settings: {
-    "react": {
-      "version": "detect"
-    }
+    react: {
+      version: "detect",
+    },
   },
-  "rules": {
-    "@typescript-eslint/ban-ts-ignore": "off"
-  }
+  rules: {
+    "@typescript-eslint/ban-ts-ignore": "off",
+  },
 };

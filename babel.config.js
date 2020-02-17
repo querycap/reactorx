@@ -1,13 +1,13 @@
-module.exports = ({
+module.exports = {
   presets: [
     [
       "@babel/preset-env",
       {
-        "targets": {
-          "node": "current",
+        targets: {
+          node: "current",
         },
       },
     ],
-    "@querycap/babel-preset"
-  ]
-});
+    "@querycap-dev/babel-preset",
+  ],
+};

@@ -1,9 +1,10 @@
 {
   "name": "@reactorx/router",
   "version": "0.20.2",
-  "types": "dist/router.cjs.d.ts",
-  "main": "dist/router.cjs.js",
-  "module": "dist/router.esm.js",
+  "ts": "src/index.ts",
+  "types": "dist/index.d.ts",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.es.js",
   "files": [
     "dist/"
   ],
@@ -11,7 +12,6 @@
     "@babel/runtime": "*",
     "history": "4.10.x",
     "react": "*",
-    "react-dom": "*",
     "rxjs": "6.x"
   },
   "dependencies": {

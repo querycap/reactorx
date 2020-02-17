@@ -1,9 +1,10 @@
 {
   "name": "@reactorx/request",
   "version": "0.20.2",
-  "types": "dist/request.cjs.d.ts",
-  "main": "dist/request.cjs.js",
-  "module": "dist/request.esm.js",
+  "ts": "src/index.ts",
+  "types": "dist/index.d.ts",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.es.js",
   "files": [
     "dist/"
   ],
