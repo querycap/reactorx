@@ -1,14 +1,9 @@
 {
-  "packages": [
-    "@reactorx/*"
-  ],
+  "packages": ["@reactorx/*"],
   "npmClient": "yarn",
   "useWorkspaces": true,
   "publish": {
-    "ignoreChanges": [
-      "*.js",
-      "__tests__/**"
-    ]
+    "ignoreChanges": ["*.js", "__tests__/**"]
   },
-  "version": "0.20.2"
+  "version": "0.20.3"
 }
