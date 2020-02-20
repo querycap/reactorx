@@ -57,7 +57,7 @@
     "react-dom": "16.12.x",
     "redux-logger": "3.0.6",
     "ts-node": "8.6.2",
-    "typescript": "3.7.5"
+    "typescript": "3.8.2"
   },
   "jest": {
     "testEnvironment": "jsdom",
