@@ -2081,17 +2081,19 @@
   resolved "https://registry.yarnpkg.com/@querycap-dev/eslint-config/-/eslint-config-0.2.0.tgz#bbc68dd8fa245097ededabcdaca41d52d2a3dfb8"
   integrity sha512-EoLlM1zaS9yRBzq6Gf8e80lFgwXISrUJ2yhBFoFEfro51PvCJX5eS8+Q+V8xwCIJcotgc5JZCeS+5t1aSa50qA==
 
-"@querycap-dev/monobundle@0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@querycap-dev/monobundle/-/monobundle-0.1.2.tgz#1ca1b636cc62a6416321722f2ae1d715edabeae5"
-  integrity sha512-ssuhiFu2hUNOUAouijzVSdF7zxVWEs1UUJ4JEvzZ+A2Y4Mr0yDy8mhQ0DRuLyckQdg6PO4gB1DnaXZl+tUcFgw==
+"@querycap-dev/monobundle@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@querycap-dev/monobundle/-/monobundle-0.2.0.tgz#09dd51c14be50544c3c0166a30b3ef1d4b50e966"
+  integrity sha512-+A3iJpvoQSq05agqLrkHSshfVl1ZC30M4zlRJwZ4TaaS5OuJ8XuJ0u9XI0X1SGaInGRTH0qXyNTWIGueMc6REA==
   dependencies:
     "@rollup/plugin-node-resolve" "7.1.1"
+    "@types/yargs" "15.x"
     chalk "3.0.x"
     del "5.1.x"
     rollup "1.31.x"
     rollup-plugin-babel "4.3.3"
     rollup-plugin-dts "1.2.1"
+    yargs "15.1.x"
 
 "@rollup/plugin-node-resolve@7.1.1":
   version "7.1.1"
@@ -2343,17 +2345,17 @@
   resolved "https://registry.yarnpkg.com/@types/yargs-parser/-/yargs-parser-15.0.0.tgz#cb3f9f741869e20cce330ffbeb9271590483882d"
   integrity sha512-FA/BWv8t8ZWJ+gEOnLLd8ygxH/2UFbAvgEonyfN6yWGLKc7zVjbpl2Y4CTjid9h2RfgPP6SEt6uHwEOply00yw==
 
+"@types/yargs@15.x", "@types/yargs@^15.0.0":
+  version "15.0.3"
+  resolved "https://registry.yarnpkg.com/@types/yargs/-/yargs-15.0.3.tgz#41453a0bc7ab393e995d1f5451455638edbd2baf"
+  integrity sha512-XCMQRK6kfpNBixHLyHUsGmXrpEmFFxzMrcnSXFMziHd8CoNJo8l16FkHyQq4x+xbM7E2XL83/O78OD8u+iZTdQ==
+  dependencies:
+    "@types/yargs-parser" "*"
+
 "@types/yargs@^13.0.0":
   version "13.0.5"
   resolved "https://registry.yarnpkg.com/@types/yargs/-/yargs-13.0.5.tgz#18121bfd39dc12f280cee58f92c5b21d32041908"
   integrity sha512-CF/+sxTO7FOwbIRL4wMv0ZYLCRfMid2HQpzDRyViH7kSpfoAFiMdGqKIxb1PxWfjtQXQhnQuD33lvRHNwr809Q==
-  dependencies:
-    "@types/yargs-parser" "*"
-
-"@types/yargs@^15.0.0":
-  version "15.0.3"
-  resolved "https://registry.yarnpkg.com/@types/yargs/-/yargs-15.0.3.tgz#41453a0bc7ab393e995d1f5451455638edbd2baf"
-  integrity sha512-XCMQRK6kfpNBixHLyHUsGmXrpEmFFxzMrcnSXFMziHd8CoNJo8l16FkHyQq4x+xbM7E2XL83/O78OD8u+iZTdQ==
   dependencies:
     "@types/yargs-parser" "*"
 
@@ -9178,6 +9180,23 @@ yargs-parser@^16.1.0:
     camelcase "^5.0.0"
     decamelize "^1.2.0"
 
+yargs@15.1.x, yargs@^15.0.0:
+  version "15.1.0"
+  resolved "https://registry.yarnpkg.com/yargs/-/yargs-15.1.0.tgz#e111381f5830e863a89550bd4b136bb6a5f37219"
+  integrity sha512-T39FNN1b6hCW4SOIk1XyTOWxtXdcen0t+XYrysQmChzSipvhBO8Bj0nK1ozAasdk24dNWuMZvr4k24nz+8HHLg==
+  dependencies:
+    cliui "^6.0.0"
+    decamelize "^1.2.0"
+    find-up "^4.1.0"
+    get-caller-file "^2.0.1"
+    require-directory "^2.1.1"
+    require-main-filename "^2.0.0"
+    set-blocking "^2.0.0"
+    string-width "^4.2.0"
+    which-module "^2.0.0"
+    y18n "^4.0.0"
+    yargs-parser "^16.1.0"
+
 yargs@^14.2.2:
   version "14.2.2"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-14.2.2.tgz#2769564379009ff8597cdd38fba09da9b493c4b5"
@@ -9194,23 +9213,6 @@ yargs@^14.2.2:
     which-module "^2.0.0"
     y18n "^4.0.0"
     yargs-parser "^15.0.0"
-
-yargs@^15.0.0:
-  version "15.1.0"
-  resolved "https://registry.yarnpkg.com/yargs/-/yargs-15.1.0.tgz#e111381f5830e863a89550bd4b136bb6a5f37219"
-  integrity sha512-T39FNN1b6hCW4SOIk1XyTOWxtXdcen0t+XYrysQmChzSipvhBO8Bj0nK1ozAasdk24dNWuMZvr4k24nz+8HHLg==
-  dependencies:
-    cliui "^6.0.0"
-    decamelize "^1.2.0"
-    find-up "^4.1.0"
-    get-caller-file "^2.0.1"
-    require-directory "^2.1.1"
-    require-main-filename "^2.0.0"
-    set-blocking "^2.0.0"
-    string-width "^4.2.0"
-    which-module "^2.0.0"
-    y18n "^4.0.0"
-    yargs-parser "^16.1.0"
 
 yn@3.1.1:
   version "3.1.1"
