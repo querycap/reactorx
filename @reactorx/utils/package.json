@@ -1,6 +1,6 @@
 {
   "name": "@reactorx/utils",
-  "version": "0.20.3",
+  "version": "0.20.4",
   "ts": "src/index.ts",
   "types": "_cjs/index.d.ts",
   "main": "_cjs/index.js",
