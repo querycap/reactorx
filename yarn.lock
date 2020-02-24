@@ -2061,10 +2061,10 @@
   dependencies:
     "@types/node" ">= 8"
 
-"@querycap-dev/babel-preset@0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@querycap-dev/babel-preset/-/babel-preset-0.1.1.tgz#e38bb25035a78cd45590effdf904da593c6146e6"
-  integrity sha512-iaIOKIC+CG3tKZBtj0R9AoaxPfFiiW8hQdpFzICLlKeIJkvhOjReg3SobyHuF8Hd3IdSMO2jJOH2ctgfKeLDHA==
+"@querycap-dev/babel-preset@0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@querycap-dev/babel-preset/-/babel-preset-0.1.2.tgz#fd67b373e0272639f89a98bbe5001e53f9a7d9ae"
+  integrity sha512-VuqvFg20O1NAj6RqceL5C3NoeyAYpzlr/KNF6LFMFFKOc5G8hngbX1AeZvm5zg7Pn+pBc6LG3dOcnoRon5iDkA==
   dependencies:
     "@babel/plugin-proposal-class-properties" "7.8.x"
     "@babel/plugin-proposal-nullish-coalescing-operator" "7.8.x"
@@ -2073,7 +2073,7 @@
     "@babel/plugin-transform-react-jsx" "7.8.x"
     "@babel/plugin-transform-runtime" "7.8.x"
     "@babel/plugin-transform-typescript" "7.8.x"
-    babel-plugin-pure-calls-annotation "0.2.2"
+    babel-plugin-pure-calls-annotation "0.3.0"
     babel-plugin-typescript-iife-enum "0.2.1"
 
 "@querycap-dev/eslint-config@0.2.0":
@@ -2793,10 +2793,10 @@ babel-plugin-jest-hoist@^25.1.0:
   dependencies:
     "@types/babel__traverse" "^7.0.6"
 
-babel-plugin-pure-calls-annotation@0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/babel-plugin-pure-calls-annotation/-/babel-plugin-pure-calls-annotation-0.2.2.tgz#1daee31fac57f2edb9bb407182e32dae65224b04"
-  integrity sha512-bQc6XZaypBn1kJW3/OtiJGgOIj8iT6wuz9Uws0s93dJpmKhlt6hvPCqc52b8VdODLiX+00Z3Q4KeKSfUinJsYw==
+babel-plugin-pure-calls-annotation@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-pure-calls-annotation/-/babel-plugin-pure-calls-annotation-0.3.0.tgz#0c9ead171786bf6348f81efe5215ee234506b12d"
+  integrity sha512-sWgnYhnV+AL3vs+Um7DDV9T/D3+TRBa5Phw3jKq8iQNC875daCs0QnMqS62uMWt6Od9hSDoGO5+3xaGQWNqxQw==
 
 babel-plugin-typescript-iife-enum@0.2.1:
   version "0.2.1"
