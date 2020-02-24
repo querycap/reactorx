@@ -2,10 +2,11 @@
   "name": "@reactorx/core",
   "version": "0.20.3",
   "ts": "src/index.ts",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.es.js",
+  "main": "_cjs/index.js",
+  "module": "_esm5/index.js",
   "files": [
-    "dist/"
+    "_esm5/",
+    "_cjs/"
   ],
   "license": "MIT",
   "peerDependencies": {
@@ -16,5 +17,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "types": "dist/index.d.ts"
+  "types": "_cjs/index.d.ts"
 }

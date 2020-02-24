@@ -2,11 +2,12 @@
   "name": "@reactorx/form",
   "version": "0.20.3",
   "ts": "src/index.ts",
-  "types": "dist/index.d.ts",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.es.js",
+  "types": "_cjs/index.d.ts",
+  "main": "_cjs/index.js",
+  "module": "_esm5/index.js",
   "files": [
-    "dist/"
+    "_esm5/",
+    "_cjs/"
   ],
   "license": "MIT",
   "peerDependencies": {

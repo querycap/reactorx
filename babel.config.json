@@ -1,0 +1,29 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": true
+        }
+      }
+    ],
+    "@querycap-dev/babel-preset"
+  ],
+  "env": {
+    "ROLLUP": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "targets": {
+              "chrome": 50,
+              "ie": 11,
+              "esmodules": true
+            }
+          }
+        ]
+      ]
+    }
+  }
+}

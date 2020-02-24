@@ -1,13 +1,13 @@
 lib/
 dist/
 .tmp/
+_cjs/
+_esm5/
 
 public/
 
 *.js
-
-# Created by https://www.gitignore.io/api/vim,node,macos,linux,webstorm,visualstudiocode
-# Edit at https://www.gitignore.io/?templates=vim,node,macos,linux,webstorm,visualstudiocode
+!.eslintrc.js
 
 ### Linux ###
 *~
@@ -242,9 +242,3 @@ fabric.properties
 .idea/sonarlint
 
 # End of https://www.gitignore.io/api/vim,node,macos,linux,webstorm,visualstudiocode
-
-
-.tmp/
-
-!babel.config.js
-!.eslintrc.js
