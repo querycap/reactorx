@@ -13,7 +13,7 @@
     "@babel/runtime": "*",
     "axios": "0.19.x",
     "lodash": "4.17.x",
-    "react": ">=16.12.0",
+    "react": ">=16.x",
     "rxjs": ">= 6.x"
   },
   "dependencies": {
