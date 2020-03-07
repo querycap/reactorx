@@ -2,8 +2,9 @@
   "compileOnSave": true,
   "compilerOptions": {
     "baseUrl": ".",
+    "rootDir": ".",
     "paths": {
-      "*": ["__types__/*", "*/src", "*"]
+      "*": ["__types__/*", "*"]
     },
     "noImplicitAny": true,
     "experimentalDecorators": true,
@@ -27,7 +28,7 @@
     "declaration": true,
     "noEmitOnError": false,
     "emitDeclarationOnly": true,
-    "outDir": "./.tmp"
+    "outDir": ".tmp"
   },
   "exclude": [".tmp/*", "dist/*", "node_modules/*"]
 }

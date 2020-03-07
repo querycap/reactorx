@@ -1,19 +1,14 @@
 {
   "name": "@reactorx/form",
   "version": "0.20.5",
-  "ts": "src/index.ts",
-  "types": "_cjs/index.d.ts",
-  "main": "_cjs/index.js",
-  "module": "_esm5/index.js",
   "files": [
-    "_esm5/",
-    "_cjs/"
+    "dist/"
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@babel/runtime": "*",
     "react": ">=16.0",
-    "rxjs": ">= 6.x"
+    "rxjs": ">= 6.x",
+    "@babel/runtime-corejs3": "*"
   },
   "dependencies": {
     "@reactorx/core": "^0.20.5",
@@ -22,5 +17,8 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "types": "dist/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js"
 }

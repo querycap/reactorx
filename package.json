@@ -14,8 +14,8 @@
     "ncu": "lerna exec -- ncu -u",
     "fmt": "prettier --write @reactorx/{,**/}{,**/}*.{ts,tsx,json,md}",
     "test": "jest --coverage",
-    "build": "lerna exec -- monobundle",
-    "prepare": "yarn test && yarn run build"
+    "build": "lerna exec monobundle",
+    "prepare": "yarn test && lerna --scope ${LERNA_PACKAGE_NAME} exec monobundle"
   },
   "commitlint": {
     "extends": [
@@ -23,28 +23,24 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "7.8.4",
-    "@babel/preset-env": "7.8.4",
-    "@babel/runtime": "7.8.4",
+    "@babel/core": "7.8.7",
+    "@babel/preset-env": "7.8.7",
+    "@babel/runtime": "7.8.7",
     "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4",
-    "@querycap-dev/babel-preset": "0.1.3",
-    "@querycap-dev/eslint-config": "0.2.0",
-    "@querycap-dev/monobundle": "0.2.0",
-    "@testing-library/react": "9.4.1",
+    "@querycap-dev/babel-preset": "0.2.0",
+    "@querycap-dev/eslint-config": "0.3.0",
+    "@querycap-dev/monobundle": "0.4.0",
+    "@testing-library/react": "9.5.0",
     "@types/history": "4.7.5",
-    "@types/jest": "25.1.3",
+    "@types/jest": "25.1.4",
     "@types/lodash": "4.14.149",
-    "@types/node": "13.7.6",
+    "@types/node": "13.9.0",
     "@types/react": "16.9.23",
     "@types/react-dom": "16.9.5",
-    "@typescript-eslint/eslint-plugin": "2.21.0",
-    "@typescript-eslint/parser": "2.21.0",
     "axios": "0.19.2",
     "babel-jest": "25.1.0",
     "eslint": "6.8.0",
-    "eslint-plugin-react": "7.18.3",
-    "eslint-plugin-react-hooks": "2.5.0",
     "history": "4.10.1",
     "husky": "4.2.3",
     "jest": "25.1.0",
@@ -57,7 +53,7 @@
     "react-dom": "16.13.x",
     "redux-logger": "3.0.6",
     "ts-node": "8.6.2",
-    "typescript": "3.8.2"
+    "typescript": "3.8.3"
   },
   "jest": {
     "testEnvironment": "jsdom",
@@ -74,9 +70,6 @@
     "modulePaths": [
       "<rootDir>"
     ],
-    "moduleNameMapper": {
-      "^@reactorx/([^/]+)$": "<rootDir>/@reactorx/$1/src"
-    },
     "testRegex": ".*/__tests__/.+\\.(generator|test|spec)\\.(ts|tsx)$"
   },
   "husky": {
