@@ -2081,16 +2081,16 @@
   resolved "https://registry.yarnpkg.com/@querycap-dev/eslint-config/-/eslint-config-0.2.0.tgz#bbc68dd8fa245097ededabcdaca41d52d2a3dfb8"
   integrity sha512-EoLlM1zaS9yRBzq6Gf8e80lFgwXISrUJ2yhBFoFEfro51PvCJX5eS8+Q+V8xwCIJcotgc5JZCeS+5t1aSa50qA==
 
-"@querycap-dev/monobundle@0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@querycap-dev/monobundle/-/monobundle-0.2.0.tgz#09dd51c14be50544c3c0166a30b3ef1d4b50e966"
-  integrity sha512-+A3iJpvoQSq05agqLrkHSshfVl1ZC30M4zlRJwZ4TaaS5OuJ8XuJ0u9XI0X1SGaInGRTH0qXyNTWIGueMc6REA==
+"@querycap-dev/monobundle@0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@querycap-dev/monobundle/-/monobundle-0.4.0.tgz#143c50a2c781c17554d2d7eecc15015bcf509f52"
+  integrity sha512-46FbGEN20Y6DPizcUdGE0ejCjKb177EZe+Iv00Kyjiw/FnHp/CUepoGRZTDzmheXuQxrnu83jc729s7EGT+Edg==
   dependencies:
     "@rollup/plugin-node-resolve" "7.1.1"
     "@types/yargs" "15.x"
     chalk "3.0.x"
     del "5.1.x"
-    rollup "1.31.x"
+    rollup "1.30.x"
     rollup-plugin-babel "4.3.3"
     rollup-plugin-dts "1.2.1"
     yargs "15.1.x"
@@ -7820,10 +7820,10 @@ rollup-pluginutils@^2.8.1:
   dependencies:
     estree-walker "^0.6.1"
 
-rollup@1.31.x:
-  version "1.31.1"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-1.31.1.tgz#4170d6f87148d46e5fbe29b493f8f3ea3453c96f"
-  integrity sha512-2JREN1YdrS/kpPzEd33ZjtuNbOuBC3ePfuZBdKEybvqcEcszW1ckyVqzcEiEe0nE8sqHK+pbJg+PsAgRJ8+1dg==
+rollup@1.30.x:
+  version "1.30.1"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-1.30.1.tgz#3fd28d6198beb2f3cd1640732047d5ec16c2d3a0"
+  integrity sha512-Uus8mwQXwaO+ZVoNwBcXKhT0AvycFCBW/W8VZtkpVGsotRllWk9oldfCjqWmTnFRI0y7x6BnEqSqc65N+/YdBw==
   dependencies:
     "@types/estree" "*"
     "@types/node" "*"
