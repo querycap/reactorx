@@ -2163,10 +2163,10 @@
     babel-plugin-pure-calls-annotation "0.3.x"
     babel-plugin-typescript-iife-enum "0.2.x"
 
-"@querycap-dev/eslint-config@0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@querycap-dev/eslint-config/-/eslint-config-0.3.0.tgz#45bdec3ebc378caa3ceaeb30fd65b725db1fb60a"
-  integrity sha512-0jN0rQXzNCJstvwv7fvvTLUZ8C8Q1bDvmaEFgiHwHXcflZ9vV5Ex5ofriF6x1L9owIu2ecJjbf+GP5nfD5eSqA==
+"@querycap-dev/eslint-config@0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@querycap-dev/eslint-config/-/eslint-config-0.3.1.tgz#1b44bf41985b9cf62cb02bd8e7e93bd4c2f99ead"
+  integrity sha512-mvbn7swTTTZUjb+QAkToARBtI7kghIYgS96yAwtI+duypwtmKVwrlTnynGO8qXSNVhEyHaSdgzfaOzAd9QmXxA==
   dependencies:
     "@typescript-eslint/eslint-plugin" "2.x"
     "@typescript-eslint/parser" "2.x"
