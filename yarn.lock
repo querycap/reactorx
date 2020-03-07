@@ -2148,10 +2148,10 @@
   dependencies:
     "@types/node" ">= 8"
 
-"@querycap-dev/babel-preset@0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@querycap-dev/babel-preset/-/babel-preset-0.2.0.tgz#540dd654f24f86538a2da4c469515ff0d53f793d"
-  integrity sha512-gIwnzWf5A+2mYBTyUSCuPVpc5iAvO/My20dvINWA77MKWM9M1xxCN0fN2AVPIND5ESKi0KUDP1giHnDR2rWU7g==
+"@querycap-dev/babel-preset@0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@querycap-dev/babel-preset/-/babel-preset-0.2.2.tgz#96a3002a6414c00d0cdfe143c23d3030591ea405"
+  integrity sha512-ViXKiuVqOs19OU5LnEWrZ36g7CjXnn0T09EoCh+hex90vm2v2FYPSB44B4jlBPeGfwNbEQ6Od5RpcWw9ggQ2KQ==
   dependencies:
     "@babel/plugin-proposal-class-properties" "7.8.x"
     "@babel/plugin-proposal-nullish-coalescing-operator" "7.8.x"
