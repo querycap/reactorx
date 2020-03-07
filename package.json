@@ -28,7 +28,7 @@
     "@babel/runtime": "7.8.4",
     "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4",
-    "@querycap-dev/babel-preset": "0.1.3",
+    "@querycap-dev/babel-preset": "0.2.0",
     "@querycap-dev/eslint-config": "0.2.0",
     "@querycap-dev/monobundle": "0.2.0",
     "@testing-library/react": "9.4.1",
