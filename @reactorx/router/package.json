@@ -1,17 +1,17 @@
 {
   "name": "@reactorx/router",
-  "version": "0.20.5",
+  "version": "0.20.6",
   "files": [
     "dist/"
   ],
   "peerDependencies": {
+    "@babel/runtime-corejs3": "*",
     "history": "4.10.x",
     "react": "*",
-    "rxjs": "6.x",
-    "@babel/runtime-corejs3": "*"
+    "rxjs": "6.x"
   },
   "dependencies": {
-    "@reactorx/core": "^0.20.5",
+    "@reactorx/core": "^0.20.6",
     "path-to-regexp": "6.1.0"
   },
   "publishConfig": {

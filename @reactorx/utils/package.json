@@ -1,6 +1,6 @@
 {
   "name": "@reactorx/utils",
-  "version": "0.20.4",
+  "version": "0.20.6",
   "files": [
     "dist/"
   ],
@@ -11,7 +11,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "peerDependencies": {},
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "module": "dist/index.es.js"

@@ -1,17 +1,17 @@
 {
   "name": "@reactorx/form",
-  "version": "0.20.5",
+  "version": "0.20.6",
   "files": [
     "dist/"
   ],
   "license": "MIT",
   "peerDependencies": {
+    "@babel/runtime-corejs3": "*",
     "react": ">=16.0",
-    "rxjs": ">= 6.x",
-    "@babel/runtime-corejs3": "*"
+    "rxjs": ">= 6.x"
   },
   "dependencies": {
-    "@reactorx/core": "^0.20.5",
+    "@reactorx/core": "^0.20.6",
     "@types/lodash": "4.14.x",
     "lodash": "4.17.x"
   },

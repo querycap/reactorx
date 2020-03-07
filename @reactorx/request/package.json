@@ -1,18 +1,18 @@
 {
   "name": "@reactorx/request",
-  "version": "0.20.5",
+  "version": "0.20.6",
   "files": [
     "dist/"
   ],
   "peerDependencies": {
+    "@babel/runtime-corejs3": "*",
     "axios": "0.19.x",
     "lodash": "4.17.x",
     "react": ">=16.x",
-    "rxjs": ">= 6.x",
-    "@babel/runtime-corejs3": "*"
+    "rxjs": ">= 6.x"
   },
   "dependencies": {
-    "@reactorx/core": "^0.20.5"
+    "@reactorx/core": "^0.20.6"
   },
   "publishConfig": {
     "access": "public"

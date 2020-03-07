@@ -11,11 +11,10 @@
     ]
   },
   "scripts": {
-    "ncu": "lerna exec -- ncu -u",
     "fmt": "prettier --write @reactorx/{,**/}{,**/}*.{ts,tsx,json,md}",
     "test": "jest --coverage",
     "build": "lerna exec monobundle",
-    "prepare": "yarn test && lerna --scope ${LERNA_PACKAGE_NAME} exec monobundle"
+    "prepare": "yarn test && yarn build"
   },
   "commitlint": {
     "extends": [
