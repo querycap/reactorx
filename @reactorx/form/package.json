@@ -1,6 +1,6 @@
 {
   "name": "@reactorx/form",
-  "version": "0.20.6",
+  "version": "0.20.7",
   "files": [
     "dist/"
   ],
@@ -11,7 +11,7 @@
     "rxjs": ">= 6.x"
   },
   "dependencies": {
-    "@reactorx/core": "^0.20.6",
+    "@reactorx/core": "^0.20.7",
     "@types/lodash": "4.14.x",
     "lodash": "4.17.x"
   },
