@@ -5,59 +5,33 @@
   "workspaces": [
     "@reactorx/*"
   ],
-  "preconstruct": {
-    "packages": [
-      "@reactorx/*"
-    ]
-  },
   "scripts": {
-    "fmt": "prettier --write @reactorx/{,**/}{,**/}*.{ts,tsx,json,md}",
     "test": "jest --coverage",
-    "build": "lerna exec monobundle",
-    "prepare": "yarn test && yarn build"
+    "build": "lerna exec monobundle"
   },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
-  "devDependencies": {
-    "@babel/core": "7.8.7",
-    "@babel/preset-env": "7.8.7",
-    "@babel/runtime": "7.8.7",
-    "@commitlint/cli": "8.3.5",
-    "@commitlint/config-conventional": "8.3.4",
-    "@querycap-dev/babel-preset": "0.2.3",
-    "@querycap-dev/eslint-config": "0.3.2",
-    "@querycap-dev/monobundle": "0.4.6",
+  "dependencies": {
+    "@querycap-dev/dev-deps": "*",
+    "@querycap-dev/monobundle": "*",
     "@testing-library/react": "9.5.0",
     "@types/history": "4.7.5",
-    "@types/jest": "25.1.4",
     "@types/lodash": "4.14.149",
     "@types/node": "13.9.0",
     "@types/react": "16.9.23",
     "@types/react-dom": "16.9.5",
     "axios": "0.19.2",
-    "babel-jest": "25.1.0",
-    "eslint": "6.8.0",
     "history": "4.10.1",
-    "husky": "4.2.3",
-    "jest": "25.1.0",
-    "lerna": "3.20.2",
-    "lint-staged": "10.0.8",
     "lodash": "4.17.15",
-    "prettier": "1.19.1",
-    "pretty-quick": "2.0.1",
     "react": "16.13.x",
     "react-dom": "16.13.x",
-    "redux-logger": "3.0.6",
-    "ts-node": "8.6.2",
-    "typescript": "3.8.3"
+    "redux-logger": "3.0.6"
   },
   "jest": {
     "testEnvironment": "jsdom",
     "transform": {
       "^.+\\.[t|j]sx?$": "babel-jest"
+    },
+    "moduleNameMapper": {
+      "^@reactorx/([^/]+)$": "<rootDir>/@reactorx/$1/index.ts"
     },
     "moduleFileExtensions": [
       "tsx",
@@ -73,13 +47,38 @@
   },
   "husky": {
     "hooks": {
+      "post-merge": "yarn",
       "pre-commit": "lint-staged && pretty-quick --staged",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   },
   "lint-staged": {
     "*.{ts,tsx}": [
       "eslint --quiet"
     ]
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "arrowParens": "always",
+    "printWidth": 120,
+    "jsxBracketSameLine": true
+  },
+  "eslintConfig": {
+    "extends": [
+      "@querycap-dev/eslint-config"
+    ],
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    },
+    "rules": {
+      "@typescript-eslint/ban-ts-ignore": "off"
+    }
   }
 }
