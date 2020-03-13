@@ -28,7 +28,7 @@
     "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4",
     "@querycap-dev/babel-preset": "0.2.3",
-    "@querycap-dev/eslint-config": "0.3.2",
+    "@querycap-dev/eslint-config": "0.3.5",
     "@querycap-dev/monobundle": "0.4.6",
     "@testing-library/react": "9.5.0",
     "@types/history": "4.7.5",

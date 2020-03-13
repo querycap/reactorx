@@ -2164,13 +2164,14 @@
     babel-plugin-pure-calls-annotation "0.3.x"
     babel-plugin-typescript-iife-enum "0.2.x"
 
-"@querycap-dev/eslint-config@0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@querycap-dev/eslint-config/-/eslint-config-0.3.2.tgz#39d4c9aaf4bd9a8b77f6930978956dbec0e59aed"
-  integrity sha512-A66A9FSgha5mtj0bS7LkI059gX04bUb86Ei3DsQf4sZfp0yMSrLL+ML+UwCdh3bPQbX8iZgFfq3IsM73/t/xRQ==
+"@querycap-dev/eslint-config@0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@querycap-dev/eslint-config/-/eslint-config-0.3.5.tgz#8cde33ba8ad403a70e698cd5f35bdd599dcb93de"
+  integrity sha512-BQft9NScJewBAbJKcIHl/w7XFrgdVi5APKIqhTkJN536pvj0Eyidj6CDIlfOeQRsyZYApKgBR2gTjRnI/bKxYA==
   dependencies:
     "@typescript-eslint/eslint-plugin" "2.x"
     "@typescript-eslint/parser" "2.x"
+    eslint "6.8.x"
     eslint-plugin-react "7.x"
     eslint-plugin-react-hooks "2.x"
 
@@ -4088,7 +4089,7 @@ eslint-visitor-keys@^1.1.0:
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-1.1.0.tgz#e2a82cea84ff246ad6fb57f9bde5b46621459ec2"
   integrity sha512-8y9YjtM1JBJU/A9Kc+SbaOV4y29sSWckBwMHa+FGtVj5gN/sbnKDf6xJUl+8g7FAij9LVaP8C24DUiH/f/2Z9A==
 
-eslint@6.8.0:
+eslint@6.8.0, eslint@6.8.x:
   version "6.8.0"
   resolved "https://registry.yarnpkg.com/eslint/-/eslint-6.8.0.tgz#62262d6729739f9275723824302fb227c8c93ffb"
   integrity sha512-K+Iayyo2LtyYhDSYwz5D5QdWw0hCacNzyq1Y821Xna2xSJj7cijoLLYmLxTQgcgZ9mC61nryMy9S7GRbYpI5Ig==
